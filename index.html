@@ -14,9 +14,8 @@
       <div class="row">
         <div class="col-md-6">
           <h1><a href="http://pandoc.org/">PanDoc</a> Electron</h1>
-            <button id="openFile"  onclick="openFile();">Open</button>
-          <button id="saveFile" onclick="saveFile();">Save</button><br />
-          <button id="runCommand" onclick="runShellCommand();">Run Command</button><br />
+          <button class="btn btn-primary btn-xs"  id="saveFile" onclick="saveFile();">Save</button>
+          <button class="btn btn-primary btn-xs" id="convertFile" onclick="convertFile();">Convert</button>
         </div>
         <div class="col-md-6">
           <pre id="command"></pre>
@@ -24,12 +23,14 @@
       </div>
       <div class="row">
         <div class="col-md-6">
+          <button class="btn btn-primary btn-xs"  id="openFile"  onclick="openFile();">Open</button>
+          <input type="text" length="45" id="inputFILE" value="readme.md">
           <button class="btn btn-primary btn-xs" id="convert">Convert</button>
           &nbsp;
           <label for="from">
           from
           </label>
-          <select id="from">
+          <select id="inputFORMAT">
             <option value="docbook">DocBook</option>
             <option value="haddock">Haddock markup</option>
             <option value="html">HTML</option>
@@ -53,7 +54,7 @@
           <label for="to">
           to
           </label>
-          <select id="to">
+          <select id="outputFORMAT">
             <option value="asciidoc">AsciiDoc</option>
             <option value="context">ConTeXt</option>
             <option value="docbook">DocBook</option>
@@ -84,8 +85,10 @@
           </select>
           <br>
           <pre id="results"></pre>
+          <b>Citation Style:</b>
+          <input type="text" length="45" id="cslFILE">
           <b>Template Code:</b>
-          <textarea id="editor" style="width: 400px; height: 300px;"></textarea>
+          <textarea id="template" style="width: 400px; height: 300px;"></textarea>
         </div>
       </div>
     </div>
@@ -105,6 +108,11 @@
  function openFile () {
   dialog.showOpenDialog(function (fileNames) {
   });
+  if (fileNames) {
+    alert("fileNames  exist!")
+  } else {
+    alert("Filename does not exist");
+  };
 }
 function saveFile () {
   fs.writeFile('message.txt', 'Hello Node.js', (err) => {

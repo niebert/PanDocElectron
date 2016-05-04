@@ -47,6 +47,10 @@ Now you are able to install Electron on you system
 
 > `sudo npm install -g electron-prebuilt`
 
+If you want to create Windows Application on your MacOSX please install
+
+> `brew install Caskroom/cask/xquartz wine mono`
+
 Please install Xcode form the AppStore for your MacOSX system
 
 The Atom Editor is recommended as developing environment together with electron:
@@ -54,7 +58,8 @@ Download and install from  the following website:
 
 * [https://atom.io/](https://atom.io/)
 
-## Electron Tutorials
+
+## Electron Tutorials for Linux and MacOSX
 
 * [Create the first App in Electron](https://www.youtube.com/watch?v=ojX5yz35v4M)
 * Install a [Quick Start Electron](http://electron.atom.io/) Application. Use the install support for this:
