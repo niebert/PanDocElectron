@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PanDoc Electron</title>
+    <!-- script src="./lib/jquery-1.js"></script>
+    <script src="./lib/bootstrap.js"></script -->
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/main.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1><a href="http://pandoc.org/">PanDoc</a> Electron</h1>
+            <button id="openFile"  onclick="openFile();">Open</button>
+          <button id="saveFile" onclick="saveFile();">Save</button><br />
+          <button id="runCommand" onclick="runShellCommand();">Run Command</button><br />
+        </div>
+        <div class="col-md-6">
+          <pre id="command"></pre>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-primary btn-xs" id="convert">Convert</button>
+          &nbsp;
+          <label for="from">
+          from
+          </label>
+          <select id="from">
+            <option value="docbook">DocBook</option>
+            <option value="haddock">Haddock markup</option>
+            <option value="html">HTML</option>
+            <option value="latex">LaTeX</option>
+            <option value="markdown" selected="selected">Markdown (pandoc)</option>
+            <option value="markdown_strict">Markdown (strict)</option>
+            <option value="markdown_phpextra">Markdown (PHP Markdown Extra)</option>
+            <option value="markdown_github">Markdown (GitHub)</option>
+            <option value="mediawiki">MediaWiki</option>
+            <option value="markdown_mmd">MultiMarkdown</option>
+            <option value="opml">OPML</option>
+            <option value="org">Org Mode</option>
+            <option value="rst">reStructuredText</option>
+            <option value="textile">Textile</option>
+            <option value="t2t">Txt2Tags</option>
+          </select>
+          <br>
+          <textarea id="text" maxlength="3000" rows="15"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label for="to">
+          to
+          </label>
+          <select id="to">
+            <option value="asciidoc">AsciiDoc</option>
+            <option value="context">ConTeXt</option>
+            <option value="docbook">DocBook</option>
+            <option value="dokuwiki">DokuWiki</option>
+            <option value="dzslides">DZSlides</option>
+            <option value="man">Groff man</option>
+            <option value="html" selected="selected">HTML</option>
+            <option value="html5">HTML 5</option>
+            <option value="icml">ICML</option>
+            <option value="latex">LaTeX</option>
+            <option value="beamer">LaTeX Beamer</option>
+            <option value="markdown">Markdown (pandoc)</option>
+            <option value="markdown_strict">Markdown (strict)</option>
+            <option value="markdown_phpextra">Markdown (PHP Markdown Extra)</option>
+            <option value="markdown_github">Markdown (GitHub)</option>
+            <option value="markdown_mmd">MultiMarkdown</option>
+            <option value="rst">reStructuredText</option>
+            <option value="textile">Textile</option>
+            <option value="mediawiki">MediaWiki</option>
+            <option value="org">Org Mode</option>
+            <option value="opendocument">OpenDocument</option>
+            <option value="opml">OPML</option>
+            <option value="rtf">RTF</option>
+            <option value="S5">S5</option>
+            <option value="slideous">Slideous</option>
+            <option value="slidy">Slidy</option>
+            <option value="texinfo">Texinfo</option>
+          </select>
+          <br>
+          <pre id="results"></pre>
+          <b>Template Code:</b>
+          <textarea id="editor" style="width: 400px; height: 300px;"></textarea>
+        </div>
+      </div>
+    </div>
+    <footer>
+     <p class="version">PanDoc Electron - GUI <span id="version"></span></p>
+     <p>© 2013–2015 <a href="http://johnmacfarlane.net/">John MacFarlane</a>
+       PanDoc Electron uses Node.js <script>document.write(process.versions.node)</script>,
+       Chromium <script>document.write(process.versions.chrome)</script>,
+       and Electron <script>document.write(process.versions.electron)</script>.
+     </p>
+    </footer>
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+<br />
+<script>
+ var remote = require('remote');
+ var dialog = remote.require('dialog');
+ function openFile () {
+  dialog.showOpenDialog(function (fileNames) {
+  });
+}
+function saveFile () {
+  fs.writeFile('message.txt', 'Hello Node.js', (err) => {
+    if (err) throw err;
+    console.log('It\'s saved!');
+  });
+}
+function runShellCommand () {
+  const child = exec('ls -la',
+    (error, stdout, stderr) => {
+      console.log(`stdout: ${stdout}`);
+      alert(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+      if (error !== null) {
+        console.log(`exec error: ${error}`);
+      }
+  });
+
+}
+</script>
+
+  </body>
+
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+    const fs = require('fs');
+    const exec = require('child_process').exec;
+  </script>
+</html>
