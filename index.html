@@ -3,19 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <title>PanDoc Electron</title>
-    <!-- script src="./lib/jquery-1.js"></script>
-    <script src="./lib/bootstrap.js"></script -->
+    <!-- script src="./js/jquery-1.js"></script>
+    <script src="./js/bootstrap.js"></script -->
     <link href="./css/bootstrap.css" rel="stylesheet">
     <link href="./css/main.css" rel="stylesheet">
-
+    <script src="./js/showhide.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="row">
         <div class="col-md-6">
           <h1><a href="http://pandoc.org/">PanDoc</a> Electron</h1>
-          <button class="btn btn-primary btn-xs"  id="saveFile" onclick="saveFile();">Save</button>
-          <button class="btn btn-primary btn-xs" id="convertFile" onclick="convertFile();">Convert</button>
         </div>
         <div class="col-md-6">
           <pre id="command"></pre>
@@ -23,72 +21,204 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <button class="btn btn-primary btn-xs"  id="openFile"  onclick="openFile();">Open</button>
-          <input type="text" length="45" id="inputFILE" value="readme.md">
-          <button class="btn btn-primary btn-xs" id="convert">Convert</button>
-          &nbsp;
-          <label for="from">
-          from
-          </label>
-          <select id="inputFORMAT">
-            <option value="docbook">DocBook</option>
-            <option value="haddock">Haddock markup</option>
-            <option value="html">HTML</option>
-            <option value="latex">LaTeX</option>
-            <option value="markdown" selected="selected">Markdown (pandoc)</option>
-            <option value="markdown_strict">Markdown (strict)</option>
-            <option value="markdown_phpextra">Markdown (PHP Markdown Extra)</option>
-            <option value="markdown_github">Markdown (GitHub)</option>
-            <option value="mediawiki">MediaWiki</option>
-            <option value="markdown_mmd">MultiMarkdown</option>
-            <option value="opml">OPML</option>
-            <option value="org">Org Mode</option>
-            <option value="rst">reStructuredText</option>
-            <option value="textile">Textile</option>
-            <option value="t2t">Txt2Tags</option>
-          </select>
-          <br>
-          <textarea id="text" maxlength="3000" rows="15"></textarea>
-        </div>
-        <div class="col-md-6">
-          <label for="to">
-          to
-          </label>
-          <select id="outputFORMAT">
-            <option value="asciidoc">AsciiDoc</option>
-            <option value="context">ConTeXt</option>
-            <option value="docbook">DocBook</option>
-            <option value="dokuwiki">DokuWiki</option>
-            <option value="dzslides">DZSlides</option>
-            <option value="man">Groff man</option>
-            <option value="html" selected="selected">HTML</option>
-            <option value="html5">HTML 5</option>
-            <option value="icml">ICML</option>
-            <option value="latex">LaTeX</option>
-            <option value="beamer">LaTeX Beamer</option>
-            <option value="markdown">Markdown (pandoc)</option>
-            <option value="markdown_strict">Markdown (strict)</option>
-            <option value="markdown_phpextra">Markdown (PHP Markdown Extra)</option>
-            <option value="markdown_github">Markdown (GitHub)</option>
-            <option value="markdown_mmd">MultiMarkdown</option>
-            <option value="rst">reStructuredText</option>
-            <option value="textile">Textile</option>
-            <option value="mediawiki">MediaWiki</option>
-            <option value="org">Org Mode</option>
-            <option value="opendocument">OpenDocument</option>
-            <option value="opml">OPML</option>
-            <option value="rtf">RTF</option>
-            <option value="S5">S5</option>
-            <option value="slideous">Slideous</option>
-            <option value="slidy">Slidy</option>
-            <option value="texinfo">Texinfo</option>
-          </select>
-          <br>
-          <pre id="results"></pre>
-          <b>Citation Style:</b>
-          <input type="text" length="45" id="cslFILE">
-          <b>Template Code:</b>
-          <textarea id="template" style="width: 400px; height: 300px;"></textarea>
+          <table border="0"  cellspacing="30" class="buttontable">
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-xs"  id="openFile"  onclick="openInputFile('projects');">Source File</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <select id="inputFORMAT">
+                  <option value="docbook">DocBook</option>
+                  <option value="haddock">Haddock markup</option>
+                  <option value="html">HTML</option>
+                  <option value="latex">LaTeX</option>
+                  <option value="markdown" selected="selected">Markdown (pandoc)</option>
+                  <option value="markdown_strict">Markdown (strict)</option>
+                  <option value="markdown_phpextra">Markdown (PHP Markdown Extra)</option>
+                  <option value="markdown_github">Markdown (GitHub)</option>
+                  <option value="mediawiki">MediaWiki</option>
+                  <option value="markdown_mmd">MultiMarkdown</option>
+                  <option value="opml">OPML</option>
+                  <option value="org">Org Mode</option>
+                  <option value="rst">reStructuredText</option>
+                  <option value="textile">Textile</option>
+                  <option value="t2t">Txt2Tags</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Web-Input:</b> <input type="checkbox" name="checkWebInput" id="checkWebInput" onclick="changedWebInput(this.checked)" >
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="inputFILE"></tt>
+              </td>
+            </tr>
+            <tr>
+              <tr>
+                <td>
+                  <b id="labelURL" hidden="hidden">Web-Input-URL:</b>
+                </td>
+                <td>
+                  &nbsp;
+                </td>
+                <td>
+                  <input type="text" size="55" id="inputWEB" value="http://ifm.uni-landau.de" hidden="hidden">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                <b>Destination:</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <select id="outputFORMAT" onchange="changedOutFormat(this.value)">
+                  <option value="html">HTML</option>
+                  <option value="html5">HTML 5</option>
+                  <option value="latex">LaTeX</option>
+                  <option value="markdown">Markdown (pandoc)</option>
+                  <option value="mediawiki">MediaWiki</option>
+                  <option value="beamer">LaTeX Beamer</option>
+                  <option value="reveal" selected="selected">RevealJS</option>
+                  <option value="audioslides">AudioSlides</option>
+                  <option value="dzslides">DZSlides</option>
+                  <option value="odt">ODT-File</option>
+                  <option value="docx">DOCX-File</option>
+                  <option value="asciidoc">AsciiDoc</option>
+                  <option value="context">ConTeXt</option>
+                  <option value="docbook">DocBook</option>
+                  <option value="dokuwiki">DokuWiki</option>
+                  <option value="man">Groff man</option>
+                  <option value="icml">ICML</option>
+                  <option value="markdown_strict">Markdown (strict)</option>
+                  <option value="markdown_phpextra">Markdown (PHP Markdown Extra)</option>
+                  <option value="markdown_github">Markdown (GitHub)</option>
+                  <option value="markdown_mmd">MultiMarkdown</option>
+                  <option value="rst">reStructuredText</option>
+                  <option value="textile">Textile</option>
+                  <option value="org">Org Mode</option>
+                  <option value="opendocument">OpenDocument</option>
+                  <option value="opml">OPML</option>
+                  <option value="rtf">RTF</option>
+                  <option value="S5">S5</option>
+                  <option value="slideous">Slideous</option>
+                  <option value="slidy">Slidy</option>
+                  <option value="texinfo">Texinfo</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>&nbsp;</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="outputFILE"></tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-xs"  id="openBIBFile"  onclick="openBIBFile('bib/data');">BibTeX Citation</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt>BibTeX-Format</tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>&nbsp;</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="bibFILE"></tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-xs"  id="openCSLFile"  onclick="openCSLFile('bib/data');">CSL-File</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt>Citation Style</tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>&nbsp;</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="cslFILE"></tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-xs"  id="openTPLFile"  onclick="openTPLFile('tpl');">Source File</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt>Template</tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>&nbsp;</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="tplFILE"></tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label hidden="hidden" id="labelREFFile">
+                  <button class="btn btn-primary btn-xs"  id="openREFFile"  onclick="openREFFile('tpl');">Style Reference</button>
+                </label>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="refLABEL" hidden="hidden">Style Reference (ODT/DOCX)</tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>&nbsp;</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="refFILE" hidden="hidden"></tt>
+              </td>
+            </tr>
+          </table>
+          <br/>
+          <textarea id="inputEDITOR" maxlength="3000" rows="15"></textarea>
         </div>
       </div>
     </div>
@@ -103,35 +233,91 @@
     <!-- All of the Node.js APIs are available in this renderer process. -->
 <br />
 <script>
- var remote = require('remote');
- var dialog = remote.require('dialog');
- function openFile () {
-  dialog.showOpenDialog(function (fileNames) {
-  });
-  if (fileNames) {
-    alert("fileNames  exist!")
-  } else {
-    alert("Filename does not exist");
-  };
-}
-function saveFile () {
-  fs.writeFile('message.txt', 'Hello Node.js', (err) => {
-    if (err) throw err;
-    console.log('It\'s saved!');
-  });
-}
-function runShellCommand () {
-  const child = exec('ls -la',
-    (error, stdout, stderr) => {
-      console.log(`stdout: ${stdout}`);
-      alert(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-      if (error !== null) {
-        console.log(`exec error: ${error}`);
-      }
-  });
+var remote = require('remote');
+var dialog = remote.require('dialog');
+var vExtHash = new Array();
+vExtHash["latex"]="tex";
+vExtHash["beamer"]="tex";
+vExtHash["mediawiki"]="wiki";
+vExtHash["reveal"]="html";
+vExtHash["markdown"]="html";
+vExtHash["dzslides"]="html";
+vExtHash["audioslides"]="html";
 
+function openInputFile (pPath) {
+  openFile("inputFILE","inputEDITOR",pPath)
 }
+function openBIBFile (pPath) {
+  openFile("bibFILE","",pPath)
+}
+function openREFFile (pPath) {
+  openFile("refFILE","",pPath)
+}
+function openCSLFile (pPath) {
+  openFile("cslFILE","",pPath)
+}
+function openTPLFile (pPath) {
+  openFile("tplFILE","",pPath)
+}
+function changedWebInput(pChecked) {
+  //alert("Changed Web Input");
+  if (pChecked) {
+    showElement("labelURL");
+    showElement("inputWEB");
+  } else {
+    hideElement("labelURL");
+    hideElement("inputWEB");
+  }
+};
+function changedOutFormat (pOutputFORMAT) {
+  if ((pOutputFORMAT=="odt") || (pOutputFORMAT=="docx")) {
+    showElement("labelREFFile")
+    showElement("refLABEL")
+    showElement("refFILE")
+  } else {
+    hideElement("labelREFFile")
+    hideElement("refLABEL")
+    hideElement("refFILE")
+  }
+}
+
+function createOutputFile (pInputFile,pOutputFORMAT) {
+  var vFileNoExt = removeExtension(pInputFile);
+  var vExt = vExtHash[pOutputFORMAT] || pOutputFORMAT;
+  return vFileNoExt+"_"+pOutputFORMAT+"."+vExt;
+}
+function openFile (pFilenameID,pTextAreaID,pPath) {
+  dialog.showOpenDialog(function (fileNames) {
+  if (fileNames === undefined) return;
+  var fileName = fileNames[0];
+  document.getElementById(pFilenameID).innerHTML=fileName;
+  if (pTextAreaID!="") {
+    fs.readFile(fileName, 'utf-8', function (err, data) {
+      document.getElementById(pTextAreaID).value = data;
+    });
+  };
+ });
+}
+
+function saveFile () {
+ fs.writeFile('message.txt', 'Hello Node.js', (err) => {
+   if (err) throw err;
+   console.log('It\'s saved!');
+ });
+}
+
+function runShellCommand (pCommand) {
+ const child = exec(pCommand,
+   (error, stdout, stderr) => {
+     console.log(`stdout: ${stdout}`);
+     //alert(`stdout: ${stdout}`);
+     console.log(`stderr: ${stderr}`);
+     if (error !== null) {
+       console.log(`exec error: ${error}`);
+     }
+ });
+}
+
 </script>
 
   </body>

@@ -53,6 +53,8 @@ If you want to create Windows Application on your MacOSX please install
 
 Please install Xcode form the AppStore for your MacOSX system
 
+* [https://developer.apple.com/xcode/download](https://developer.apple.com/xcode/download)
+
 The Atom Editor is recommended as developing environment together with electron:
 Download and install from  the following website:
 
