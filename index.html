@@ -5,26 +5,49 @@
     <title>PanDoc Electron</title>
     <!-- script src="./js/jquery-1.js"></script>
     <script src="./js/bootstrap.js"></script -->
-    <link href="./css/bootstrap.css" rel="stylesheet">
-    <link href="./css/main.css" rel="stylesheet">
-    <script src="./js/showhide.js"></script>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <script src="js/showhide.js"></script>
+    <script src="js/pathfiles.js"></script>
+    <script src="js/writedom.js"></script>
+
   </head>
   <body>
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <h1><a href="http://pandoc.org/">PanDoc</a> Electron</h1>
+          <h1><a href="http://pandoc.org/try" target="_blank">PanDoc</a> Electron</h1>
         </div>
         <div class="col-md-6">
           <pre id="command"></pre>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
-          <table border="0"  cellspacing="30" class="buttontable">
+        <div align="center">
+          <button  id="loadConfig"  onclick="loadConfig('default.cfg');">Load Config</button>
+          <button  id="saveConfig"  onclick="saveConfig('default.cfg');">Save Config</button>
+          <button class="btn btn-primary btn-xs"  id="convertFILE"  onclick="convertFile();" >Convert File</button>
+          <hr/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6" id="divconfig">
+          <table border="0"  cellspacing="30" class="buttonsnovice">
+            <tr>
+              <tr>
+                <td>
+                  <b id="projectmainLABEL">Main Source Folder:</b>
+                </td>
+                <td>
+                  &nbsp;
+                </td>
+                <td>
+                  <input type="text" size="55" id="projectmainDIR" value="">
+                </td>
+              </tr>
             <tr>
               <td>
-                <button class="btn btn-primary btn-xs"  id="openFile"  onclick="openInputFile('projects');">Source File</button>
+                <button class="btn btn-primary btn-xs"  id="openFile"  onclick="openInputFile('projects');">Input File</button>
               </td>
               <td>
                 &nbsp;
@@ -51,7 +74,7 @@
             </tr>
             <tr>
               <td>
-                <b>Web-Input:</b> <input type="checkbox" name="checkWebInput" id="checkWebInput" onclick="changedWebInput(this.checked)" >
+                <b>Input:-File</b>
               </td>
               <td>
                 &nbsp;
@@ -60,20 +83,8 @@
                 <tt id="inputFILE"></tt>
               </td>
             </tr>
-            <tr>
-              <tr>
-                <td>
-                  <b id="labelURL" hidden="hidden">Web-Input-URL:</b>
-                </td>
-                <td>
-                  &nbsp;
-                </td>
-                <td>
-                  <input type="text" size="55" id="inputWEB" value="http://ifm.uni-landau.de" hidden="hidden">
-                </td>
-              </tr>
-              <tr>
-                <td>
+            <tr><!-- outputFILE -->
+              <td>
                 <b>Destination:</b>
               </td>
               <td>
@@ -115,7 +126,7 @@
                 </select>
               </td>
             </tr>
-            <tr>
+            <tr><!-- outputFILE -->
               <td>
                 <b>&nbsp;</b>
               </td>
@@ -126,9 +137,38 @@
                 <tt id="outputFILE"></tt>
               </td>
             </tr>
+          </table>
+          <hr/><b>Web-Input:</b> <input type="checkbox" name="checkWebInput" id="checkWebInput" onclick="toggleCheck('tableweb',this.checked)" >
+          <table border="0"  cellspacing="30" id="tableweb" class="buttonsweb"  hidden="hidden">
             <tr>
               <td>
-                <button class="btn btn-primary btn-xs"  id="openBIBFile"  onclick="openBIBFile('bib/data');">BibTeX Citation</button>
+                <b>Web Project Name:</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <input type="text" size="35" id="inputWEBFILE" value="mywebfile" onchange="setInput4WebDownload()">
+                <button class="btn btn-primary btn-xs"  id="downloadFile"  onclick="downloadInputFile('projects');">Input File</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <b id="labelURL">Web-Input-URL:</b>
+              </td>
+              <td>
+                  &nbsp;
+              </td>
+              <td>
+                  <input type="text" size="55" id="inputURL" value="http://ifm.uni-landau.de" >
+              </td>
+            </tr>
+          </table>
+          <hr/><b>Bibiographie:</b> <input type="checkbox" name="checkCitation" id="checkCitation" onclick="toggleCheck('tablecitation',this.checked)" >
+          <table border="0"  cellspacing="30" id="tablecitation" class="buttonscitation"  hidden="hidden">
+            <tr><!-- bibFILE -->
+              <td>
+                  <button class="btn btn-primary btn-xs"  id="openBIBFile"  onclick="openBIBFile('bib/data');">BibTeX Citation</button>
               </td>
               <td>
                 &nbsp;
@@ -137,7 +177,7 @@
                 <tt>BibTeX-Format</tt>
               </td>
             </tr>
-            <tr>
+            <tr><!-- bibFILE -->
               <td>
                 <b>&nbsp;</b>
               </td>
@@ -148,7 +188,7 @@
                 <tt id="bibFILE"></tt>
               </td>
             </tr>
-            <tr>
+            <tr><!-- cslFILE -->
               <td>
                 <button class="btn btn-primary btn-xs"  id="openCSLFile"  onclick="openCSLFile('bib/data');">CSL-File</button>
               </td>
@@ -159,7 +199,7 @@
                 <tt>Citation Style</tt>
               </td>
             </tr>
-            <tr>
+            <tr><!-- cslFILE -->
               <td>
                 <b>&nbsp;</b>
               </td>
@@ -170,61 +210,19 @@
                 <tt id="cslFILE"></tt>
               </td>
             </tr>
-            <tr>
-              <td>
-                <button class="btn btn-primary btn-xs"  id="openTPLFile"  onclick="openTPLFile('tpl');">Template</button>
-              </td>
-              <td>
-                &nbsp;
-              </td>
-              <td>
-                <tt>Template</tt>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <b>&nbsp;</b>
-              </td>
-              <td>
-                &nbsp;
-              </td>
-              <td>
-                <tt id="tplFILE"></tt>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label hidden="hidden" id="labelREFFile">
-                  <button class="btn btn-primary btn-xs"  id="openREFFile"  onclick="openREFFile('tpl');">Style Reference</button>
-                </label>
-              </td>
-              <td>
-                &nbsp;
-              </td>
-              <td>
-                <tt id="refLABEL" hidden="hidden">Style Reference (ODT/DOCX)</tt>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <b>&nbsp;</b>
-              </td>
-              <td>
-                &nbsp;
-              </td>
-              <td>
-                <tt id="refFILE" hidden="hidden"></tt>
-              </td>
-            </tr>
           </table>
-          <br/>
-          <textarea id="inputEDITOR" maxlength="3000" rows="15"></textarea>
+          <hr/><b>Templates:</b> <input type="checkbox" name="checkTemplates" id="checkTemplates" onclick="toggleCheck('tabletemplates',this.checked)" >
+          <table border="0"  cellspacing="30" id="tabletemplates" class="buttonstemplate"  hidden="hidden">
+          </table>
+          <hr/>
+          <b>Input Editor:</b> <input type="checkbox" name="checkEditor" id="checkEditor" onclick="toggleCheck('inputEDITOR',this.checked)" >
+          <textarea id="inputEDITOR" maxlength="3000" rows="15" hidden="hidden"></textarea>
+          <hr/>
         </div>
-      </div>
     </div>
     <footer>
-     <p class="version">PanDoc Electron - GUI <span id="version"></span></p>
-     <p>© 2013–2015 <a href="http://johnmacfarlane.net/">John MacFarlane</a>
+     <p class="version">PanDoc Electron - GUI <span id="version">0.4</span> - Engelbert Niehaus</p>
+     <p>for PanDoc by <a href="http://johnmacfarlane.net/" target="_blank">John MacFarlane</a>
        PanDoc Electron uses Node.js <script>document.write(process.versions.node)</script>,
        Chromium <script>document.write(process.versions.chrome)</script>,
        and Electron <script>document.write(process.versions.electron)</script>.
@@ -233,8 +231,10 @@
     <!-- All of the Node.js APIs are available in this renderer process. -->
 <br />
 <script>
-var remote = require('remote');
-var dialog = remote.require('dialog');
+var remote  = require('remote');
+const fs    = require('fs');
+var app     = remote.require('app');
+var dialog  = remote.require('dialog');
 var vExtHash = new Array();
 vExtHash["latex"]="tex";
 vExtHash["beamer"]="tex";
@@ -245,28 +245,38 @@ vExtHash["dzslides"]="html";
 vExtHash["audioslides"]="html";
 
 function openInputFile (pPath) {
+  pPath = getProjectDir(pPath);
   openFile("inputFILE","inputEDITOR",pPath)
 }
 function openBIBFile (pPath) {
+  pPath = getProjectDir(pPath);
   openFile("bibFILE","",pPath)
 }
 function openREFFile (pPath) {
+  pPath = getProjectDir(pPath);
   openFile("refFILE","",pPath)
 }
 function openCSLFile (pPath) {
+  pPath = getProjectDir(pPath);
   openFile("cslFILE","",pPath)
 }
 function openTPLFile (pPath) {
+  pPath = getProjectDir(pPath);
   openFile("tplFILE","",pPath)
 }
+function downloadInputFile(pPath) {
+  alert("Download Input File and Convert Source File to MarkDown");
+};
 function changedWebInput(pChecked) {
   //alert("Changed Web Input");
   if (pChecked) {
     showElement("labelURL");
-    showElement("inputWEB");
+    showElement("inputURL");
+    showElement("webProjectName");
   } else {
     hideElement("labelURL");
-    hideElement("inputWEB");
+    hideElement("inputURL");
+    hideElement("webProjectName");
   }
 };
 function changedOutFormat (pOutputFORMAT) {
@@ -286,24 +296,82 @@ function createOutputFile (pInputFile,pOutputFORMAT) {
   var vExt = vExtHash[pOutputFORMAT] || pOutputFORMAT;
   return vFileNoExt+"_"+pOutputFORMAT+"."+vExt;
 }
+function openDirectory(pID,pDefaultPath) {
+  //dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]})
+  dialog.showOpenDialog({ defaultPath: pDefaultPath , properties: [ 'openDirectory' ]})
+}
 function openFile (pFilenameID,pTextAreaID,pPath) {
-  dialog.showOpenDialog(function (fileNames) {
+  openFileWriteDOM(pFilenameID,pTextAreaID,pPath,write2value);
+}
+function openFileWriteDOM (pFilenameID,pTextAreaID,pPath,fWriteDOM) {
+  dialog.showOpenDialog({defaultPath: app.getPath('downloads')},function (fileNames) {
   if (fileNames === undefined) return;
   var fileName = fileNames[0];
-  document.getElementById(pFilenameID).innerHTML=fileName;
+  fWriteDOM(pFilenameID,fileName);
   if (pTextAreaID!="") {
     fs.readFile(fileName, 'utf-8', function (err, data) {
-      document.getElementById(pTextAreaID).value = data;
+      write2value(pTextAreaID, data);
+      console.log('\''+fileName+' opened!');
     });
   };
  });
 }
 
-function saveFile () {
- fs.writeFile('message.txt', 'Hello Node.js', (err) => {
+function loadConfig(pConfigFile) {
+  var vConfigFile = pConfigFile || "default.cfg";
+  // simnply load config file into the innerHTML of DIV node 'divconfig'
+  fs.readFile(__dirname+'/config/'+vConfigFile, 'utf-8', function (err, data) {
+    write2innerHTML("divconfig", data);
+    console.log('Config File \''+vConfigFile+' loaded!');
+  });
+
+}
+
+function saveConfig (pConfigFile) {
+  var vConfigFile = pConfigFile || "default.cfg";
+  // simnply write the innerHTML of DIV node 'divconfig' into file
+  var vContent=document.getElementById("divconfig").innerHTML;
+  fs.writeFile('config/'+vConfigFile, vContent, (err) => {
+  //fs.writeFile(vConfigFile, vContent, (err) => {
    if (err) throw err;
-   console.log('It\'s saved!');
+   console.log('Config File \''+pConfigFile+'\' saved!');
  });
+}
+
+function saveFile(pFilename,pContent) {
+ fs.writeFile(pFilename, pContent, (err) => {
+   if (err) throw err;
+   console.log('Filename \''+pFilename+'\' saved!');
+   //alert("Dirname: "+__dirname)
+ });
+}
+
+function setInput4WebDownload() {
+  var vFilename = document.getElementById("inputWEBFILE").value || "webdownload.md";
+
+  if (vFilename == "") {
+    alert("Download File undefined, set Filename to 'webdownload.md'")
+  } else if (getExtensionOfFilename(vFilename) != "md") {
+    vFilename = removeExtension(vFilename)+".md";
+    alert("Extension is not 'md'. Use filename '"+vFilename+"' instead!");
+  };
+  write2value("inputWEBFILE",vFilename);
+  vFilename = getProjectDir(pProject)+"/"+vFilename;
+  console.log('Web Input File: \''+vFilename+'\' defined!');
+  write2innerHTML("inputFILE",vFilename);
+}
+
+function saveTestFile () {
+  alert("Call: saveTestFile() l.368 index.html")
+  saveFile('./message.txt', 'Hello Node.js this is the File Content');
+}
+function saveFile2AppDir (pFilename,pContent) {
+  var vFilename=__dirname+"/"+pFilename;
+  fs.writeFile(vFilename, pContent, (err) => {
+    if (err) throw err;
+    console.log('File: \''+vFilename+'\' saved!');
+    //alert("Dirname: "+__dirname)
+  });
 }
 
 function runShellCommand (pCommand) {
@@ -317,6 +385,49 @@ function runShellCommand (pCommand) {
      }
  });
 }
+function convertChecker() {
+  alert("check input set, webdownload command exec");
+}
+function runPandocShell() {
+  alert("now execute ");
+}
+function convertFile() {
+  convertChecker();
+  runPandocShell();
+}
+function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt) {
+  var vDefaultName = "tpldefault";
+  if (pOutputFORMAT=="odt") {
+    vDefaultName = "content"
+  };
+  var vDefaultTpl = pPath+"/tpl/"+pOutputFORMAT+"/"+vDefaultName+"."+pExt;
+  var vContent = pOutputFORMAT+"-Template "+pTemplate+" undefined";
+  var vContent = pOutputFORMAT+"-Template "+pTemplate+" undefined";
+  fs.readFile(pTemplate, 'utf-8', function (err, tpldata) {
+    vContent = replaceString(tpldata,"___FORMAT___", pOutputFORMAT);
+    vContent = replaceString(vContent,"___TYPE___", pOutputFORMAT.toUpperCase());
+    vContent = replaceString(vContent,"___TPLDEFAULT___", vDefaultTpl);
+    //alert(vContent);
+    append2innerHTML(pID,vContent);
+    console.log('Template File \''+pTemplate+' loaded!');
+  });
+  return vContent;
+}
+function setDefaultValues() {
+  var vPath = app.getPath('documents')+"/PanDocs";
+  write2value("projectmainDIR",vPath);
+  // set vPath to Template Path and init the templates to default filenames
+  vPath = app.getPath('home')+"/ownCloudLD/PanDoc";
+  appendTemplateInput("tabletemplates","reveal",'html/template.html',vPath,"html");
+  appendTemplateInput("tabletemplates","audioslides",'html/template.html',vPath,"html");
+  appendTemplateInput("tabletemplates","odt",'html/template.html',vPath,"xml");
+  appendTemplateInput("tabletemplates","odt",'html/referencefile.html',vPath,"odt");
+  appendTemplateInput("tabletemplates","docx",'html/referencefile.html',vPath,"docx");
+  appendTemplateInput("tabletemplates","latex",'html/template.html',vPath,"tex");
+  //alert(app.getPath('documents'))
+}
+
+setDefaultValues();
 
 </script>
 
@@ -325,7 +436,7 @@ function runShellCommand (pCommand) {
   <script>
     // You can also require other files to run in this process
     require('./renderer.js')
-    const fs = require('fs');
+    //const fs = require('fs');
     const exec = require('child_process').exec;
   </script>
 </html>

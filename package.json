@@ -24,5 +24,8 @@
   "homepage": "https://github.com/electron/electron-quick-start#readme",
   "devDependencies": {
     "electron-prebuilt": "^0.37.8"
+  },
+  "dependencies": {
+    "electron-open-link-in-browser": "^1.0.2"
   }
 }

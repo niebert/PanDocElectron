@@ -1,3 +1,10 @@
+function toggleCheck(pID,pChecked) {
+	if (pChecked) {
+		show(pID,"block");
+	} else {
+		hide(pID);
+	}
+}
 function hide(pID) {
 		var vNode = document.getElementById(pID);
 	if (vNode) {
