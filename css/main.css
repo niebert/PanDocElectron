@@ -2,7 +2,7 @@ h1 { margin-bottom: 1em; }
 body { margin: auto; }
 textarea { height: auto; width: 100%; font-family: monospace; margin-top: 15px; }
 div.alert { margin: 1em; }
-h3 { margin-top: 0; margin-bottom: 0; padding: 0; font-size: 100%; }
+h3 {font-weight: bold; margin-top: 0; margin-bottom: 0; padding: 0; font-size: 120%; }
 pre#results { width: 100%; margin-top: 15px; }
 footer { color: #555; text-align: center; margin: 1em; }
 p.version { color: #555; }

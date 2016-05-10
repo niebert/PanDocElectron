@@ -1,14 +1,33 @@
 function write2innerHTML(pID,pContent) {
-  document.getElementById(pID).innerHTML=pContent;
-}
+  var vNode =document.getElementById(pID)
+  if (vNode){
+    vNode.innerHTML=pContent;
+  } else {
+    alert("Write DOM-Node 'innerHTML' with ID=["+pID+"] was undefined")
+  }}
 function write2value(pID,pContent) {
-  document.getElementById(pID).value=pContent;
+  var vNode =document.getElementById(pID)
+  if (vNode){
+    vNode.value=pContent;
+  } else {
+    alert("Write DOM-Node 'value' with ID=["+pID+"] was undefined")
+  }
 }
 function append2innerHTML(pID,pContent) {
-  document.getElementById(pID).innerHTML+=pContent;
+  var vNode =document.getElementById(pID)
+  if (vNode){
+    vNode.innerHTML+=pContent;
+  } else {
+    alert("Append DOM-Node 'innerHTML' with ID=["+pID+"] was undefined")
+  }
 }
 function append2value(pID,pContent) {
-  document.getElementById(pID).value+=pContent;
+  var vNode =document.getElementById(pID)
+  if (vNode){
+    vNode.value+=pContent;
+  } else {
+    alert("DOM-Node 'value' with ID=["+pID+"] was undefined")
+  }
 }
 function replaceString(pString,pSearch,pReplace)
 // replaces in the string "pString" multiple substrings "pSearch" by "pReplace"

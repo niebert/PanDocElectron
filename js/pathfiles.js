@@ -10,7 +10,10 @@ function getPathFromFilename(pFilename) {
   return pFilename.substr(0, pFilename.lastIndexOf('/'));
 }
 function getProjectDir(pProject) {
-  var vProject = ("/"+pProject) || "";
+  var vProject = "";
+  if (pProject) {
+    vProject = "/"+pProject;
+  };
   return (document.getElementById("projectmainDIR").value+vProject);
 }
 /**

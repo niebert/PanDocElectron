@@ -34,17 +34,16 @@
         <div class="col-md-6" id="divconfig">
           <table border="0"  cellspacing="30" class="buttonsnovice">
             <tr>
-              <tr>
-                <td>
-                  <b id="projectmainLABEL">Main Source Folder:</b>
-                </td>
-                <td>
+              <td>
+                <b id="projectmainLABEL">Main Folder:</b>
+              </td>
+              <td>
                   &nbsp;
-                </td>
-                <td>
+              </td>
+              <td>
                   <input type="text" size="55" id="projectmainDIR" value="">
-                </td>
-              </tr>
+              </td>
+            </tr>
             <tr>
               <td>
                 <button class="btn btn-primary btn-xs"  id="openFile"  onclick="openInputFile('projects');">Input File</button>
@@ -73,8 +72,8 @@
               </td>
             </tr>
             <tr>
-              <td>
-                <b>Input:-File</b>
+              <td align="right">
+                <b>Input File:</b>
               </td>
               <td>
                 &nbsp;
@@ -84,8 +83,8 @@
               </td>
             </tr>
             <tr><!-- outputFILE -->
-              <td>
-                <b>Destination:</b>
+              <td align="right">
+                <b>Output Format:</b>
               </td>
               <td>
                 &nbsp;
@@ -127,8 +126,8 @@
               </td>
             </tr>
             <tr><!-- outputFILE -->
-              <td>
-                <b>&nbsp;</b>
+              <td align="right">
+                <b>Output File:</b>
               </td>
               <td>
                 &nbsp;
@@ -138,33 +137,51 @@
               </td>
             </tr>
           </table>
-          <hr/><b>Web-Input:</b> <input type="checkbox" name="checkWebInput" id="checkWebInput" onclick="toggleCheck('tableweb',this.checked)" >
+          <hr/>
+          <h3>
+            Web-Input:
+            <input type="checkbox" name="checkWebInput" id="checkWebInput" onclick="toggleCheck('tableweb',this.checked)" >
+          </h3>
           <table border="0"  cellspacing="30" id="tableweb" class="buttonsweb"  hidden="hidden">
             <tr>
-              <td>
-                <b>Web Project Name:</b>
+              <td align="right">
+                <b>Project Name:</b>
               </td>
               <td>
                 &nbsp;
               </td>
               <td>
-                <input type="text" size="35" id="inputWEBFILE" value="mywebfile" onchange="setInput4WebDownload()">
-                <button class="btn btn-primary btn-xs"  id="downloadFile"  onclick="downloadInputFile('projects');">Input File</button>
+                <input type="text" size="35" id="inputPROJECT" value="mywebfile" onchange="setInput4WebDownload()">
               </td>
             </tr>
             <tr>
+              <td align="right">
+                <b>Download File:</b>
+              </td>
               <td>
-                  <b id="labelURL">Web-Input-URL:</b>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="downloadWebFILE"></tt>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <button class="btn btn-primary btn-xs"  id="downloadFile"  onclick="downloadInputFile('projects');">Download File</button>
               </td>
               <td>
                   &nbsp;
               </td>
               <td>
-                  <input type="text" size="55" id="inputURL" value="http://ifm.uni-landau.de" >
+                  <input type="text" size="55" id="inputURL" value="http://www.gnu.org/software/make/" >
               </td>
             </tr>
           </table>
-          <hr/><b>Bibiographie:</b> <input type="checkbox" name="checkCitation" id="checkCitation" onclick="toggleCheck('tablecitation',this.checked)" >
+          <hr/>
+          <h3>
+            Bibiography:
+            <input type="checkbox" name="checkCitation" id="checkCitation" onclick="toggleCheck('tablecitation',this.checked)" >
+          </h3>
           <table border="0"  cellspacing="30" id="tablecitation" class="buttonscitation"  hidden="hidden">
             <tr><!-- bibFILE -->
               <td>
@@ -211,11 +228,25 @@
               </td>
             </tr>
           </table>
-          <hr/><b>Templates:</b> <input type="checkbox" name="checkTemplates" id="checkTemplates" onclick="toggleCheck('tabletemplates',this.checked)" >
+          <hr/>
+          <h3>
+            Templates:
+            <input type="checkbox" name="checkTemplates" id="checkTemplates" onclick="toggleCheck('tabletemplates',this.checked)" >
+          </h3>
           <table border="0"  cellspacing="30" id="tabletemplates" class="buttonstemplate"  hidden="hidden">
           </table>
           <hr/>
-          <b>Input Editor:</b> <input type="checkbox" name="checkEditor" id="checkEditor" onclick="toggleCheck('inputEDITOR',this.checked)" >
+          <h3>
+            Reveal and MathJax:
+            <input type="checkbox" name="checkReveal" id="checkReveal" onclick="toggleCheck('tablereveal',this.checked)" >
+          </h3>
+          <table border="0"  cellspacing="30" id="tablereveal" class="buttonstemplate"  hidden="hidden">
+          </table>
+          <hr/>
+          <h3>
+            Input Editor:
+            <input type="checkbox" name="checkEditor" id="checkEditor" onclick="toggleCheck('inputEDITOR',this.checked)" >
+          </h3>
           <textarea id="inputEDITOR" maxlength="3000" rows="15" hidden="hidden"></textarea>
           <hr/>
         </div>
@@ -302,12 +333,38 @@ function openDirectory(pID,pDefaultPath) {
 }
 function openFile (pFilenameID,pTextAreaID,pPath) {
   openFileWriteDOM(pFilenameID,pTextAreaID,pPath,write2value);
+};
+function checkPathExists(pPath) {
+  var path = require('path');
+  if (path.existsSync(pPath)) {
+    console.log('Found \''+pPath+'\' Path');
+    // do something
+  };
+}
+function checkFileExists(pFile) {
+  if (fs.existsSync(pFile)) {
+    console.log('Found \''+pFile+'\' File');
+    // do something
+  }
 }
 function openFileWriteDOM (pFilenameID,pTextAreaID,pPath,fWriteDOM) {
-  dialog.showOpenDialog({defaultPath: app.getPath('downloads')},function (fileNames) {
+  var mkdirp = require('mkdirp');
+  //alert("pPath="+pPath);
+  var vNode = document.getElementById("projectmainDIR");
+  //var vDefaultPath=app.getPath('downloads')}
+  var vDefaultPath=app.getPath('documents')
+  if (vNode) {
+    alert("Project Main Dir:"+vNode.value);
+    vDefaultPath=vNode.value;
+  }
+  mkdirp(vDefaultPath, function(err) {
+    // path exists unless there was an error
+    //alert("vDefaultPath="+vDefaultPath+" is existing");
+  });
+  dialog.showOpenDialog({defaultPath: vDefaultPath},function (fileNames) {
   if (fileNames === undefined) return;
   var fileName = fileNames[0];
-  fWriteDOM(pFilenameID,fileName);
+  write2innerHTML(pFilenameID, fileName);
   if (pTextAreaID!="") {
     fs.readFile(fileName, 'utf-8', function (err, data) {
       write2value(pTextAreaID, data);
@@ -394,30 +451,58 @@ function runPandocShell() {
 function convertFile() {
   convertChecker();
   runPandocShell();
-}
+};
+
+var vHashTPL = new Array();
+
+function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButtonTitle) {
+  var vReplaceHash = {};
+  vReplaceHash["FOLDERID"]    = pFolderID;
+  vReplaceHash["BUTTONTITLE"] = pButtonTitle;
+  vReplaceHash["TITLE"] = pTitle;
+  vReplaceHash["PATHDEFAULT"] = pPathDefault;
+  appendTemplateHash(pID,pTemplate,vReplaceHash);
+};
 function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt) {
+  var vReplaceHash = {};
   var vDefaultName = "tpldefault";
-  if (pOutputFORMAT=="odt") {
+  if ((pOutputFORMAT=="odt") && (pTemplate.indexOf("referencefile")>0)) {
     vDefaultName = "content"
   };
-  var vDefaultTpl = pPath+"/tpl/"+pOutputFORMAT+"/"+vDefaultName+"."+pExt;
-  var vContent = pOutputFORMAT+"-Template "+pTemplate+" undefined";
-  var vContent = pOutputFORMAT+"-Template "+pTemplate+" undefined";
+  vReplaceHash["FORMAT"] = pOutputFORMAT;
+  vReplaceHash["TYPE"]   = pOutputFORMAT.toUpperCase();
+  vReplaceHash["TPLDEFAULT"] = pPath+"/tpl/"+pOutputFORMAT+"/"+vDefaultName+"."+pExt;
+  appendTemplateHash(pID,pTemplate,vReplaceHash);
+};
+function appendTemplateHash(pID,pTemplate,pReplaceHash) {
+  var vContent = "Error: Template "+pTemplate+" undefined";
+  if (vHashTPL[pTemplate]) {
+  //  vContent = vHashTPL[pTemplate];
+    alert("Template: "+pTemplate+" exists\n"+vHashTPL[pTemplate]);
+  };
+  //} else {
   fs.readFile(pTemplate, 'utf-8', function (err, tpldata) {
-    vContent = replaceString(tpldata,"___FORMAT___", pOutputFORMAT);
-    vContent = replaceString(vContent,"___TYPE___", pOutputFORMAT.toUpperCase());
-    vContent = replaceString(vContent,"___TPLDEFAULT___", vDefaultTpl);
-    //alert(vContent);
-    append2innerHTML(pID,vContent);
-    console.log('Template File \''+pTemplate+' loaded!');
+      //alert("Template: "+pTemplate+" load\n"+tpldata);
+      vContent = tpldata;
+      for (iID in pReplaceHash) {
+        vContent = replaceString(vContent,"___"+iID+"___", pReplaceHash[iID]);
+      };
+      //alert("REPLACED ["+pID+"]: \n"+vContent);
+      append2innerHTML(pID,vContent);
+      console.log('Template File \''+pTemplate+' loaded!');
   });
-  return vContent;
+};
+function setInput4WebDownload() {
+  var vProjectName = document.getElementById("inputPROJECT").value;
+  var vDownloadFile = getProjectDir()+"/"+vProjectName+"/"+vProjectName+"_web.md";
+  document.getElementById("downloadWebFILE").innerHTML = vDownloadFile;
 }
 function setDefaultValues() {
-  var vPath = app.getPath('documents')+"/PanDocs";
-  write2value("projectmainDIR",vPath);
+  var vPathMain = app.getPath('documents')+"/PanDoc";
+  write2value("projectmainDIR",vPathMain);
+  setInput4WebDownload();
   // set vPath to Template Path and init the templates to default filenames
-  vPath = app.getPath('home')+"/ownCloudLD/PanDoc";
+  var vPath = app.getPath('home')+"/ownCloudLD/PanDoc";
   appendTemplateInput("tabletemplates","reveal",'html/template.html',vPath,"html");
   appendTemplateInput("tabletemplates","audioslides",'html/template.html',vPath,"html");
   appendTemplateInput("tabletemplates","odt",'html/template.html',vPath,"xml");
@@ -425,6 +510,8 @@ function setDefaultValues() {
   appendTemplateInput("tabletemplates","docx",'html/referencefile.html',vPath,"docx");
   appendTemplateInput("tabletemplates","latex",'html/template.html',vPath,"tex");
   //alert(app.getPath('documents'))
+  appendDirectoryInput("tablereveal","Reveal","html/defaultfolder.html","reveal",vPathMain+"/reveal","Reveal Folder ");
+  appendDirectoryInput("tablereveal","MathJax","html/defaultfolder.html","mathjax",vPathMain+"/mathjax","MathJax Folder ");
 }
 
 setDefaultValues();
