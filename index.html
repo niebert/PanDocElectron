@@ -267,6 +267,7 @@ const fs    = require('fs');
 var app     = remote.require('app');
 var dialog  = remote.require('dialog');
 var vExtHash = new Array();
+var vPathSeparator = "/";
 vExtHash["latex"]="tex";
 vExtHash["beamer"]="tex";
 vExtHash["mediawiki"]="wiki";
@@ -426,7 +427,7 @@ function saveFile2AppDir (pFilename,pContent) {
   var vFilename=__dirname+"/"+pFilename;
   fs.writeFile(vFilename, pContent, (err) => {
     if (err) throw err;
-    console.log('File: \''+vFilename+'\' saved!');
+    console.log('File: \''+pFilename+'\' saved to application directory!');
     //alert("Dirname: "+__dirname)
   });
 }
@@ -436,7 +437,6 @@ function runShellCommand (pCommand) {
    (error, stdout, stderr) => {
      console.log(`stdout: ${stdout}`);
      //alert(`stdout: ${stdout}`);
-     console.log(`stderr: ${stderr}`);
      if (error !== null) {
        console.log(`exec error: ${error}`);
      }
@@ -498,20 +498,24 @@ function setInput4WebDownload() {
   document.getElementById("downloadWebFILE").innerHTML = vDownloadFile;
 }
 function setDefaultValues() {
-  var vPathMain = app.getPath('documents')+"/PanDoc";
+  if (getOperatingSystem()=="Windows") {
+    vPathSeparator = "\\";
+  };
+  var vPathMain = app.getPath('documents')+vPathSeparator+"PanDoc";
   write2value("projectmainDIR",vPathMain);
   setInput4WebDownload();
   // set vPath to Template Path and init the templates to default filenames
-  var vPath = app.getPath('home')+"/ownCloudLD/PanDoc";
-  appendTemplateInput("tabletemplates","reveal",'html/template.html',vPath,"html");
-  appendTemplateInput("tabletemplates","audioslides",'html/template.html',vPath,"html");
-  appendTemplateInput("tabletemplates","odt",'html/template.html',vPath,"xml");
-  appendTemplateInput("tabletemplates","odt",'html/referencefile.html',vPath,"odt");
-  appendTemplateInput("tabletemplates","docx",'html/referencefile.html',vPath,"docx");
-  appendTemplateInput("tabletemplates","latex",'html/template.html',vPath,"tex");
+  var vPath = app.getPath('home')+vPathSeparator+"ownCloudLD"+vPathSeparator+"PanDoc";
+  var vhtml ="html"+vPathSeparator;
+  appendTemplateInput("tabletemplates","reveal",vhtml+'template.html',vPath,"html");
+  appendTemplateInput("tabletemplates","audioslides",vhtml+'template.html',vPath,"html");
+  appendTemplateInput("tabletemplates","odt",vhtml+'template.html',vPath,"xml");
+  appendTemplateInput("tabletemplates","odt",vhtml+'referencefile.html',vPath,"odt");
+  appendTemplateInput("tabletemplates","docx",vhtml+'referencefile.html',vPath,"docx");
+  appendTemplateInput("tabletemplates","latex",vhtml+'template.html',vPath,"tex");
   //alert(app.getPath('documents'))
-  appendDirectoryInput("tablereveal","Reveal","html/defaultfolder.html","reveal",vPathMain+"/reveal","Reveal Folder ");
-  appendDirectoryInput("tablereveal","MathJax","html/defaultfolder.html","mathjax",vPathMain+"/mathjax","MathJax Folder ");
+  appendDirectoryInput("tablereveal","Reveal",vhtml+"defaultfolder.html","reveal",vPathMain+vPathSeparator+"reveal","Reveal Folder ");
+  appendDirectoryInput("tablereveal","MathJax",vhtml+"defaultfolder.html","mathjax",vPathMain+vPathSeparator+"mathjax","MathJax Folder ");
 }
 
 setDefaultValues();

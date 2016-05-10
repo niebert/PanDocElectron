@@ -1,5 +1,10 @@
 # PanDocElectron
-Atom/Electron Application for calling PanDoc Converter with Shell Commands on Linux Windows Mac
+Atom/Electron Application for calling PanDoc Converter with Shell Commands on Linux Windows Mac. To use PanDocElectron just as application, install
+* `git` to download and update the sources of PanDocElectron
+* `npm` to install pre-build packages of Electron as a runtime environment.
+When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
+> `cd  Documents`
+> `git clone https://github.com/niebert/PanDocElectron`
 
 
 # Electron Framework
@@ -29,6 +34,11 @@ Finally it is necessary to install the build essentials on the Linux system with
 
 > `sudo apt-get install -y build-essential `
 
+Install necessary modules for PanDocElectron:
+
+> `cd PanDocElectron`
+> `npm install mkdirp`
+
 The Atom Editor is recommended as developing environment together with electron:
 Download and install from  the following website:
 
@@ -51,14 +61,14 @@ If you want to create Windows Application on your MacOSX please install
 
 > `brew install Caskroom/cask/xquartz wine mono`
 
-Please install Xcode form the AppStore for your MacOSX system
-
-* [https://developer.apple.com/xcode/download](https://developer.apple.com/xcode/download)
-
 The Atom Editor is recommended as developing environment together with electron:
 Download and install from  the following website:
 
 * [https://atom.io/](https://atom.io/)
+
+Please install Xcode form the AppStore for your MacOSX system as developer environment:
+
+* [https://developer.apple.com/xcode/download](https://developer.apple.com/xcode/download)
 
 
 ## Electron Tutorials for Linux and MacOSX
@@ -74,6 +84,21 @@ Go into the repository`
 
 Now install the dependencies and run
 > `$ npm install && npm start `
+
+Install necessary modules for PanDocElectron:
+
+> `$ npm install mkdirp`
+
+## PanDocElectron on Windows
+The node package manager (NPM) is necessary for installation of electron.
+
+* [https://nodejs.org/en/#download](https://nodejs.org/en/#download)
+
+As a next step it necessary to install NodeJS on your system.
+
+* [https://nodejs.org/en/](https://nodejs.org/en/)
+
+Now you are able to install Electron on you system
 
 ## Electron Builder Packager
 
