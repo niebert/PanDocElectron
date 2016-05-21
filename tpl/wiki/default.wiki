@@ -1,0 +1,113 @@
+= Markdown to Latex Using APA 6 Style =
+
+If you have to use the American Psychological Association Style version 6 (apa6) then this package of templates and scripts might be just what you need.
+
+Using the style if you have to do it manually in Word is a pain. These templates and scripts allow you to automatically generate apa6 compliant documents with the minimum of fuss and effort. Your citations are also created and formatted properly.
+
+== The Process ==
+
+These templates and scripts use Markdown as the document markup language, they then convert the Markdown document to LaTeX and run biber to format the bibliography and citations and finally convert the whole document to a properly formatted PDF. That means that you need some software installed on your system before you can begin.
+
+== Pre-Requisites ==
+
+The set up is the most time consuming thing about this package. Once you have set up your system then creating documents is quick and simple. You need to be able to issue simple commands at the terminal but most people can manage to do that.
+
+This set up is tested to work on MacOS 10.8.2 using Pandoc 1.11.1 . It will no doubt work on Linux with perhaps minor mods to the paths in the scripts. It will also probably work on Windows using a shell emulator. I don't know about Windows so you are on your own there!
+
+First you need to install [http://johnmacfarlane.net/pandoc/installing.html Pandoc] . It's quick and simple and once installed it's seamless to run. Once you have installed you should open Terminal and at the prompt type <code>pandoc --version</code> to check that you have a good install. If Pandoc tells you its version number you are good to go.
+
+Now you need to install a LaTeX distribution. This is a bigger job - the distributions are quite large. [http://tug.org/mactex/ Here's] a good Mac distribution. There are distributions for other platforms.
+
+Make a cup of coffee and set the install running. Once you have LaTeX installed find the TeX Live Utility and launch it. Use it to install the <code>apa6</code> package. You will need this package to format your documents according to APA style.
+
+Once you have all of those things ready you need to install these scripts.
+
+== Installation ==
+
+Either clone the Git repo off Bitbucket or download the zip file from the same location. Put the scripts into a directory which will be the directory you use to generate your documents. We'll call this <code>maindir</code>.
+
+Take the <code>apa6template.tex</code> document and put it into <code>/usr/local/share/pandoc-1.11/data/templates/apa6template.tex</code> . That path will be slightly different if you have a different version of Pandoc installed. Modify it to suit.
+
+There are now a number of files left in <code>maindir</code>:
+
+* <code>abstract.md</code> is where you enter your document abstract
+* <code>affiliations.md</code> is where you enter your affiliations for the title page
+* <code>APATemplate.md</code> is a Markdown template that is set up for you to use to actually write your document. Copy and rename it to use if for your own document.
+* <code>shorttitle.md</code> is where you enter the short title for your document
+* <code>keywords.md</code> which is where you enter your document keywords.
+* <code>createpdf.sh</code> is a script which you will use to create your final PDF document. It runs PDFLaTeX and biber multiple times to create the document, the citations and the bibliography.
+* <code>md2pdf.sh</code> creates a PDF but doesn't run multiple passes or run biber. It is for doing a quick document generate to check formatting and maths.
+* <code>md2tex.sh</code> takes your Markdown document and generates a LaTeX document from it. This is useful if you want to debug problems in your document.
+* <code>tex2pdf.sh</code> is the script that you'd use after you used the previous script. For instance if you made mods to the tex file you could then convert to PDF using this script.
+* <code>cleantex.sh</code> when you run the build command LaTeX creates all sorts of additional files in <code>maindir</code>. Sometimes you feel like you'd like to clean those files up. Sometimes you find aberrant behaviour - particularly when you are debugging a .tex file. This script can help be removing much of the detritus from <code>maindir</code>. Use with care and have a look at it and comment out any file types you don't want removed.
+
+You need to have a bibliography file in <code>maindir</code>. The name of this file is set in <code>apa6template.tex</code>. Currently it is set to <code>bibliography.bib</code> you can either call your <code>.bib</code> file that or modify the template to suit the name of your <code>.bib</code> file. If you need a bibliography app, google for Jabref.
+
+You should open Terminal and cd to <code>maindir</code> then run <code>chmod 755 *.sh</code> this will ensure that your scripts are executable.
+
+== Using the Scripts ==
+
+Here's the short version:
+
+# Copy the <code>APATemplate.md</code> document and write your document in the copy you've made.
+# Populate the keywords, affiliations, abstract and shorttitle documents.
+# When you have your document ready in <code>maindir</code> create a PDF of it by running <code>./createpdf.sh</code> from within <code>maindir</code>. This will create various files in <code>maindir</code> most of which don't matter. The two files you are interested in are the file called <code>yourfilename.tex</code> and <code>yourfilename.pdf</code>.
+
+Now the long version.
+
+=== Your Markdown Document ===
+
+The first three lines of the Markdown template are meta data that is passed into the apa6template.tex document by Pandoc. You need to ensure that these are the first three lines in the document with no blank space before or between them.
+
+The content of these lines is:
+
+# The document title
+# The Author or Authors names
+# The format of the final document. This has three options: <code>man</code> is the manuscript version of APA 6 style, <code>doc</code> is a plain document format and <code>jou</code> is the two column journal style. Set this parameter to suit your current purpose.
+
+You can enter either [http://code.ahren.org/markdown-cheatsheet Markdown] format text or verbatim LaTeX or a mixture of both. The ability to enter verbatim LaTeX is important, particularly if you need to include formulas and other maths in your document. Pandoc will pass it through unchanged...with a couple of exceptions.
+
+If you want to set in-line maths then you need to escape the slashes in the environment like this: <code>\\(...\\)</code> the additional <code>\</code> gets stripped on the way through. If you want to set display maths then the same applies <code>\\[...\\]</code>.
+
+However if you are just setting up another environment you don't need to double escape:
+
+<pre>\begin{equation}
+...
+\end{equation}</pre>
+Will work just fine. Similarly if you set up some other environment and then put display or inline maths inside that environment you ''don't'' need to double escape it. So:
+
+<pre>\begin{APAenumerate}
+\item Some text with maths \(...\)
+\end{APAenumerate}</pre>
+Will work fine too.
+
+Have a good read of the PDF document that is installed with the apa6 package using the TeX Live Utility. You can access it by finding the apa6 package and then double clicking it and then clicking the PDF. It tells you all about the capabilities of the package and how to use them.
+
+=== Running Head on Title Page ===
+
+If you ''don't'' want a running head on the title page then find this text in the preamble of the <code>apa6template.tex</code> document:
+
+<pre>\fancypagestyle{titlepage}{%
+  \lhead{}%
+   \rhead{\thepage}%
+}</pre>
+Make sure it is ''not'' commented.
+
+If you ''do'' want a running head on the title page of your manuscript - as per strict APA 6 Style then ''comment out'' the above text.
+
+== Issue resolution &amp; Bugfixes ==
+
+=== Issue 1 ===
+
+A necessary file <code>rgb.tex</code> was missing from the distribution. It has now been added. It should be placed in <code>maindir</code>.
+
+=== Issue 2 ===
+
+Added <code>\usepackage{fancyhdr}</code> to <code>apa6template.tex</code>.
+
+=== Issue 3 ===
+
+This issue arose as a discussion about the use of Pandoc citations as opposed to using LaTeX style citations as verbatim LaTeX. One of the users explored the issue and the findings are contained in [https://bitbucket.org/zuline/md2latex/issue/3/pandoc-citations-not-supported this discussion.]
+
+The bottom line is that the best outcomes will likely be achieved by using the LaTeX citation approach not the Pandoc citation approach.
+

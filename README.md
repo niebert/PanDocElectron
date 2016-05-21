@@ -1,14 +1,22 @@
 # PanDocElectron
-Atom/Electron Application for calling PanDoc Converter with Shell Commands on Linux Windows Mac. To use PanDocElectron just as application, install
-* `git` to download and update the sources of PanDocElectron
+PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Document Converter on the Command Shell on Linux, Mac or Windows. Or in simple words:
+* The converting documents is performed by PanDoc
+* PanDocElectron frees the user from knowing and setting the parameters from the command line.
+##General Requirements for Electron
+Electron is more or less a browers, that has full access to your filesystem. So Electron/Atom allows to write Multiplattform Application just with HTML and Javascript.
+If you want to use Electron Applications in general (including PanDocElectron) it is necessary to install the following software packages:
+* `git` to download and update the sources of Electron Applications ([http://git-scm.com/](http://git-scm.com/)])
 * `npm` to install pre-build packages of Electron as a runtime environment.
 When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
 > `cd  Documents`
 > `git clone https://github.com/niebert/PanDocElectron`
 
+## Electron Framework
+For running and testing the `Electron` application (like PanDocElectron) it is necessary to install the Electron environment on your Desktop Computer. With electron you are able to create cross-plattform application.
 
-# Electron Framework
-For running and testing the application PanDocElectron it is necessary to install the Electron environment on your Desktop Computer. With electron you are able to create cross-plattform application.
+## Software Development with Atom/Electron
+* npm installs packages in `node_modules`. If you have installed  `electron-prebuilt` in that folder on a Mac then do not sync the content in you github repository because others users on a Windows Machine will get confused because the software will create error messages due to the non-matching Operating System (OS).
+* Install Atom ([https://atom.io/](https://atom.io/)) as Editor for Software Development in 
 
 ## Linux - Electron Framework
 The node package manager (NPM) is necessary for installation of electron.

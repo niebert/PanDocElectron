@@ -10,16 +10,17 @@
     <script src="js/showhide.js"></script>
     <script src="js/pathfiles.js"></script>
     <script src="js/writedom.js"></script>
-
+    <script src="js/opsysdetect.js"></script>
+    <script src="js/cmdpandoc.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <h1><a href="http://pandoc.org/try" target="_blank">PanDoc</a> Electron</h1>
+          <h1><a href="javascript:openBrowserURL('http://pandoc.org/try')">PanDoc</a> Electron</h1>
         </div>
         <div class="col-md-6">
-          <pre id="command"></pre>
+        <b>Command:</b> <pre id="command"></pre>
         </div>
       </div>
       <div class="row">
@@ -35,13 +36,13 @@
           <table border="0"  cellspacing="30" class="buttonsnovice">
             <tr>
               <td>
-                <b id="projectmainLABEL">Main Folder:</b>
+                <button class="btn btn-default"  id="defDIRmainDIR"  onclick="openDirectory('projectmainDIR',document.getElementById('projectmainDIR').innerHTML);">Main Folder</button>
               </td>
               <td>
                   &nbsp;
               </td>
               <td>
-                  <input type="text" size="55" id="projectmainDIR" value="">
+                  <tt id="projectmainDIR"></tt>
               </td>
             </tr>
             <tr>
@@ -52,16 +53,17 @@
                 &nbsp;
               </td>
               <td>
-                <select id="inputFORMAT">
-                  <option value="docbook">DocBook</option>
-                  <option value="haddock">Haddock markup</option>
+                <select id="inputFORMAT" onchange="changedInFormat(this.value)">
+                  <option value="markdown" selected="selected">Markdown (pandoc)</option>
+                  <option value="mediawiki">MediaWiki</option>
                   <option value="html">HTML</option>
                   <option value="latex">LaTeX</option>
-                  <option value="markdown" selected="selected">Markdown (pandoc)</option>
+                  <option value="pdf">PDF Input for AudioSlides Output</option>
+                  <option value="docbook">DocBook</option>
+                  <option value="haddock">Haddock markup</option>
                   <option value="markdown_strict">Markdown (strict)</option>
                   <option value="markdown_phpextra">Markdown (PHP Markdown Extra)</option>
                   <option value="markdown_github">Markdown (GitHub)</option>
-                  <option value="mediawiki">MediaWiki</option>
                   <option value="markdown_mmd">MultiMarkdown</option>
                   <option value="opml">OPML</option>
                   <option value="org">Org Mode</option>
@@ -98,10 +100,12 @@
                   <option value="mediawiki">MediaWiki</option>
                   <option value="beamer">LaTeX Beamer</option>
                   <option value="reveal" selected="selected">RevealJS</option>
-                  <option value="audioslides">AudioSlides</option>
+                  <option value="audioslides">AudioSlides for PDF Input</option>
                   <option value="dzslides">DZSlides</option>
                   <option value="odt">ODT-File</option>
+                  <option value="odt2col">ODT-File - 2 Cols</option>
                   <option value="docx">DOCX-File</option>
+                  <option value="docx2col">DOCX-File - 2 Cols</option>
                   <option value="asciidoc">AsciiDoc</option>
                   <option value="context">ConTeXt</option>
                   <option value="docbook">DocBook</option>
@@ -123,6 +127,7 @@
                   <option value="slidy">Slidy</option>
                   <option value="texinfo">Texinfo</option>
                 </select>
+                <div id="divSlideCount" hidden="hidden">AudioSlide Count <input type="slidecount" value="16" size="3"></div>
               </td>
             </tr>
             <tr><!-- outputFILE -->
@@ -134,6 +139,36 @@
               </td>
               <td>
                 <tt id="outputFILE"></tt>
+              </td>
+            </tr>
+          </table>
+          <hr/>
+          <h3>
+            New-Project:
+            <input type="checkbox" name="checkWebInput" id="checkWebInput" onclick="toggleCheck('tablenew',this.checked)" >
+          </h3>
+          <table border="0"  cellspacing="30" id="tablenew" class="buttonsnew"  hidden="hidden">
+            <tr>
+              <td align="right">
+                <b>Project Name:</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <input type="text" size="35" id="inputNEWPROJECT" value="myproject" onchange="setInput4Project(this.id,'inputNEWFILE')">
+                <button class="btn btn-primary btn-xs"  id="createNewProjectBTN"  onclick="createProject();">Create Project</button>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <b>New File:</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="inputNEWFILE"></tt>
               </td>
             </tr>
           </table>
@@ -151,7 +186,7 @@
                 &nbsp;
               </td>
               <td>
-                <input type="text" size="35" id="inputPROJECT" value="mywebfile" onchange="setInput4WebDownload()">
+                <input type="text" size="35" id="inputWEBPROJECT" value="mywebfile" onchange="setInput4Project(this.id,'downloadWebFILE')">
               </td>
             </tr>
             <tr>
@@ -245,7 +280,8 @@
           <hr/>
           <h3>
             Input Editor:
-            <input type="checkbox" name="checkEditor" id="checkEditor" onclick="toggleCheck('inputEDITOR',this.checked)" >
+            <input type="checkbox" name="checkEditor" id="checkEditor" onclick="toggleCheck('inputEDITOR',this.checked)" > --
+            <button onclick="saveEditorContent()"> Save </button>
           </h3>
           <textarea id="inputEDITOR" maxlength="3000" rows="15" hidden="hidden"></textarea>
           <hr/>
@@ -253,7 +289,7 @@
     </div>
     <footer>
      <p class="version">PanDoc Electron - GUI <span id="version">0.4</span> - Engelbert Niehaus</p>
-     <p>for PanDoc by <a href="http://johnmacfarlane.net/" target="_blank">John MacFarlane</a>
+     <p>for PanDoc by <a href="javascript:openBrowserURL('http://johnmacfarlane.net/')">John MacFarlane</a>
        PanDoc Electron uses Node.js <script>document.write(process.versions.node)</script>,
        Chromium <script>document.write(process.versions.chrome)</script>,
        and Electron <script>document.write(process.versions.electron)</script>.
@@ -266,16 +302,12 @@ var remote  = require('remote');
 const fs    = require('fs');
 var app     = remote.require('app');
 var dialog  = remote.require('dialog');
-var vExtHash = new Array();
 var vPathSeparator = "/";
-vExtHash["latex"]="tex";
-vExtHash["beamer"]="tex";
-vExtHash["mediawiki"]="wiki";
-vExtHash["reveal"]="html";
-vExtHash["markdown"]="html";
-vExtHash["dzslides"]="html";
-vExtHash["audioslides"]="html";
 
+function openBrowserURL(pURL) {
+  const {shell} = require('electron');
+  shell.openExternal(pURL);
+}
 function openInputFile (pPath) {
   pPath = getProjectDir(pPath);
   openFile("inputFILE","inputEDITOR",pPath)
@@ -297,32 +329,126 @@ function openTPLFile (pPath) {
   openFile("tplFILE","",pPath)
 }
 function downloadInputFile(pPath) {
-  alert("Download Input File and Convert Source File to MarkDown");
+  //alert("Download Input File and Convert Source File to MarkDown");
+  var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  makedirpath(vPath);
+  //alert("URL: "+getValueDOM("inputURL")+"\nDownload File: "+getValueDOM("downloadWebFILE")+"\nWeb Project: "+getValueDOM("inputWEBPROJECT"));
+
+  var vCommand ="pandoc -s -r html "+getValueDOM("inputURL")+" -o "+getValueDOM("downloadWebFILE");
+  console.log(vCommand);
+  var vAnswer = true;
+  if (checkFileExists(getValueDOM("downloadWebFILE"))) {
+    vAnswer = confirm("Warning Download will overwrite existing File!")
+  };
+  if (vAnswer) {
+    runShellCommand(vCommand);
+    vInputFile = getValueDOM("downloadWebFILE");
+    copyFile2Editor ("inputEDITOR",vInputFile);
+    write2innerHTML("inputFILE",vInputFile);
+    alert("Download URL: "+getValueDOM("inputURL")+"\nto Web Project: "+getValueDOM("inputWEBPROJECT"));
+  }
 };
 function changedWebInput(pChecked) {
   //alert("Changed Web Input");
-  if (pChecked) {
-    showElement("labelURL");
-    showElement("inputURL");
-    showElement("webProjectName");
-  } else {
-    hideElement("labelURL");
-    hideElement("inputURL");
-    hideElement("webProjectName");
-  }
+  };
+function changedInFormat (pInputFORMAT) {
+  //alert("Changed Input Format to "+pInputFORMAT);
+  //setInput4Project('inputNEWPROJECT','inputNEWFILE');
+  switch (pInputFORMAT) {
+    case "pdf":
+        // PDF as Input implies audioslides as outputFORMAT
+        setOutputFormat("audioslides");
+        break;
+    case "myformat":
+        // handle case
+        break;
+    default:
+      // Default Output Format
+  } //end switch
+}
+function setInputFormat(pInputFORMAT) {
+  write2value("inputFORMAT",pInputFORMAT);
 };
 function changedOutFormat (pOutputFORMAT) {
-  if ((pOutputFORMAT=="odt") || (pOutputFORMAT=="docx")) {
-    showElement("labelREFFile")
-    showElement("refLABEL")
-    showElement("refFILE")
+  //alert("Changed Output Format to "+pOutputFORMAT);
+  var vInputFile= getValueDOM("inputFILE");
+  if ((!vInputFile) || (vInputFile == "")) {
+    alert("Input File is undefined! Please select File");
   } else {
-    hideElement("labelREFFile")
-    hideElement("refLABEL")
-    hideElement("refFILE")
+    //alert("changedOutFormat() vInputFile="+vInputFile);
+    var vOutFile = createOutputFile(vInputFile,pOutputFORMAT);
+    write2innerHTML("outputFILE",vOutFile);
+    switch (pOutputFORMAT) {
+      case "audioslides":
+          // PDF as Input implies audioslides as outputFORMAT
+          setInputFormat("pdf");
+          break;
+      case "myformat":
+          // handle case
+          break;
+      default:
+        // Default Output Format
+    } //end switch
+  };
+  visibleAudioSlideCount(pOutputFORMAT);
+};
+function setOutputFormat(pOutputFORMAT) {
+  write2value("outputFORMAT",pOutputFORMAT);
+  visibleAudioSlideCount(pOutputFORMAT);
+};
+
+function visibleAudioSlideCount(pOutputFORMAT) {
+  if (pOutputFORMAT == "audioslides") {
+    showElement("divSlideCount");
+    alert("Input File must be PDF!");
+  } else {
+    hideElement("divSlideCount");
+  };
+}
+function saveEditorContent() {
+  var vInputFile = getValueDOM("inputFILE");
+  if (vInputFile=="") {
+    alert("Error: Input Filename is not defined!");
+  } else {
+    alert("Input File saved!\n"+vInputFile);
   }
 }
-
+function createProject() {
+  var vSep = getPathSeparator();
+  var vName = getValueDOM("inputNEWPROJECT");
+  var vPath = getValueDOM("projectmainDIR")+vSep+vName;
+  var vInFormat = getValueDOM("inputFORMAT");
+  var vExt = vExtHash[vInFormat];
+  var vFilename = vName+"."+vExt;
+  if (confirm("Do you want to create the following project?\nProject Folder: "+vName+"/\nFilename: "+vFilename)) {
+    makedirpath(vPath);
+    var vDefaultFile = __dirname;
+    //openFile (vFilenameID,"inputEDITOR",pPath)
+    var vDir = __dirname+vSep+"tpl"+vSep+"DEFAULT"+vSep;
+    vFilename = vPath+vSep+vFilename;
+    var vSource = "";
+    var vInFormat = getValueDOM("inputFORMAT");
+    switch (vInFormat) {
+      case "md":
+        vSource = vDir + vInFormat + vSep +"default."+vInFormat;
+        copyFile(vSource,vFilename);
+        break;
+      case "mediawiki":
+          vSource = vDir + "wiki" + vSep +"default.wiki";
+          copyFile(vSource,vFilename);
+          break;
+      default:
+        vSource = vDir + "md" + vSep +"default.md";
+        runShellCommand("pandoc -f markdown -t "+vInFormat+" -o "+vPath+vSep+vFilename+"."+vInFormat);
+    };
+    makeProjectDirs(); //audio, video, config, images
+    setInput4Project('inputNEWPROJECT','inputNEWFILE');
+    alert("Project: "+vName+" created!" );
+  } else {
+    // Do nothing!
+    alert("Project Create: CANCEL Operation")
+  }
+}
 function createOutputFile (pInputFile,pOutputFORMAT) {
   var vFileNoExt = removeExtension(pInputFile);
   var vExt = vExtHash[pOutputFORMAT] || pOutputFORMAT;
@@ -330,7 +456,10 @@ function createOutputFile (pInputFile,pOutputFORMAT) {
 }
 function openDirectory(pID,pDefaultPath) {
   //dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]})
-  dialog.showOpenDialog({ defaultPath: pDefaultPath , properties: [ 'openDirectory' ]})
+  var vFolder =dialog.showOpenDialog({ defaultPath: pDefaultPath , properties: [ 'openDirectory' ]});
+  if (vFolder) {
+    write2innerHTML(pID,vFolder);
+  }
 }
 function openFile (pFilenameID,pTextAreaID,pPath) {
   openFileWriteDOM(pFilenameID,pTextAreaID,pPath,write2value);
@@ -346,35 +475,48 @@ function checkFileExists(pFile) {
   if (fs.existsSync(pFile)) {
     console.log('Found \''+pFile+'\' File');
     // do something
+    return true;
+  } else {
+    return false;
   }
 }
-function openFileWriteDOM (pFilenameID,pTextAreaID,pPath,fWriteDOM) {
+function copyFile(pSource,pDestination) {
+  if (checkFileExists(pDestination)) {
+    alert("Create Error: File exists \n"+pDestination);
+  } else {
+    var fs = require('fs');
+    fs.createReadStream(pSource).pipe(fs.createWriteStream(pDestination));
+  };
+};
+function makedirpath(pPathDir) {
   var mkdirp = require('mkdirp');
-  //alert("pPath="+pPath);
-  var vNode = document.getElementById("projectmainDIR");
-  //var vDefaultPath=app.getPath('downloads')}
-  var vDefaultPath=app.getPath('documents')
-  if (vNode) {
-    alert("Project Main Dir:"+vNode.value);
-    vDefaultPath=vNode.value;
-  }
-  mkdirp(vDefaultPath, function(err) {
+  mkdirp(pPathDir, function(err) {
     // path exists unless there was an error
-    //alert("vDefaultPath="+vDefaultPath+" is existing");
+    //alert("Directory="+pPathDir+" already exists!");
   });
+}
+function openFileWriteDOM (pFilenameID,pTextAreaID,pPath,fWriteDOM) {
+  //alert("pPath="+pPath);
+  //var vDefaultPath=app.getPath('downloads')}
+  //var vDefaultPath=app.getPath('documents');
+  var vDefaultPath = getValueDOM("projectmainDIR");
+  makedirpath(vDefaultPath);
   dialog.showOpenDialog({defaultPath: vDefaultPath},function (fileNames) {
   if (fileNames === undefined) return;
   var fileName = fileNames[0];
   write2innerHTML(pFilenameID, fileName);
+  changedOutFormat(getValueDOM("outputFORMAT"));
   if (pTextAreaID!="") {
-    fs.readFile(fileName, 'utf-8', function (err, data) {
-      write2value(pTextAreaID, data);
-      console.log('\''+fileName+' opened!');
-    });
+    copyFile2Editor(pTextAreaID,fileName);
   };
  });
 }
-
+function copyFile2Editor (pID,pFilename) {
+  fs.readFile(pFilename, 'utf-8', function (err, data) {
+    write2value(pID, data);
+    console.log('\''+pFilename+' opened!');
+  });
+}
 function loadConfig(pConfigFile) {
   var vConfigFile = pConfigFile || "default.cfg";
   // simnply load config file into the innerHTML of DIV node 'divconfig'
@@ -404,27 +546,37 @@ function saveFile(pFilename,pContent) {
  });
 }
 
-function setInput4WebDownload() {
-  var vFilename = document.getElementById("inputWEBFILE").value || "webdownload.md";
-
+function setInput4Project(pInputID,pOutputID,pExt) {
+  var vPathSep = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
+  var vInFormat = getValueDOM("inputFORMAT");
+  var vExt = vExtHash[vInFormat];
+  //var vExt = pExt || vExtHash[vInFormat];
+  var vDefaultFilename = "input";
+  var vFilename = document.getElementById(pInputID).value || vDefaultFilename;
   if (vFilename == "") {
-    alert("Download File undefined, set Filename to 'webdownload.md'")
-  } else if (getExtensionOfFilename(vFilename) != "md") {
-    vFilename = removeExtension(vFilename)+".md";
-    alert("Extension is not 'md'. Use filename '"+vFilename+"' instead!");
+    alert("Error ["+pInputID+"]: Input File was undefined");
+  } else {
+    //alert("Format: "+vInFormat+" Extension: "+vExt);
+    //if (getExtensionOfFilename(vFilename) != "md") {
+    //vFilename = removeExtension(vFilename)+".md";
+    //alert("Extension is not 'md'. Use filename '"+vFilename+"' instead!");
   };
-  write2value("inputWEBFILE",vFilename);
-  vFilename = getProjectDir(pProject)+"/"+vFilename;
-  console.log('Web Input File: \''+vFilename+'\' defined!');
-  write2innerHTML("inputFILE",vFilename);
+  //write2value(pOutputID,vFilename);
+  //alert("setInput4Project() vFilename:\n"+vFilename);
+  var vProjectDir = getProjectDir();
+  //alert("vProjectDir="+vProjectDir);
+  vFilename = vProjectDir+vPathSep+vFilename+vPathSep+vFilename+"."+vExt;
+  console.log('Set Input File: \''+vFilename+'\' to DOM-Node['+pOutputID+']!');
+  write2innerHTML(pOutputID,vFilename);
 }
 
 function saveTestFile () {
-  alert("Call: saveTestFile() l.368 index.html")
+  console.log("Call: saveTestFile() l.368 index.html");
   saveFile('./message.txt', 'Hello Node.js this is the File Content');
 }
 function saveFile2AppDir (pFilename,pContent) {
-  var vFilename=__dirname+"/"+pFilename;
+  var vSep = getPathSeparator();
+  var vFilename=__dirname+vSep+pFilename;
   fs.writeFile(vFilename, pContent, (err) => {
     if (err) throw err;
     console.log('File: \''+pFilename+'\' saved to application directory!');
@@ -433,24 +585,46 @@ function saveFile2AppDir (pFilename,pContent) {
 }
 
 function runShellCommand (pCommand) {
- const child = exec(pCommand,
+  //pCommand="ls -a";
+  //alert(pCommand);
+  const child = exec(pCommand,
    (error, stdout, stderr) => {
      console.log(`stdout: ${stdout}`);
      //alert(`stdout: ${stdout}`);
      if (error !== null) {
        console.log(`exec error: ${error}`);
+     } else {
+       console.log("'"+pCommand+"' was successful");
      }
  });
 }
-function convertChecker() {
-  alert("check input set, webdownload command exec");
+function convertChecker(pHash) {
+  var vReturn = true;
+  //alert("check input set, webdownload command exec");
+  var vInputFile = getValueDOM("inputFILE");
+  if (vInputFile == "") {
+    vReturn = false;
+    alert("Error: Input File was not defined!")
+  } else {
+    var vExt = getExtensionOfFilename(vInputFile);
+    var vInputFormat = getValueDOM("inputFORMAT");
+    if (vExt !== vExtHash[vInputFormat]) {
+      vReturn = confirm("Please check, if input Format ["+vInputFormat+"]!");
+      pHash["inputFILE"] = vInputFile;
+      pHash["inputFORMAT"] = vInputFormat;
+      pHash["outputFORMAT"] = getValueDOM("outputFORMAT");
+    };
+  };
+  return vReturn;
 }
-function runPandocShell() {
-  alert("now execute ");
+function runPandocShell(pHash) {
+  alert("now execute "+pHash["inputFILE"]);
 }
 function convertFile() {
-  convertChecker();
-  runPandocShell();
+  var vHash = {};
+  if (convertChecker(vHash)) {
+    runPandocShell(vHash);
+  };
 };
 
 var vHashTPL = new Array();
@@ -465,13 +639,17 @@ function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButto
 };
 function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt) {
   var vReplaceHash = {};
+  var vSep = getPathSeparator();
   var vDefaultName = "tpldefault";
   if ((pOutputFORMAT=="odt") && (pTemplate.indexOf("referencefile")>0)) {
     vDefaultName = "content"
   };
+  if (pExt=="md") {
+    vDefaultName = "input"
+  };
   vReplaceHash["FORMAT"] = pOutputFORMAT;
   vReplaceHash["TYPE"]   = pOutputFORMAT.toUpperCase();
-  vReplaceHash["TPLDEFAULT"] = pPath+"/tpl/"+pOutputFORMAT+"/"+vDefaultName+"."+pExt;
+  vReplaceHash["TPLDEFAULT"] = pPath+vSep+"tpl"+vSep+pOutputFORMAT+vSep+vDefaultName+"."+pExt;
   appendTemplateHash(pID,pTemplate,vReplaceHash);
 };
 function appendTemplateHash(pID,pTemplate,pReplaceHash) {
@@ -493,30 +671,84 @@ function appendTemplateHash(pID,pTemplate,pReplaceHash) {
   });
 };
 function setInput4WebDownload() {
+  var vSep = getPathSeparator();
   var vProjectName = document.getElementById("inputPROJECT").value;
-  var vDownloadFile = getProjectDir()+"/"+vProjectName+"/"+vProjectName+"_web.md";
+  var vDownloadFile = getProjectDir()+vSep+vProjectName+vSep+vProjectName+"_web.md";
   document.getElementById("downloadWebFILE").innerHTML = vDownloadFile;
 }
 function setDefaultValues() {
-  if (getOperatingSystem()=="Windows") {
-    vPathSeparator = "\\";
-  };
+  var vPathSeparator = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
   var vPathMain = app.getPath('documents')+vPathSeparator+"PanDoc";
-  write2value("projectmainDIR",vPathMain);
-  setInput4WebDownload();
+  write2innerHTML("projectmainDIR",vPathMain);
+  //setInput4WebDownload();
+  setInput4Project('inputNEWPROJECT','inputNEWFILE');
+  setInput4Project('inputWEBPROJECT','downloadWebFILE',"md");
   // set vPath to Template Path and init the templates to default filenames
-  var vPath = app.getPath('home')+vPathSeparator+"ownCloudLD"+vPathSeparator+"PanDoc";
+  //var vPath = app.getPath('documents')+vPathSeparator+"PanDoc";
+  var vPath = __dirname;
+  //var vPath = app.getPath('home')+vPathSeparator+"ownCloudLD"+vPathSeparator+"PanDoc";
+
   var vhtml ="html"+vPathSeparator;
+  appendTemplateInput("tabletemplates","DEFAULT",vhtml+'template.html',vPath,"md");
   appendTemplateInput("tabletemplates","reveal",vhtml+'template.html',vPath,"html");
   appendTemplateInput("tabletemplates","audioslides",vhtml+'template.html',vPath,"html");
+  appendTemplateInput("tabletemplates","latex",vhtml+'template.html',vPath,"tex");
   appendTemplateInput("tabletemplates","odt",vhtml+'template.html',vPath,"xml");
   appendTemplateInput("tabletemplates","odt",vhtml+'referencefile.html',vPath,"odt");
+  appendTemplateInput("tabletemplates","odt2col",vhtml+'referencefile.html',vPath,"odt");
   appendTemplateInput("tabletemplates","docx",vhtml+'referencefile.html',vPath,"docx");
-  appendTemplateInput("tabletemplates","latex",vhtml+'template.html',vPath,"tex");
+  appendTemplateInput("tabletemplates","docx2col",vhtml+'referencefile.html',vPath,"docx");
   //alert(app.getPath('documents'))
   appendDirectoryInput("tablereveal","Reveal",vhtml+"defaultfolder.html","reveal",vPathMain+vPathSeparator+"reveal","Reveal Folder ");
   appendDirectoryInput("tablereveal","MathJax",vhtml+"defaultfolder.html","mathjax",vPathMain+vPathSeparator+"mathjax","MathJax Folder ");
+
 }
+
+vExtHash={};
+vExtHash["pdf"]="md"; //audioslides
+vExtHash["html"]="html";
+vExtHash["html5"]="html";
+vExtHash["reveal"]="html";
+vExtHash["dzslides"]="html";
+vExtHash["audioslides"]="html";
+vExtHash["mediawiki"]="wiki";
+vExtHash["latex"] = "tex";
+vExtHash["markdown"] = "md";
+vExtHash["beamer"] = "tex";
+vExtHash["odt"] = "odt";
+vExtHash["docx"] = "docx";
+vExtHash["odt2col"] = "odt";
+vExtHash["docx2col"] = "docx";
+vExtHash["asciidoc"] = "asciidoc";
+vExtHash["context"] = "tex";
+vExtHash["docbook"] = "db";
+vExtHash["dokuwiki"] = "wiki";
+vExtHash["man"] = "man";
+vExtHash["icml"] = "icml";
+vExtHash["markdown_strict"] = "mds";
+vExtHash["markdown_phpextra"] = "mdphp";
+vExtHash["markdown_github"] = "mdgit";
+vExtHash["markdown_mmd"] = "mmd";
+vExtHash["rst"] = "rst";
+vExtHash["textile"] = "textile";
+vExtHash["org"] = "org";
+vExtHash["opendocument"] = "xml";
+vExtHash["opml"] = "opml";
+vExtHash["rtf"] = "rtf";
+vExtHash["S5"] = "s5";
+vExtHash["slideous"] = "html";
+vExtHash["slidy"] = "html";
+vExtHash["texinfo"] = "texi";
+//alert("vExtHash[markdown]="+vExtHash["markdown"]);
+
+vExt2Format={};
+for (iID in vExtHash) {
+  vExt2Format[vExtHash[iID]]=iID;
+};
+vExt2Format["html"]="html";
+vExt2Format["pdf"]="audioslides";
+vExt2Format["tex"]="latex";
+vExt2Format["wiki"]="mediawiki";
 
 setDefaultValues();
 

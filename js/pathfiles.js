@@ -1,3 +1,4 @@
+
 function getExtensionOfFilename(pFilename) {
   var re = /(?:\.([^.]+))?$/;
   // re.exec("/path.file/project/output.dzslides.html")[1];  returns  "html"
@@ -10,11 +11,12 @@ function getPathFromFilename(pFilename) {
   return pFilename.substr(0, pFilename.lastIndexOf('/'));
 }
 function getProjectDir(pProject) {
+  var vSep = getPathSeparator();
   var vProject = "";
   if (pProject) {
-    vProject = "/"+pProject;
+    vProject = vSep+pProject;
   };
-  return (document.getElementById("projectmainDIR").value+vProject);
+  return (getValueDOM("projectmainDIR")+vProject);
 }
 /**
  * Souce: https://gist.github.com/eriwen/1211656
@@ -41,4 +43,11 @@ function getRelativePath(source, target) {
 	relPathArr.length && (relativePath += relPathArr.join(sep) + sep);
 
 	return relativePath + filename;
+}
+function makeProjectDirs(pPath){
+  var vSep = getPathSeparator();
+  makedirpath(pPath+vSep+"config");
+  makedirpath(pPath+vSep+"audio");
+  makedirpath(pPath+vSep+"video");
+  makedirpath(pPath+vSep+"images");
 }

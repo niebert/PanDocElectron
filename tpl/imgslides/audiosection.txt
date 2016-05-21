@@ -1,0 +1,8 @@
+<section id="section" class="slide level2">
+	<audio>
+  		<source src="audio/audio___NR___.mp3" type="audio/mpeg">
+	</audio>
+	<figure>
+		<img src="images/img___NR___.png" title="Slide ___NR___" />
+	</figure>
+</section>

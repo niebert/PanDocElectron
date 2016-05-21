@@ -58,3 +58,13 @@ function replaceString(pString,pSearch,pReplace)
   }
 
 };
+function getValueDOM(pID) {
+  var vReturn = document.getElementById(pID).value;
+  if (!vReturn) {
+    vReturn = getInnerHTML(pID);
+  };
+  return vReturn;
+};
+function getInnerHTML(pID) {
+  return document.getElementById(pID).innerHTML;
+};
