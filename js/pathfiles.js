@@ -5,11 +5,21 @@ function getExtensionOfFilename(pFilename) {
   return re.exec(pFilename)[1];   // "html"
 }
 function removeExtension(pFilename) {
-  return pFilename.substr(0, pFilename.lastIndexOf('.'));
-}
+  var vReturn = pFilename;
+  if (pFilename.indexOf('.')>0) {
+    vReturn = pFilename.substr(0, pFilename.lastIndexOf('.'));
+  };
+  return vReturn;
+};
 function getPathFromFilename(pFilename) {
   return pFilename.substr(0, pFilename.lastIndexOf('/'));
-}
+};
+function getNameExt4Filename(pFilename) {
+  return pFilename.substr(pFilename.lastIndexOf('/')+1,pFilename.length);
+};
+function getName4Filename(pFilename) {
+  return removeExtension(getNameExt4Filename(pFilename));
+};
 function getProjectDir(pProject) {
   var vSep = getPathSeparator();
   var vProject = "";
@@ -17,6 +27,14 @@ function getProjectDir(pProject) {
     vProject = vSep+pProject;
   };
   return (getValueDOM("projectmainDIR")+vProject);
+}
+function getSoftwareDir(pProject) {
+  var vSep = getPathSeparator();
+  var vProject = "";
+  if (pProject) {
+    vProject = vSep+pProject;
+  };
+  return (__dirname+vProject);
 }
 /**
  * Souce: https://gist.github.com/eriwen/1211656
@@ -27,7 +45,9 @@ function getProjectDir(pProject) {
  * @return Relative path (e.g. "../../style.css") as {String}
  */
 function getRelativePath(source, target) {
-	var sep = (source.indexOf("/") !== -1) ? "/" : "\\",
+  var vSep = getPathSeparator();
+  //var sep = (source.indexOf("/") !== -1) ? "/" : "\\",
+  var sep = getPathSeparator(),
 		targetArr = target.split(sep),
 		sourceArr = source.split(sep),
 		filename = targetArr.pop(),
@@ -43,8 +63,9 @@ function getRelativePath(source, target) {
 	relPathArr.length && (relativePath += relPathArr.join(sep) + sep);
 
 	return relativePath + filename;
-}
+};
 function makeProjectDirs(pPath){
+  // Creates all subdirectories for a project
   var vSep = getPathSeparator();
   makedirpath(pPath+vSep+"config");
   makedirpath(pPath+vSep+"audio");

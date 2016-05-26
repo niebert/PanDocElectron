@@ -1,4 +1,4 @@
-h1 { margin-bottom: 1em; }
+/*h1 { margin-bottom: 1em; }
 body { margin: auto; }
 textarea { height: auto; width: 100%; font-family: monospace; margin-top: 15px; }
 div.alert { margin: 1em; }
@@ -8,3 +8,20 @@ footer { color: #555; text-align: center; margin: 1em; }
 p.version { color: #555; }
 button#convert { vertical-align: bottom; }
 pre#command { margin-top: 1em; background-color: transparent; border: none; }
+*/
+.pandocblue {
+ color: #3D8CD1;
+}
+
+footer {
+	text-align: center;
+	font-size: 8px;
+}
+.bluebutton {
+  background-color:#3D8CD1;
+  color:white;
+}
+textarea {
+  width: 100%;
+  font-family:monospace;
+}

@@ -59,10 +59,16 @@ function replaceString(pString,pSearch,pReplace)
 
 };
 function getValueDOM(pID) {
-  var vReturn = document.getElementById(pID).value;
-  if (!vReturn) {
-    vReturn = getInnerHTML(pID);
-  };
+  var vNode = document.getElementById(pID);
+  var vReturn = "";
+  if (!vNode) {
+    console.log("DOM Node ["+pID+"] does not exist!");
+  } else {
+    vReturn = vNode.value;
+    if (!vReturn) {
+      vReturn = getInnerHTML(pID);
+    };
+  }
   return vReturn;
 };
 function getInnerHTML(pID) {
