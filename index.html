@@ -5,12 +5,15 @@
     <title>PanDoc Electron</title>
     <!--link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet"-->
+    <!-- JQUERY MOBILE Integration -->
     <link href="css/app.css" rel="stylesheet" />
-    <link href="css/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <!--
+     <link href="css/jquery.mobile.icons.min.css" rel="stylesheet" />
     <link href="css/jquery.mobile.structure-1.4.5.min.css" rel="stylesheet" />
-    <link href="css/main.css" rel="stylesheet" />
-    <script src="js/jquery-1.11.1.min.js"></script>
+    <!script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    -->
+    <link href="css/main.css" rel="stylesheet" />
     <script src="js/showhide.js"></script>
     <script src="js/pathfiles.js"></script>
     <script src="js/writedom.js"></script>
@@ -337,7 +340,8 @@
             <input type="checkbox" name="checkEditor" id="checkEditor" onclick="toggleCheck('inputEDITOR',this.checked)" hidden="hidden"> --
             <button onclick="saveEditorContent()"> Save </button>
           </h3>
-          <textarea id="inputEDITOR" maxlength="3000" rows="15" ></textarea>
+          <textarea id="inputEDITOR" rows="15" ></textarea>
+          <textarea id="inputLOOP" maxlength="3000" rows="15" ></textarea>
           <hr/>
         </div>
         <div class="divcommand">
