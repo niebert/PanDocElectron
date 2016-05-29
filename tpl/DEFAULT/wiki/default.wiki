@@ -24,14 +24,14 @@ The list describes the purpose of these folders and provides a small survey abou
 == Mathemtatics: ==
 
 * Taylor Series <math>f(x)=\sum_{n=0}^\infty\frac{f^{(n)}(a)}{n!}(x-a)^n</math><br />
-Separate Math Form 
+Separate Math Form
 
 <math> \displaystyle \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right) </math>
 
 == Folder Audio Video: ==
 
-* if you use medis files create a subdirectory in the project directory call ''media/'' with the subfolders ''media/audio'', ''media/video'' and ''media/images''
-* thes folders contain all media files (Video, Audio, Images, ...) that are used in the reveal presentation or other PanDoc export formats.
+* if you use media files create a subdirectories in the project directory for used media type with the subfolders ''/audio'', ''/video'' and ''/images''
+* the folders contain all media files (Video, Audio, Images, ...) that are used in the reveal presentation or other PanDoc export formats.
 
 == Commands for MarkDown ==
 
@@ -40,8 +40,8 @@ Separate Math Form
 
 <pre>pandoc -t html5 --template=tpl4reveal.html \
       --standalone --section-divs \
-      --variable theme=&quot;beige&quot; \
-      --variable transition=&quot;slide&quot; \
+      --variable theme="beige" \
+      --variable transition="slide"; \
       slides.md -o slides.html</pre>
 == Commands for WikiMedia ==
 
@@ -50,11 +50,10 @@ Separate Math Form
 
 <pre>pandoc -f mediawiki -t html5 --template=tpl4reveal.html \
      --standalone --section-divs \
-     --variable theme=&quot;beige&quot; \
-     --variable transition=&quot;slide&quot; --mathjax \
+     --variable theme="beige" \
+     --variable transition="slide" --mathjax \
      wikipedia.wiki -o wikipedia.html </pre>
 == Learning Markdown &amp; WikiMedia ==
 
 * Learning Markdown http://www.markdowntutorial.com
 * Learning WikiMedia https://en.wikipedia.org/wiki/Wikipedia:Tutorial
-

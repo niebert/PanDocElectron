@@ -1,4 +1,11 @@
 
+function makedirpath(pPathDir) {
+  var mkdirp = require('mkdirp');
+  mkdirp(pPathDir, function(err) {
+    // full path exists including all subdirectories unless there was an error
+    //alert("Directory="+pPathDir+" already exists!");
+  });
+}
 function getExtensionOfFilename(pFilename) {
   var re = /(?:\.([^.]+))?$/;
   // re.exec("/path.file/project/output.dzslides.html")[1];  returns  "html"
@@ -12,6 +19,9 @@ function removeExtension(pFilename) {
   return vReturn;
 };
 function getPathFromFilename(pFilename) {
+  return getPath4Filename(pFilename);
+}
+function getPath4Filename(pFilename) {
   return pFilename.substr(0, pFilename.lastIndexOf('/'));
 };
 function getNameExt4Filename(pFilename) {

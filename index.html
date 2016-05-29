@@ -17,8 +17,13 @@
     <script src="js/showhide.js"></script>
     <script src="js/pathfiles.js"></script>
     <script src="js/writedom.js"></script>
+    <script src="js/ioformat.js"></script>
     <script src="js/opsysdetect.js"></script>
     <script src="js/cmdpandoc.js"></script>
+    <script>
+      vHashTPL={};
+      vHashTPL["mainDIR"] = __dirname;
+    </script>
   </head>
   <body>
     <div class="container">
@@ -94,6 +99,18 @@
                 <tt id="inputFILE"></tt>
               </td>
             </tr>
+            <tr>
+              <td align="right">
+                <b>Input Filter:</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <input type="text" id="inputFILTER" size="30" value="+simple_tables+footnotes">
+                <button id="bHelpFilter" onclick="openBrowserURL('http://pandoc.org')"> ? </button>
+              </td>
+            </tr>
             <tr><!-- outputFILE -->
               <td align="right">
                 <b>Output Format:</b>
@@ -137,8 +154,18 @@
                   <option value="slidy">Slidy</option>
                   <option value="texinfo">Texinfo</option>
                 </select>
-                <div id="selectOutputFORMAT"  style="display: none">reveal</div>
                 <div id="divSlideCount" hidden="hidden">AudioSlide Count <input type="text" id="slidecount" value="16" size="3"></div>
+                <select id="themeREVEAL">
+                  <option value="beige" selected="selected">Beige Background</option>
+                  <option value="simple">Simple White Background</option>
+                  <option value="sky">Sky Blue Background (UpperCase)</option>
+                  <option value="serif">Serif White Background</option>
+                  <option value="blood">Black Background with Red Links</option>
+                  <option value="moon">Moon Reveal Theme</option>
+                  <option value="solarized">Solarized Reveal Theme</option>
+                  <option value="black">Black Background"</option>
+                </select>
+                <div id="selectOutputFORMAT"  style="display: none">reveal</div>
               </td>
             </tr>
             <tr><!-- outputFILE -->
@@ -160,7 +187,6 @@
                 &nbsp;
               </td>
               <td>
-                <tt id="outputTITLE"></tt>
                 <input TYPE="text" size="75" id="outputTITLE" value="My Title"/>
               </td>
             </tr>
@@ -309,6 +335,7 @@
           <h3>
             Templates:
             <input type="checkbox" name="checkTemplates" id="checkTemplates" onclick="toggleCheck('tabletemplates',this.checked)"  hidden="hidden">
+            <button class="bluebutton" onclick="updateSoftware()">Update Software</button>
           </h3>
           <table border="0"  cellspacing="30" id="tabletemplates" class="buttonstemplate" >
           </table>
@@ -341,7 +368,8 @@
             <button onclick="saveEditorContent()"> Save </button>
           </h3>
           <textarea id="inputEDITOR" rows="15" ></textarea>
-          <textarea id="inputLOOP" maxlength="3000" rows="15" ></textarea>
+          <textarea id="inputLOOP" rows="15" hidden="hidden"></textarea>
+          <textarea id="outputEDITOR" rows="15" idden="hidden"></textarea>
           <hr/>
         </div>
         <div class="divcommand">
@@ -365,336 +393,14 @@ var app     = remote.require('app');
 var dialog  = remote.require('dialog');
 var vPathSeparator = "/";
 
-function openBrowserURL(pURL) {
-  const {shell} = require('electron');
-  shell.openExternal(pURL);
-}
-function openInputFile (pPath) {
-  pPath = getProjectDir(pPath);
-  openFile("inputFILE","inputEDITOR",pPath);
-}
-function openREFFile (pPath) {
-  pPath = getSoftwareDir(pPath);
-  openFile("refFILE","",pPath)
-}
-function openBIBFile (pPath) {
-  //pPath = getProjectDir(pPath);
-  var vSep = getPathSeparator();
-  pPath = getSoftwareDir("bib"+vSep+pPath);
-  openFile("bibFILE","",pPath)
-}
-function openCSLFile (pPath) {
-  var vSep = getPathSeparator();
-  pPath = getSoftwareDir("bib"+vSep+pPath);
-  openFile("cslFILE","",pPath)
-}
-function openTPLFile (pPath) {
-  pPath = getSoftwareDir(pPath);
-  openFile("tplFILE","",pPath)
-}
-function downloadInputFile(pPath) {
-  //alert("Download Input File and Convert Source File to MarkDown");
-  var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
-  makedirpath(vPath);
-  //alert("URL: "+getValueDOM("inputURL")+"\nDownload File: "+getValueDOM("downloadWebFILE")+"\nWeb Project: "+getValueDOM("inputWEBPROJECT"));
-
-  var vCommand ="pandoc -s -r html "+getValueDOM("inputURL")+" -o "+getValueDOM("downloadWebFILE");
-  console.log(vCommand);
-  var vAnswer = true;
-  if (checkFileExists(getValueDOM("downloadWebFILE"))) {
-    vAnswer = confirm("Warning Download will overwrite existing File!")
-  };
+function updateSoftware() {
+  vAnswer = confirm("Do want to update PanDocElectron with GIT!");
   if (vAnswer) {
-    runShellCommand(vCommand);
-    vInputFile = getValueDOM("downloadWebFILE");
-    copyFile2Editor ("inputEDITOR",vInputFile);
-    write2innerHTML("inputFILE",vInputFile);
-    alert("Download URL: "+getValueDOM("inputURL")+"\nto Web Project: "+getValueDOM("inputWEBPROJECT"));
-  }
-};
-function changedWebInput(pChecked) {
-  //alert("Changed Web Input");
-  };
-function changedInFormat (pInputFORMAT) {
-  //alert("Changed Input Format to "+pInputFORMAT);
-  //setInput4Project('inputNEWPROJECT','inputNEWFILE');
-  switch (pInputFORMAT) {
-    case "pdf":
-        // PDF as Input implies audioslides as outputFORMAT
-        setOutputFormat("audioslides");
-        setInput4Project("inputNEWPROJECT",'inputNEWFILE');
-        break;
-    case "myformat":
-        // handle case
-        break;
-    default:
-      // Default Output Format
-      setInput4Project("inputNEWPROJECT",'inputNEWFILE');
-  } //end switch
-  write2innerHTML("selectInputFORMAT",pInputFORMAT);
-}
-function autoSelectInputFormat() {
-  var vFile = getValueDOM("inputFILE");
-  var vExt = getExtensionOfFilename(vFile);
-  if (vExt2Format[vExt]) {
-    write2value("inputFORMAT",vExt2Format[vExt]);
-  };
-  if (vExt == "pdf") {
-    setOutputFormat("audioslides");
-  }
-}
-function setInputFormat(pInputFORMAT) {
-  write2value("inputFORMAT",pInputFORMAT);
-};
-function changedOutFormat (pOutputFORMAT) {
-  //alert("Changed Output Format to "+pOutputFORMAT);
-  var vInputFile= getValueDOM("inputFILE");
-  if ((!vInputFile) || (vInputFile == "")) {
-    alert("Input File is undefined! Please select File\n  changetOutFormat()-Call:377");
+    //runShellCommand("cd \""+__dirname+"\"; git update");
+    alert("Update of PanDocElectron was performed with GIT.\nPlease restart PanDocElectron");
   } else {
-    //alert("changedOutFormat() vInputFile="+vInputFile);
-    var vOutFile = createOutputFile(vInputFile,pOutputFORMAT);
-    write2innerHTML("outputFILE",vOutFile);
-    switch (pOutputFORMAT) {
-      case "audioslides":
-          // PDF as Input implies audioslides as outputFORMAT
-          setInputFormat("pdf");
-          break;
-      case "myformat":
-          // handle case
-          break;
-      default:
-        // Default Output Format
-    } //end switch
+    alert("CANCEL: Updating Software was cancelled!");
   };
-  write2value("selectOutputFORMAT",pOutputFORMAT);
-  visibleAudioSlideCount(pOutputFORMAT);
-};
-function setOutputFormat(pOutputFORMAT) {
-  write2value("outputFORMAT",pOutputFORMAT);
-  var vInputFile = getValueDOM("inputFILE");
-  var vOutFile   = createOutputFile(vInputFile,pOutputFORMAT);
-  write2innerHTML("outputFILE",vOutFile);
-  visibleAudioSlideCount(pOutputFORMAT);
-};
-
-function visibleAudioSlideCount(pOutputFORMAT) {
-  if (pOutputFORMAT == "audioslides") {
-    showElement("divSlideCount");
-    alert("Input File must be PDF!");
-  } else {
-    hideElement("divSlideCount");
-  };
-}
-function saveEditorContent() {
-  var vInputFile = getValueDOM("inputFILE");
-  if (vInputFile=="") {
-    alert("Error: Input Filename is not defined!");
-  } else {
-    alert("Input File saved!\n"+vInputFile);
-  }
-}
-function createProject() {
-  var vSep = getPathSeparator();
-  var vName = getValueDOM("inputNEWPROJECT");
-  var vPath = getValueDOM("projectmainDIR")+vSep+vName;
-  var vInFormat = getValueDOM("inputFORMAT");
-  var vExt = vExtHash[vInFormat];
-  // vFilename is the new Input Filename for the new project
-  var vFilename = vPath+vSep+vName+"."+vExt;
-  // vFile
-  if (confirm("Do you want to create the following project?\nProject Folder: "+vName+"/\nFilename: "+vName+"."+vExt)) {
-    makedirpath(vPath);
-    //openFile (vFilenameID,"inputEDITOR",pPath)
-    var vDir = __dirname+vSep+"tpl"+vSep+"DEFAULT"+vSep;
-    // vDefaultFile: Copy from this default Source File for new Project
-    var vDefaultFile = vDir + "md" + vSep +"default.md";
-    var vInFormat = getValueDOM("inputFORMAT");
-    switch (vInFormat) {
-      case "md":
-        //alert("MD Create Project createProject():436:index.html");
-        vDefaultFile = vDir + vInFormat + vSep +"default."+vInFormat;
-        copyFile(vDefaultFile,vFilename);
-        break;
-      case "mediawiki":
-        //alert("WIKI Create Project createProject():441:index.html");
-        vDefaultFile = vDir + "wiki" + vSep +"default.wiki";
-        copyFile(vDefaultFile,vFilename);
-        break;
-      case "pdf":
-          //alert("MD Create Project createProject():436:index.html");
-          vDefaultFile = vDir + vInFormat + vSep +"default."+vInFormat;
-          copyFile(vDefaultFile,vFilename);
-          break;
-      default:
-        //alert("["+vInFormat+"] Create Project createProject():441:index.html");
-        vDefaultFile = vDir + "md" + vSep +"default.md";
-        runShellCommand("pandoc -f markdown -t "+vInFormat+" "+vDefaultFile+" -o "+vFilename);
-    };
-    makeProjectDirs(vPath); //audio, video, config, images
-    //setInput4Project('inputNEWPROJECT','inputNEWFILE');
-    write2innerHTML("inputFILE",vFilename);
-    changedOutFormat(getValueDOM(outputFORMAT));
-    copyFile2Editor ("inputEDITOR",vFilename);
-    //setFormat4Input();
-    //write2value("inputFORMAT",)
-    alert("Project: "+vName+" created!" );
-  } else {
-    // Do nothing!
-    alert("Project Create: CANCEL Operation")
-  }
-}
-function setFormat4Input () {
-  var vInputFile = getValueDOM("inputFILE");
-  var vExt = getExtensionOfFilename(vFilename);
-  var vInputFormat = "markdown";
-  if (vExt2Format[vExt]) {
-    vInputFormat = vExt2Format[vExt];
-  };
-  write2value("inputFORMAT",vInputFormat);
-}
-function createOutputFile (pInputFile,pOutputFORMAT) {
-  var vFileNoExt = removeExtension(pInputFile);
-  var vExt = vExtHash[pOutputFORMAT] || pOutputFORMAT;
-  return vFileNoExt+"_"+pOutputFORMAT+"."+vExt;
-}
-function openDirectory(pID,pDefaultPath) {
-  //dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]})
-  var vFolder =dialog.showOpenDialog({ defaultPath: pDefaultPath , properties: [ 'openDirectory' ]});
-  if (vFolder) {
-    write2innerHTML(pID,vFolder);
-  }
-}
-function openFile (pFilenameID,pTextAreaID,pPath) {
-  openFileWriteDOM(pFilenameID,pTextAreaID,pPath);
-};
-function checkPathExists(pPath) {
-  var path = require('path');
-  if (path.existsSync(pPath)) {
-    console.log('Found \''+pPath+'\' Path');
-    // do something
-  };
-}
-function checkFileExists(pFile) {
-  if (fs.existsSync(pFile)) {
-    console.log('Found \''+pFile+'\' File');
-    // do something
-    return true;
-  } else {
-    return false;
-  }
-}
-function copyFile(pSource,pDestination) {
-  if (checkFileExists(pDestination)) {
-    alert("Create Error: File exists \n"+pDestination);
-  } else {
-    var fs = require('fs');
-    fs.createReadStream(pSource).pipe(fs.createWriteStream(pDestination));
-  };
-};
-function makedirpath(pPathDir) {
-  var mkdirp = require('mkdirp');
-  mkdirp(pPathDir, function(err) {
-    // path exists unless there was an error
-    //alert("Directory="+pPathDir+" already exists!");
-  });
-}
-function openFileWriteDOM (pFilenameID,pTextAreaID,pDefaultPath) {
-  //alert("pPath="+pPath);
-  //var vDefaultPath=app.getPath('downloads')}
-  //var vDefaultPath=app.getPath('documents');
-  //var vSep = getPathSeparator();
-  //+vSep+pPath
-  var vDefaultPath = pDefaultPath || getValueDOM("projectmainDIR");
-  makedirpath(vDefaultPath);
-  dialog.showOpenDialog({defaultPath: vDefaultPath},function (fileNames) {
-    if (fileNames === undefined) return;
-    var fileName = fileNames[0];
-    write2innerHTML(pFilenameID, fileName);
-    changedOutFormat(getValueDOM("outputFORMAT"));
-    if (pTextAreaID!="") {
-      copyFile2Editor(pTextAreaID,fileName);
-    };
-    if (pTextAreaID=="inputEDITOR") {
-      loadTitleAuthor();
-      autoSelectInputFormat();
-    }
- });
-}
-function copyFile2Editor (pID,pFilename) {
-  fs.readFile(pFilename, 'utf-8', function (err, data) {
-    write2value(pID, data);
-    console.log('\''+pFilename+' opened!');
-  });
-}
-function loadConfig(pConfigFile) {
-  var vConfigFile = pConfigFile || "default.cfg";
-  // simnply load config file into the innerHTML of DIV node 'divconfig'
-  fs.readFile(__dirname+'/config/'+vConfigFile, 'utf-8', function (err, data) {
-    write2innerHTML("divconfig", data);
-    console.log('Config File \''+vConfigFile+' loaded!');
-    write2value("inputFORMAT",getInnerHTML("selectInputFORMAT"));
-    write2value("outputFORMAT",getInnerHTML("selectOutputFORMAT"));
-  });
-}
-
-function saveConfig (pConfigFile) {
-  var vConfigFile = pConfigFile || "default.cfg";
-  // simnply write the innerHTML of DIV node 'divconfig' into file
-  write2innerHTML("selectInputFORMAT",getValueDOM("inputFORMAT"));
-  write2innerHTML("selectOutputFORMAT",getValueDOM("outputFORMAT"));
-  var vContent=document.getElementById("divconfig").innerHTML;
-  fs.writeFile('config/'+vConfigFile, vContent, (err) => {
-  //fs.writeFile(vConfigFile, vContent, (err) => {
-   if (err) throw err;
-   console.log('Config File \''+pConfigFile+'\' saved!');
- });
-}
-
-function saveFile(pFilename,pContent) {
- fs.writeFile(pFilename, pContent, (err) => {
-   if (err) throw err;
-   console.log('Filename \''+pFilename+'\' saved!');
-   //alert("Dirname: "+__dirname)
- });
-}
-
-function setInput4Project(pInputID,pOutputID,pExt) {
-  var vPathSep = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
-  var vInFormat = getValueDOM("inputFORMAT");
-  var vExt = vExtHash[vInFormat];
-  //var vExt = pExt || vExtHash[vInFormat];
-  var vDefaultFilename = "input";
-  var vFilename = document.getElementById(pInputID).value || vDefaultFilename;
-  if (vFilename == "") {
-    alert("Error ["+pInputID+"]: Input File was undefined!\n  setInput4Project():565:index.html");
-  } else {
-    //alert("Format: "+vInFormat+" Extension: "+vExt);
-    //if (getExtensionOfFilename(vFilename) != "md") {
-    //vFilename = removeExtension(vFilename)+".md";
-    //alert("Extension is not 'md'. Use filename '"+vFilename+"' instead!");
-  };
-  //write2value(pOutputID,vFilename);
-  //alert("setInput4Project() vFilename:\n"+vFilename);
-  var vProjectDir = getProjectDir();
-  //alert("vProjectDir="+vProjectDir);
-  vFilename = vProjectDir+vPathSep+vFilename+vPathSep+vFilename+"."+vExt;
-  console.log('Set Input File: \''+vFilename+'\' to DOM-Node['+pOutputID+']!');
-  write2innerHTML(pOutputID,vFilename);
-}
-
-function saveTestFile () {
-  console.log("Call: saveTestFile() l.368 index.html");
-  saveFile('./message.txt', 'Hello Node.js this is the File Content');
-}
-function saveFile2AppDir (pFilename,pContent) {
-  var vSep = getPathSeparator();
-  var vFilename=__dirname+vSep+pFilename;
-  fs.writeFile(vFilename, pContent, (err) => {
-    if (err) throw err;
-    console.log('File: \''+pFilename+'\' saved to application directory!');
-    //alert("Dirname: "+__dirname)
-  });
 }
 
 function runShellCommand (pCommand) {
@@ -711,94 +417,6 @@ function runShellCommand (pCommand) {
      }
  });
 }
-function convertChecker(pHash) {
-  var vReturn = true;
-  //alert("check input set, convertChecker()  pre command exec");
-  var vInputFile = getInnerHTML("inputFILE");
-  if (!vInputFile) {
-    vReturn = false;
-    alert("ERROR: PanDoc Input File was not defined!\n    convertChecker():656");
-  } else if (vInputFile == "") {
-    vReturn = false;
-    alert("Error: Input File was not defined!\nCall: convertChecker():659");
-  } else {
-    pHash["inputFILE"] = vInputFile;
-    var vExt = getExtensionOfFilename(vInputFile);
-    pHash["Extension"] = vExt;
-    vInputFormat = getValueDOM("inputFORMAT");
-    pHash["inputFORMAT"] = vInputFormat;
-    //alert("Check Format with Extension="+vExt+" inputFORMAT="+pHash["inputFORMAT"]);
-    if (vExt !== vExtHash[vInputFormat]) {
-      vReturn = confirm("Please check, if input Format ''"+pHash["inputFORMAT"]+"' is correct'!");
-    };
-    pHash["outputFORMAT"]    = getValueDOM("outputFORMAT");
-    setPandocOutFormat(pHash);
-  };
-  console.log("convertChecker() inputFORMAT="+pHash["inputFORMAT"]);
-  return vReturn;
-}
-function setPandocOutFormat(pHash) {
-  switch (pHash["outputFORMAT"]) {
-    case "docx2col":
-      pHash["pandocOUTFORMAT"]="docx";
-      pHash["referenceDOCX"] = getInnerHTML("refFILE"+pHash["outputFORMAT"]);
-    break;
-    case "odt2col":
-      pHash["pandocOUTFORMAT"]="docx";
-      pHash["referenceODT"] = getInnerHTML("refFILE"+pHash["outputFORMAT"]);
-    break;
-    default:
-    //pHash["referenceODT"] = "";
-    //pHash["referenceODT"] = "";
-  pHash["pandocOUTFORMAT"] = getValueDOM("outputFORMAT");
-  };
-}
-function runPandocShell(pHash) {
-  saveTitleAuthor();
-  pHash["inputFORMAT"] = getValueDOM("inputFORMAT");
-  alert("runPandocShell(pHash) now execute "+pHash["inputFILE"]);
-  executePanDocCMD(pHash);
-};
-function convertFile() {
-  var vHash = {};
-  if (convertChecker(vHash)) {
-    runPandocShell(vHash);
-    saveTitleAuthor();
-  };
-};
-function saveTitleAuthor() {
-  console.log("Save Title and Author");
-  var vConfigFile = getFilename4TitleAuthor();
-  saveFile(vConfigFile, getValueDOM("outputTITLE")+"\n"+getValueDOM("outputAUTHOR"));
-};
-function loadTitleAuthor() {
-  console.log("Load Title and Author");
-  var vConfigFile = getFilename4TitleAuthor();
-  if (checkFileExists(vConfigFile)) {
-    fs.readFile(vConfigFile , 'utf-8', function (err, data) {
-      // check if the cfg-File with Title and Author exists
-      if (data) {
-        var vLines = data.split("\n");
-        write2value("outputTITLE",vLines[0]);
-        write2value("outputAUTHOR",vLines[1]);
-        console.log('Config File \''+vConfigFile +' opened!');
-      }
-    });
-  } else {
-    console.log('Config File \''+vConfigFile +' does not exist!');
-  }
-}
-function getFilename4TitleAuthor() {
-  var vFilename = getInnerHTML("inputFILE");
-  //alert("vFilename="+vFilename+"\n getFilename4TitleAuthor()");
-  var vPath = getPathFromFilename(vFilename);
-  var vName = getName4Filename(vFilename);
-  var vSep = getPathSeparator();
-  var vConfigFile = vPath+vSep+"config"+vSep+vName+".cfg";
-  console.log("getFilename4TitleAuthor() vConfigFile=+"+vConfigFile);
-  return vConfigFile;
-}
-var vHashTPL = new Array();
 
 function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButtonTitle) {
   var vReplaceHash = {};
@@ -808,27 +426,33 @@ function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButto
   vReplaceHash["PATHDEFAULT"] = pPathDefault;
   appendTemplateHash(pID,pTemplate,vReplaceHash);
 };
-function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt) {
+function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt,pHashTPL) {
+  var vTPLID = pOutputFORMAT+"TPL";
+  if (pTemplate.indexOf("referencefile")>0) {
+    vTPLID = pOutputFORMAT+"REF";
+  };
   var vReplaceHash = {};
   var vSep = getPathSeparator();
   var vDefaultName = "tpldefault";
-  if ((pOutputFORMAT=="odt") && (pTemplate.indexOf("referencefile")>0)) {
+  if ((pOutputFORMAT=="odt") && (pTemplate == "template.html")) {
     vDefaultName = "content"
   };
-  if (pExt=="md") {
-    vDefaultName = "input"
+  if (pOutputFORMAT=="DEFAULT") {
+    vDefaultName = "input";
   };
   vReplaceHash["FORMAT"] = pOutputFORMAT;
   vReplaceHash["TYPE"]   = pOutputFORMAT.toUpperCase();
   vReplaceHash["TPLDEFAULT"] = pPath+vSep+"tpl"+vSep+pOutputFORMAT+vSep+vDefaultName+"."+pExt;
+  if (pHashTPL[vTPLID]) {
+    //alert("Template: "+vTPLID+" exists!\n"+pHashTPL[vTPLID]);
+  } else {
+    //alert("Template: "+vTPLID+" does not exist!");
+    pHashTPL[vTPLID] = vReplaceHash["TPLDEFAULT"];
+  };
   appendTemplateHash(pID,pTemplate,vReplaceHash);
 };
 function appendTemplateHash(pID,pTemplate,pReplaceHash) {
   var vContent = "Error: Template "+pTemplate+" undefined";
-  if (vHashTPL[pTemplate]) {
-  //  vContent = vHashTPL[pTemplate];
-    alert("Template: "+pTemplate+" exists\n"+vHashTPL[pTemplate]);
-  };
   //} else {
   fs.readFile(pTemplate, 'utf-8', function (err, tpldata) {
       //alert("Template: "+pTemplate+" load\n"+tpldata);
@@ -841,13 +465,8 @@ function appendTemplateHash(pID,pTemplate,pReplaceHash) {
       console.log('Template File \''+pTemplate+' loaded!');
   });
 };
-function setInput4WebDownload() {
-  var vSep = getPathSeparator();
-  var vProjectName = document.getElementById("inputPROJECT").value;
-  var vDownloadFile = getProjectDir()+vSep+vProjectName+vSep+vProjectName+"_web.md";
-  document.getElementById("downloadWebFILE").innerHTML = vDownloadFile;
-}
-function setDefaultValues() {
+
+function setDefaultValues(pHashTPL) {
   var vPathSeparator = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
   var vPathMain = app.getPath('documents')+vPathSeparator+"PanDoc";
   write2innerHTML("projectmainDIR",vPathMain);
@@ -860,21 +479,26 @@ function setDefaultValues() {
   //var vPath = app.getPath('home')+vPathSeparator+"ownCloudLD"+vPathSeparator+"PanDoc";
 
   var vhtml ="html"+vPathSeparator;
-  appendTemplateInput("tabletemplates","DEFAULT",vhtml+'template.html',vPath,"md");
-  appendTemplateInput("tabletemplates","reveal",vhtml+'template.html',vPath,"html");
-  appendTemplateInput("tabletemplates","audioslides",vhtml+'template.html',vPath,"html");
-  appendTemplateInput("tabletemplates","latex",vhtml+'template.html',vPath,"tex");
-  appendTemplateInput("tabletemplates","odt",vhtml+'template.html',vPath,"xml");
-  appendTemplateInput("tabletemplates","odt",vhtml+'referencefile.html',vPath,"odt");
-  appendTemplateInput("tabletemplates","odt2col",vhtml+'referencefile.html',vPath,"odt");
-  appendTemplateInput("tabletemplates","docx",vhtml+'referencefile.html',vPath,"docx");
-  appendTemplateInput("tabletemplates","docx2col",vhtml+'referencefile.html',vPath,"docx");
+  appendTemplateInput("tabletemplates","DEFAULT",vhtml+'template.html',vPath,"md",pHashTPL);
+  appendTemplateInput("tabletemplates","reveal",vhtml+'template.html',vPath,"html",pHashTPL);
+  appendTemplateInput("tabletemplates","audioslides",vhtml+'template.html',vPath,"html",pHashTPL);
+  appendTemplateInput("tabletemplates","dzslides",vhtml+'template.html',vPath,"html",pHashTPL);
+  appendTemplateInput("tabletemplates","latex",vhtml+'template.html',vPath,"tex",pHashTPL);
+  appendTemplateInput("tabletemplates","odt",vhtml+'template.html',vPath,"xml",pHashTPL);
+  appendTemplateInput("tabletemplates","odt",vhtml+'referencefile.html',vPath,"odt",pHashTPL);
+  appendTemplateInput("tabletemplates","odt2col",vhtml+'referencefile.html',vPath,"odt",pHashTPL);
+  appendTemplateInput("tabletemplates","docx",vhtml+'referencefile.html',vPath,"docx",pHashTPL);
+  appendTemplateInput("tabletemplates","docx2col",vhtml+'referencefile.html',vPath,"docx",pHashTPL);
+  appendTemplateInput("tabletemplates","html",vhtml+'referencefile.html',vPath,"css",pHashTPL);
   //alert(app.getPath('documents'))
-  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","reveal",vPathMain+vPathSeparator+"reveal","Reveal Folder ");
-  appendDirectoryInput("tablefolders","MathJax",vhtml+"defaultfolder.html","mathjax",vPathMain+vPathSeparator+"mathjax","MathJax Folder ");
+  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vPathSeparator+"reveal","Reveal Folder ");
+  appendDirectoryInput("tablefolders","MathJax",vhtml+"defaultfolder.html","mathjaxDIR",vPathMain+vPathSeparator+"mathjax","MathJax Folder ");
+  //copyFile2Editor ("audioslideMAIN",getInnerHTML("tplFILEaudioslides"));
+  //copyFile2Editor ("inputLOOP",__dirname+'/tpl/imgslides/audiosection.txt');
 
   setColorSelected("bConvert");
 }
+
 
 vExtHash={};
 vExtHash["pdf"]="pdf"; //audioslides
@@ -923,9 +547,13 @@ vExt2Format["html"]="html";
 vExt2Format["tex"]="latex";
 vExt2Format["wiki"]="mediawiki";
 
-setDefaultValues();
+setDefaultValues(vHashTPL);
 
 </script>
+<script src="js/configfile.js"></script>
+<script src="js/createproject.js"></script>
+<script src="js/opendialogs.js"></script>
+<script src="js/savefiles.js"></script>
 
   </body>
 

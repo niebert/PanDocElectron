@@ -16,7 +16,7 @@ $endif$
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="$revealpath$/css/reveal.css">
+  <link rel="stylesheet" href="___REVEAL___/css/reveal.css">
   <style type="text/css">code{white-space: pre;}</style>
 $if(quotes)$
   <style type="text/css">q { quotes: "“" "”" "‘" "’"; }</style>
@@ -27,9 +27,9 @@ $highlighting-css$
   </style>
 $endif$
 $if(theme)$
-  <link rel="stylesheet" href="$revealpath$/css/theme/$theme$.css" id="theme">
+  <link rel="stylesheet" href="___REVEAL___/css/theme/$theme$.css" id="theme">
 $else$
-  <link rel="stylesheet" href="$revealpath$/css/theme/black.css" id="theme">
+  <link rel="stylesheet" href="___REVEAL___/css/theme/black.css" id="theme">
 $endif$
 $for(css)$
   <link rel="stylesheet" href="$css$"/>
@@ -39,11 +39,11 @@ $endfor$
     var link = document.createElement( 'link' );
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = window.location.search.match( /print-pdf/gi ) ? '$revealpath$/css/print/pdf.css' : '$revealpath$/css/print/paper.css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? '___REVEAL___/css/print/pdf.css' : '___REVEAL___/css/print/paper.css';
     document.getElementsByTagName( 'head' )[0].appendChild( link );
   </script>
   <!--[if lt IE 9]>
-  <script src="$revealpath$/lib/js/html5shiv.js"></script>
+  <script src="___REVEAL___/lib/js/html5shiv.js"></script>
   <![endif]-->
 $if(math)$
   $math$
@@ -83,8 +83,8 @@ $body$
     </div>
   </div>
 
-  <script src="$revealpath$/lib/js/head.min.js"></script>
-  <script src="$revealpath$/js/reveal.js"></script>
+  <script src="$revealjs-url$/lib/js/head.min.js"></script>
+  <script src="$revealjs-url$/js/reveal.js"></script>
 
   <script>
 
@@ -226,21 +226,21 @@ $endif$
 
         math: {
           // mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
-          mathjax: '$mathjaxpath$/MathJax.js',
+          mathjax: '___MATHJAX___/MathJax.js',
           config: 'TeX-AMS_HTML-full'
         },
 
         // Optional reveal.js plugins
         dependencies: [
-          { src: '$revealpath$/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: '$revealpath$/plugin/zoom-js/zoom.js', async: true },
-          { src: '$revealpath$/plugin/notes/notes.js', async: true },
-          { src: '$revealpath$/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '$revealpath$/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '$revealpath$/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          { src: '$revealpath$/plugin/zoom-js/zoom.js', async: true },
-          { src: '$revealpath$/plugin/notes/notes.js', async: true },
-          { src: '$revealpath$/reveal/plugin/math/math.js', async: true }
+          { src: '___REVEAL___/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: '___REVEAL___/plugin/zoom-js/zoom.js', async: true },
+          { src: '___REVEAL___/plugin/notes/notes.js', async: true },
+          { src: '___REVEAL___/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '___REVEAL___/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '___REVEAL___/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '___REVEAL___/plugin/zoom-js/zoom.js', async: true },
+          { src: '___REVEAL___/plugin/notes/notes.js', async: true },
+          { src: '___REVEAL___/reveal/plugin/math/math.js', async: true }
 				]
       });
     </script>

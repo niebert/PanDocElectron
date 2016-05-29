@@ -6,7 +6,7 @@
 Folders & Organisation
 ----------------------
 
-The list describes the purpose of these folders and 
+The list describes the purpose of these folders and
 provides a small survey about the files that are stored in these folders:
 
 * <b>reveal:</b> Presentation Libraries (<https://github.com/hakimel/reveal.js>).
@@ -18,25 +18,25 @@ Folder reveal:
 -------------
 
 * Contains all the files that allows the use of all features of the reveal
-project. 
-* The libraries created by Hakim El Hattab are embedded in all the reveal 
-presentations. 
+project.
+* The libraries created by Hakim El Hattab are embedded in all the reveal
+presentations.
 * The content of the "reveal" folder can be replaces by newer versions
-of "reveal.js" 
+of "reveal.js"
 * URL: <https://github.com/hakimel/reveal.js>
 
-Folder  mathjax: 
+Folder  mathjax:
 ----------------
 
-* In standard [reveal.js](https://github.com/hakimel/reveal.js) presentations mathematical formulas are rendered 
-with MathJax by importing the MathJax libraries via internet access. 
-* This has the disadvantage that mathematical formulas are not rendered, when you 
+* In standard [reveal.js](https://github.com/hakimel/reveal.js) presentations mathematical formulas are rendered
+with MathJax by importing the MathJax libraries via internet access.
+* This has the disadvantage that mathematical formulas are not rendered, when you
 do not have internet connectivity or the MathJax libraries are removed from the
-browser cache. 
+browser cache.
 * The local MathJax libraries avoid these problems.
 The content of the "mathjax" folder can be replaces by newer versions
-of "MathJax" 
-* URL: <https://github.com/mathjax/MathJax> 
+of "MathJax"
+* URL: <https://github.com/mathjax/MathJax>
 * Homepage: <http://www.mathjax.org>
 
 Mathemtatics:
@@ -47,9 +47,9 @@ $$ \displaystyle  \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n
 
 Folder Audio Video:
 ----------------------
-* if you use medis files create a subdirectory in the project directory call _media/_ with the 
-  subfolders _media/audio_, _media/video_ and _media/images_
-* thes folders contain all media files (Video, Audio, Images, ...) that are used in the reveal presentation
+* if you use media files create subdirectories in the project directory call for different media files with
+  subfolders _/audio_, _/video_ and _/images_
+* the folders contain all media files (Video, Audio, Images, ...) that are used in the reveal presentation
   or other PanDoc export formats.
 
 Commands for MarkDown
@@ -61,7 +61,7 @@ Commands for MarkDown
 ```
 pandoc -t html5 --template=tpl4reveal.html \
       --standalone --section-divs \
-      --variable theme="beige" \
+      --variable theme='beige' \
       --variable transition="slide" \
       slides.md -o slides.html
 ```
@@ -75,9 +75,9 @@ Commands for WikiMedia
 ```
 pandoc -f mediawiki -t html5 --template=tpl4reveal.html \
      --standalone --section-divs \
-     --variable theme="beige" \
+     --variable theme='beige' \
      --variable transition="slide" --mathjax \
-     wikipedia.wiki -o wikipedia.html 
+     wikipedia.wiki -o wikipedia.html
 ```
 
 Learning Markdown & WikiMedia
