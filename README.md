@@ -92,18 +92,22 @@ When git installed on your operting system, you can download PanDocElectron with
 
 > `git clone https://github.com/niebert/PanDocElectron.git`
 
+### 5.5 Install Build essentials on Linux
+Finally it is necessary to install the build essentials on the Linux system with:
 
-### 5.5 Install Electron as Runtime Environment for PanDocElectron
+> `sudo apt-get install -y build-essential `
+
+### 5.6 Install Electron as Runtime Environment for PanDocElectron
 Change directory to PanDocElectron and install prebuilt Electron binaries for your  operating system:
 
 > `cd  PanDocElectron` resp. `cd /path/to/application/PanDocElectron`
 
+> `cd  node_modules`
+
+> `rm -R *`
+
 > `npm install electron-prebuilt --save-dev`
 
-### 5.6 Install Build essentials on Linux
-Finally it is necessary to install the build essentials on the Linux system with:
-
-> `sudo apt-get install -y build-essential `
 
 ### 5.7 Install LaTeX
 LaTeX is needed to convert the Documents.
@@ -178,8 +182,11 @@ Change directory to PanDocElectron and install prebuilt Electron binaries for yo
 
 > `cd  PanDocElectron` resp. `cd /path/to/application/PanDocElectron`
 
+> `rm -R node_modules`
+
 > `npm install electron-prebuilt --save-dev`
 
+> `$ npm install mkdirp`
 
 ### 6.6 Install ImageMagick on MacOSX
 ImageMagick is needed to convert the PDF documents into PNG files as slides.
@@ -240,8 +247,11 @@ Change directory to PanDocElectron and install prebuilt Electron binaries for yo
 
 > `cd  PanDocElectron` resp. `cd \path\to\application\PanDocElectron`
 
+> `rmdir node_modules /s /q`
+
 > `npm install electron-prebuilt --save-dev`
 
+> `$ npm install mkdirp`
 
 ### 7.6 Install ImageMagick on Windows
 ImageMagick is needed to convert the PDF documents into PNG files as slides.
