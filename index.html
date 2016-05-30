@@ -85,6 +85,7 @@
                   <option value="t2t">Txt2Tags</option>
                 </select>
                 <button class="bluebutton" id="convertFILE"  onclick="convertFile();" >Convert File</button>
+                <button class="bluebutton" id="openOUTFILE"  onclick="openOutputFile();" hidden="hidden">Open Output File</button>
                 <div id="selectInputFORMAT" style="display: none">markdown</div>
               </td>
             </tr>
@@ -335,7 +336,7 @@
           <h3>
             Templates:
             <input type="checkbox" name="checkTemplates" id="checkTemplates" onclick="toggleCheck('tabletemplates',this.checked)"  hidden="hidden">
-            <button class="bluebutton" onclick="updateSoftware()">Update Software</button>
+            <button class="bluebutton" onclick="updateSoftware()" hidden="hidden">Update Software</button>
           </h3>
           <table border="0"  cellspacing="30" id="tabletemplates" class="buttonstemplate" >
           </table>
@@ -387,8 +388,8 @@
     <!-- All of the Node.js APIs are available in this renderer process. -->
 <br />
 <script>
-var remote  = require('remote');
 const fs    = require('fs');
+const remote  = require('remote');
 var app     = remote.require('app');
 var dialog  = remote.require('dialog');
 var vPathSeparator = "/";
