@@ -25,8 +25,16 @@ PandocElectron uses other opensource packages for converting files:
 
 ### 2.2 Installation of PanDocElectron
 When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
+
+Install PanDocElectron
+
+> `git clone https://github.com/niebert/PanDocElectron.git`
+
+Install necessary packages that are used for generated pandoc output files:
+
 > `cd  Documents`
-> `git clone https://github.com/niebert/PanDocElectron`
+
+> `git clone https://github.com/niebert/PanDocElectron.git`
 
 Choose a location of your choice.
 
@@ -90,7 +98,12 @@ Now we install nodejs
 When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
 > `cd  Documents` resp. `cd /path/to/Documents`
 
+Download/clone PanDocElectron:
+
 > `git clone https://github.com/niebert/PanDocElectron.git`
+
+Download/clone the MathJax and Reveal Files for offline use of presentations:
+> `git clone https://github.com/niebert/PanDoc.git`
 
 ### 5.5 Install Build essentials on Linux
 Finally it is necessary to install the build essentials on the Linux system with:
@@ -102,9 +115,7 @@ Change directory to PanDocElectron and install prebuilt Electron binaries for yo
 
 > `cd  PanDocElectron` resp. `cd /path/to/application/PanDocElectron`
 
-> `cd  node_modules`
-
-> `rm -R *`
+> `rm -R node_modules/*`
 
 > `npm install electron-prebuilt --save-dev`
 
@@ -140,9 +151,16 @@ Install necessary modules for PanDocElectron:
 
 > `npm install mkdirp`
 
+Now install the dependencies and test the first run of PanDocElectron:
 
+> `npm install && npm start `
 
-### 5.10 Optional: Install Atom Editor to Modify the PanDocElectron
+### 5.10 Install PanDoc on Linux
+The main package used by PanDocElectron is PanDoc itself
+
+> `apt-get install pandoc pandoc-citeproc`
+
+### 5.11 Optional: Install Atom Editor to Modify the PanDocElectron
 PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
 The Atom Editor is recommended as developing environment together with electron:
 Download and install from  the following website:
@@ -175,21 +193,32 @@ Opening Windows (xquartz) create in your Electron Application needs the followin
 When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
 > `cd  Documents`  resp. `cd /path/to/Documents`
 
-> `git clone https://github.com/niebert/PanDocElectron`
+Download/clone PanDocElectron:
+
+> `git clone https://github.com/niebert/PanDocElectron.git`
+
+Download/clone the MathJax and Reveal Files for offline use of presentations:
+
+> `git clone https://github.com/niebert/PanDoc.git`
 
 ### 6.5 Install Electron as Runtime Environment for PanDocElectron
 Change directory to PanDocElectron and install prebuilt Electron binaries for your  operating system:
 
 > `cd  PanDocElectron` resp. `cd /path/to/application/PanDocElectron`
 
-> `rm -R node_modules`
+> `rm -R node_modules/*`
 
 > `npm install electron-prebuilt --save-dev`
 
-> `$ npm install mkdirp`
+> `npm install mkdirp`
+
+Now install the dependencies and test the first run of PanDocElectron:
+
+> `npm install && npm start `
 
 ### 6.6 Install ImageMagick on MacOSX
 ImageMagick is needed to convert the PDF documents into PNG files as slides.
+
 > `brew install imagemagick imagemagick-doc`
 
 
@@ -197,19 +226,24 @@ ImageMagick is needed to convert the PDF documents into PNG files as slides.
 LaTeX is needed to convert the Documents.
 * Install MacTeX [https://tug.org/mactex/](https://tug.org/mactex/)
 
-### 6.8 Optional: Install Atom Editor to Modify the PanDocElectron
+### 6.8 Install PanDoc on Linux
+The main package used by PanDocElectron is PanDoc itself
+
+> `brew install pandoc`
+
+### 6.9 Optional: Install Atom Editor to Modify the PanDocElectron
 PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
 The Atom Editor is recommended as developing environment together with electron:
 Download and install from  the following website:
 
 * [https://atom.io/](https://atom.io/)
 
-### 6.9 XCode for MacOSX
+### 6.10 XCode for MacOSX
 Please install Xcode form the AppStore for your MacOSX system as developer environment:
 * [https://developer.apple.com/xcode/download](https://developer.apple.com/xcode/download)
 * The X-Server on MacOSX is implemented by [XQuatz](https://www.xquartz.org/). Install XQuartz on your MacOSX with DMG-Installer.
 
-### 6.10  Optional: Install Atom Editor to Modify the PanDocElectron
+### 6.11  Optional: Install Atom Editor to Modify the PanDocElectron
 PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
 The Atom Editor is recommended as developing environment together with electron:
 Download and install from  the following website:
@@ -237,21 +271,33 @@ Now you are able to install Electron on you system
 
 ### 7.4 Installation of PanDocElectron
 Open Shell on Windows (e.g. press "Win-R," type "cmd" and press "Enter" to open a Command Prompt session using just your keyboard.
-When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
+When git is installed on your operting system, you can download PanDocElectron with the following command in the shell:
 > `cd /D %userprofile%`
 
-> `git clone https://github.com/niebert/PanDocElectron`
+Download/clone PanDocElectron:
+
+> `git clone https://github.com/niebert/PanDocElectron.git`
+
+Download/clone the MathJax and Reveal Files for offline use of presentations:
+
+> `cd documents` resp. your location where you store your documents
+
+> `git clone https://github.com/niebert/PanDoc.git`
 
 ### 7.5 Install Electron as Runtime Environment for PanDocElectron
 Change directory to PanDocElectron and install prebuilt Electron binaries for your  operating system:
 
 > `cd  PanDocElectron` resp. `cd \path\to\application\PanDocElectron`
 
-> `rmdir node_modules /s /q`
+> `rmdir node_modules/* /s /q`
 
 > `npm install electron-prebuilt --save-dev`
 
 > `$ npm install mkdirp`
+
+Now install the dependencies and test the first run of PanDocElectron:
+
+> `$ npm install && npm start `
 
 ### 7.6 Install ImageMagick on Windows
 ImageMagick is needed to convert the PDF documents into PNG files as slides.
@@ -261,7 +307,12 @@ ImageMagick is needed to convert the PDF documents into PNG files as slides.
 LaTeX is needed to convert the Documents.
 * MikTex Installation [http://miktex.org/download](http://miktex.org/download)
 
-### 7.8 Optional: Install Atom Editor to Modify the PanDocElectron
+### 7.8 Install PanDoc on Windows
+The main package used by PanDocElectron is PanDoc itself
+
+* [http://pandoc.org/installing.html](http://pandoc.org/installing.html#windows)
+
+### 7.9 Optional: Install Atom Editor to Modify the PanDocElectron
 PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
 The Atom Editor is recommended as developing environment together with electron:
 Download and install from  the following website:
