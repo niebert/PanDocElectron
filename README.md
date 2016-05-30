@@ -16,12 +16,14 @@ If you want to use Electron Applications in general (including PanDocElectron) i
 For running and testing the `Electron` applications in general (like PanDocElectron) it is necessary to install the Electron environment on your Desktop Computer. With electron you download the application that is designed as cross-plattform application and install the Electron Framework for your operating system (OS).
 
 ## 2 Requirements for PandocElectron
+
+### 2.1 Installation of Packages needed by PanDocElectron
 PandocElectron uses other opensource packages for converting files:
 * `pandoc` the swiss army knife for document processing developed by John MacFarlane.
 * `ImageMagick` to convert PDF-Slides into web-based Presentation with Audio Comments. ImageMagick is used to create multiple PNG-File as slides from the PDF document.
 * `latex` for PDF conversion and processing Latex input files. Convert from a latex document and convert the source into WikiMedia output for Wikiversity.
 
-### 2.1 Installation of PanDocElectron
+### 2.2 Installation of PanDocElectron
 When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
 > `cd  Documents`
 > `git clone https://github.com/niebert/PanDocElectron`
