@@ -158,7 +158,7 @@ Now install the dependencies and test the first run of PanDocElectron:
 ### 5.10 Install PanDoc on Linux
 The main package used by PanDocElectron is PanDoc itself
 
-> `apt-get install pandoc pandoc-citeproc`
+> `sudo apt-get install pandoc pandoc-citeproc`
 
 ### 5.11 Optional: Install Atom Editor to Modify the PanDocElectron
 PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.

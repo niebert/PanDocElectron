@@ -1,7 +1,6 @@
 #!/bin/bash
 echo "Install Electron Framework"
 echo "--------------------------"
-echo "OS: Debian, Ubuntu, Mint"
 DOCUMENTS="Documents"
 sudo apt-get install git npm curl
 sudo apt-get install -y build-essential
@@ -15,7 +14,6 @@ cd ~
 git clone https://github.com/niebert/PanDocElectron.git
 cd PanDocElectron
 rm -R node_modules/*
-npm init
 npm install electron-prebuilt --save-dev
 cd ..
 cd $DOCUMENTS
