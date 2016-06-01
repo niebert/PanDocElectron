@@ -27,5 +27,6 @@
   },
   "dependencies": {
     "electron-open-link-in-browser": "^1.0.2"
+  , "mkdirp":"^0.5.1"
   }
 }

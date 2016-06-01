@@ -30,11 +30,11 @@ Install PanDocElectron
 
 > `git clone https://github.com/niebert/PanDocElectron.git`
 
-Install necessary packages that are used for generated pandoc output files:
+Install necessary files and folders that are used for generated pandoc output files:
 
 > `cd  Documents`
 
-> `git clone https://github.com/niebert/PanDocElectron.git`
+> `git clone https://github.com/niebert/PanDoc.git`
 
 Choose a location of your choice.
 
@@ -117,6 +117,11 @@ Change directory to PanDocElectron and install prebuilt Electron binaries for yo
 
 > `rm -R node_modules/*`
 
+Start the NPM `install` process with
+> `npm install`
+
+and accept all settings in the init procedure
+
 > `npm install electron-prebuilt --save-dev`
 
 
@@ -149,11 +154,15 @@ Install necessary modules for PanDocElectron:
 
 > `cd PanDocElectron` resp. `cd /path/to/application/PanDocElectron`
 
+The following npm `mkdirp` package create all directories in a path if the directories in the path do not exist.
+
 > `npm install mkdirp`
 
-Now install the dependencies and test the first run of PanDocElectron:
+Now all dependencies are installed. PanDocElectron can be started with:
 
-> `npm install && npm start `
+> `npm start `
+
+NPM has to called in the directory `PanDocElectron`.
 
 ### 5.10 Install PanDoc on Linux
 The main package used by PanDocElectron is PanDoc itself
