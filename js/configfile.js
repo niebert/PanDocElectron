@@ -1,7 +1,7 @@
 function loadConfig(pConfigFile) {
   var vConfigFile = pConfigFile || "default.cfg";
   // simnply load config file into the innerHTML of DIV node 'divconfig'
-  fs.readFile(__dirname+'/config/'+vConfigFile, 'utf-8', function (err, data) {
+  fs.readFile(__dirname+'/node_modules/'+vConfigFile, 'utf-8', function (err, data) {
     write2innerHTML("divconfig", data);
     console.log('Config File \''+vConfigFile+' loaded!');
     write2value("inputFORMAT",getInnerHTML("selectInputFORMAT"));
@@ -15,7 +15,7 @@ function saveConfig (pConfigFile) {
   write2innerHTML("selectInputFORMAT",getValueDOM("inputFORMAT"));
   write2innerHTML("selectOutputFORMAT",getValueDOM("outputFORMAT"));
   var vContent=document.getElementById("divconfig").innerHTML;
-  fs.writeFile('config/'+vConfigFile, vContent, (err) => {
+  fs.writeFile(__dirname+'/node_modules/'+vConfigFile, vContent, (err) => {
   //fs.writeFile(vConfigFile, vContent, (err) => {
    if (err) throw err;
    console.log('Config File \''+pConfigFile+'\' saved!');

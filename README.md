@@ -5,14 +5,20 @@ PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Docume
 
 ## 1 General Requirements for Electron
 Electron is more or less a brower, that has full access to your filesystem. So Electron/Atom allows to write multiplattform application just with HTML and Javascript, than runs on:
-* Linux (see section 5)
-* MacOSX (see section 6)
-* Windows (see section 7)
+* Linux (see [section 5](http://niebert.github.io/PanDocElectron/index.html#SEC5))
+* MacOSX (see [section 6](http://niebert.github.io/PanDocElectron/index.html#SEC6))
+* Windows (see [section 7](http://niebert.github.io/PanDocElectron/index.html#SEC7))
 
 If you want to use Electron Applications in general (including PanDocElectron) it is necessary to install the following software packages:
 * `git` to download and update the sources of Electron Applications (see [http://git-scm.com/](http://git-scm.com/) for installing the software git)
 * `npm` to install pre-build packages of Electron as a runtime environment.
 * `nodejs` allow with Javscript reading and writing files to the filesystem in Electron.
+
+PanDocElectron itself of
+* application `PanDocElectron` and additional packages (see section 2.1)
+* a `PanDoc` folder for `Documents` with necessary files to support certain output formats of pandoc.
+The necessary packages are downloaded with `git` (see section 2.2).
+
 For running and testing the `Electron` applications in general (like PanDocElectron) it is necessary to install the Electron environment on your Desktop Computer. With electron you download the application that is designed as cross-plattform application and install the Electron Framework for your operating system (OS).
 
 ## 2 Requirements for PandocElectron
@@ -23,6 +29,8 @@ PandocElectron uses other opensource packages for converting files:
 * `ImageMagick` to convert PDF-Slides into web-based Presentation with Audio Comments. ImageMagick is used to create multiple PNG-File as slides from the PDF document.
 * `latex` for PDF conversion and processing Latex input files. Convert from a latex document and convert the source into WikiMedia output for Wikiversity.
 
+You can find more details in section 5 (Linux), 6 (Mac) and 7 (Windows) to install these packages.
+
 ### 2.2 Installation of PanDocElectron
 When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
 
@@ -30,13 +38,27 @@ Install PanDocElectron
 
 > `git clone https://github.com/niebert/PanDocElectron.git`
 
+> `cd  PanDocElectron`
+
+> `npm install`
+
 Install necessary files and folders that are used for generated pandoc output files:
 
 > `cd  Documents`
 
 > `git clone https://github.com/niebert/PanDoc.git`
 
-Choose a location of your choice.
+You choose a location of your choice. The default folder of the support files is:
+
+> ` Documents/PanDoc`
+
+### 2.3 Starting PanDocElectron
+You can start PanDocElectron
+> `cd  path/to/app/PanDocElectron`
+
+> `npm install`
+
+Those commands can be automized in a shell script (Linux/Mac) or with a batch file (.BAT) on Windows. 
 
 ## 3 PanDoc Projects
 PanDocElectron uses a project based approach for conversion. A project is a subdirectory of `Documents/Pandoc/` e.g. `Documents/Pandoc/MyProject`. This file contains the input files and the genrated output files by PanDoc. In general the input files are mainly WikiMedia-Files `Documents/Pandoc/MyProject/MyProject.wiki`.

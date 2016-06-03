@@ -108,8 +108,15 @@
                 &nbsp;
               </td>
               <td>
+                <input type="checkbox" id="inputFILTERUSE" >
                 <input type="text" id="inputFILTER" size="30" value="+simple_tables+footnotes">
                 <button id="bHelpFilter" onclick="openBrowserURL('http://pandoc.org')"> ? </button>
+                &nbsp;
+                <b>Parameter:</a>
+                  <input type="checkbox" id="inputPARAMSUSE" >
+                  <input type="text" id="inputPARAMS" size="30" value="--toc">
+                <button id="bHelpFilter" onclick="openBrowserURL('http://pandoc.org')"> ? </button>
+
               </td>
             </tr>
             <tr><!-- outputFILE -->
@@ -344,10 +351,24 @@
         </div>
         <div class="apptab" id="bDirectoriesPage"  hidden="hidden">
           <h3>
-            Directories:
+            Directories / System:
             <input type="checkbox" name="checkFolders" id="checkFolders" onclick="toggleCheck('tablefolders',this.checked)"  hidden="hidden">
           </h3>
           <table border="0"  cellspacing="30" id="tablefolders" class="buttonstemplate" >
+            <tr>
+              <td>
+                <b>Operating System:</b>
+              </td>
+              <td>
+                  &nbsp;
+              </td>
+              <td>
+                <input type="radio" name="selectOS" class="selectOS" value="Linux" selected="seleted" onclick="clickOS(this.value)"> Linux &nbsp;&nbsp;
+                <input type="radio" name="selectOS" class="selectOS" value="MacOSX" onclick="clickOS(this.value)"> MacOSX &nbsp;&nbsp;
+                <input type="radio" name="selectOS" class="selectOS" value="Windows" onclick="clickOS(this.value)"> Windows &nbsp;&nbsp;
+                &nbsp;&nbsp;<tt><b>[<tt id="setOS">Linux</tt>]</b></tt> &nbsp;&nbsp; Path Separator: <tt><b>'<tt id="separatorPATH"></tt>'</b></tt>
+              </td>
+            </tr>
             <tr>
               <td>
                 <button class="btn btn-default"  id="defDIRmainDIR"  onclick="openDirectory('projectmainDIR',document.getElementById('projectmainDIR').innerHTML);">Main Folder</button>
@@ -470,6 +491,9 @@ function appendTemplateHash(pID,pTemplate,pReplaceHash) {
 function setDefaultValues(pHashTPL) {
   var vPathSeparator = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
   var vPathMain = app.getPath('documents')+vPathSeparator+"PanDoc";
+  if (vPathSeparator == "\\") {
+    vPathMain = vPathSeparator + vPathMain;
+  };
   write2innerHTML("projectmainDIR",vPathMain);
   //setInput4WebDownload();
   setInput4Project('inputNEWPROJECT','inputNEWFILE');
@@ -498,6 +522,7 @@ function setDefaultValues(pHashTPL) {
   //copyFile2Editor ("inputLOOP",__dirname+'/tpl/imgslides/audiosection.txt');
 
   setColorSelected("bConvert");
+  setOS(getOperatingSystem());
 }
 
 

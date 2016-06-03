@@ -26,7 +26,15 @@ function executePanDocCMD(pHash) {
   var vInFORMAT  = pHash["inputFORMAT"];
   var vOutFORMAT = pHash["outputFORMAT"];
   var vPanOutFORMAT = pHash["pandocOUTFORMAT"];
-  var vCMD = "pandoc -f "+vInFORMAT+" -t "+vPanOutFORMAT;
+  var vInputFilter = "";
+  var vAdditionParams = "";
+  if (document.getElementById("inputFILTERUSE").checked) {
+    vInputFilter = document.getElementById("inputFILTER").value;
+  };
+  if (document.getElementById("inputPARAMSUSE").checked) {
+    vAdditionParams = " "+document.getElementById("inputPARAMS").value+" ";
+  };
+  var vCMD = "pandoc -f "+vInFORMAT+vInputFilter+" -t "+vPanOutFORMAT + vAdditionParams;
   vCMD += " "+pHash["inputFILE"]+" -o "+pHash["outputFILE"];
   vCMD += getBibCMD(pHash);
   vCMD += getTitleAuthorCMD(pHash);
@@ -52,7 +60,10 @@ function executePanDocCMD(pHash) {
       console.log(vCMD);
     break;
     case "html":
-      copyFile(pHash["reference"])
+      var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
+      var vSep = getPathSeparator();
+      copyFile(pHash["reference"],vProjectDir+vSep+"pandoc.css");
+      vCMD += " -s -S --toc  -c pandoc.css";
       runShellCommand(vCMD);
       console.log(vCMD);
     break;
