@@ -38,9 +38,17 @@ function getFileContent (pFilename) {
   var vReturn =  fs.readFileSync(pFilename,'utf8');
   console.log('get Content of \''+pFilename+'\'');
   return vReturn;
+};
+function pathLinux2Win(pPath) {
+  var vOS = getOperatingSystem();
+  if (vOS == "Windows") {
+    pPath = replaceString(pPath,"/","\\");
+  };
+  return pPath;
 }
 function openTPLFile (pFolderID,pPath,pHashTPL) {
   //makedirpath(pPath);
+  pPath = pathLinux2Win(pPath);
   pPath = getSoftwareDir(pPath);
   dialog.showOpenDialog({defaultPath: pPath},function (fileNames) {
     if (fileNames === undefined) return;

@@ -50,7 +50,7 @@
           <button  id="bNew"  onclick="setPage(this.id);">New</button>
           <button  id="bWebInput"  onclick="setPage(this.id);">Web-Input</button>
           <button  id="bBibliography"  onclick="setPage(this.id);">Bibliography</button>
-          <button  id="bDirectories"  onclick="setPage(this.id);">Directories</button>
+          <button  id="bSettings"  onclick="setPage(this.id);">Settings</button>
           <button  id="bTemplates"  onclick="setPage(this.id);">Templates</button>
           <hr/>
         </div>
@@ -349,12 +349,23 @@
           </table>
           <hr/>
         </div>
-        <div class="apptab" id="bDirectoriesPage"  hidden="hidden">
+        <div class="apptab" id="bSettingsPage"  hidden="hidden">
           <h3>
-            Directories / System:
+            Settings:
             <input type="checkbox" name="checkFolders" id="checkFolders" onclick="toggleCheck('tablefolders',this.checked)"  hidden="hidden">
           </h3>
           <table border="0"  cellspacing="30" id="tablefolders" class="buttonstemplate" >
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-xs"  id="openIMConvert"  onclick="openFile('imagemagickCMD','','/');">Convert ImageMagick</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="imagemagickCMD">convert</tt> <br>(select Command Executable/Binary for 'convert')
+              </td>
+            </tr>
             <tr>
               <td>
                 <b>Operating System:</b>

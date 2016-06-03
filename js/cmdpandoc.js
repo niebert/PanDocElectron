@@ -298,6 +298,7 @@ function convertPDF2PNG(pInputPDF,pCount) {
   var vOutPNG = vPath +i+".png";
   alert("Remark: Converting all slides could take up to "+pCount+" minutes!");
   console.log("convertPDF2PNG(pInputPDF,"+pCount+")");
+  var vIM_CMD = getImageMagicCMD();
   var vCount = parseInt(pCount);
   while ((i<vCount) && (i < 200)) {
     vOutPNG = vPath +i+".png";
@@ -306,8 +307,7 @@ function convertPDF2PNG(pInputPDF,pCount) {
     //setTimeout("document.getElementById('pandocprogress').value += 'o'",100);
     //alert("Create Image "+i+" from PDF");
     // convert -density 300 -depth 8 -quality 85 ${FilePDF}[${COUNTER}] outtmp.png
-
-    var vCMD = "convert -density 300 -depth 8 -quality 85 "+pInputPDF+"["+i+"] " + vOutPNG;
+    var vCMD = vIM_CMD+" -density 300 -depth 8 -quality 85 "+pInputPDF+"["+i+"] " + vOutPNG;
     //alert(vCMD);
     runShellCommand(vCMD);
   };

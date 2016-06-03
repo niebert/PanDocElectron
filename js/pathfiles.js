@@ -30,6 +30,9 @@ function getNameExt4Filename(pFilename) {
 function getName4Filename(pFilename) {
   return removeExtension(getNameExt4Filename(pFilename));
 };
+function getImageMagicCMD() {
+  return (getValueDOM("imagemagickCMD"));
+};
 function getProjectDir(pProject) {
   var vSep = getPathSeparator();
   var vProject = "";
