@@ -357,17 +357,6 @@
           <table border="0"  cellspacing="30" id="tablefolders" class="buttonstemplate" >
             <tr>
               <td>
-                <button class="btn btn-primary btn-xs"  id="openIMConvert"  onclick="openFile('imagemagickCMD','','/');">Convert ImageMagick</button>
-              </td>
-              <td>
-                &nbsp;
-              </td>
-              <td>
-                <tt id="imagemagickCMD">convert</tt> <br>(select Command Executable/Binary for 'convert')
-              </td>
-            </tr>
-            <tr>
-              <td>
                 <b>Operating System:</b>
               </td>
               <td>
@@ -378,6 +367,17 @@
                 <input type="radio" name="selectOS" class="selectOS" value="MacOSX" onclick="clickOS(this.value)"> MacOSX &nbsp;&nbsp;
                 <input type="radio" name="selectOS" class="selectOS" value="Windows" onclick="clickOS(this.value)"> Windows &nbsp;&nbsp;
                 &nbsp;&nbsp;<tt><b>[<tt id="setOS">Linux</tt>]</b></tt> &nbsp;&nbsp; Path Separator: <tt><b>'<tt id="separatorPATH"></tt>'</b></tt>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-xs"  id="openIMConvert"  onclick="openCMDFile('imagemagickCMD','/',vHashTPL);">Convert ImageMagick</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="imagemagickCMD">convert</tt> <br>(select Command Executable/Binary for 'convert')
               </td>
             </tr>
             <tr>

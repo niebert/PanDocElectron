@@ -46,6 +46,9 @@ function pathLinux2Win(pPath) {
   };
   return pPath;
 }
+function openCMDFile (pFolderID,pPath,pHashTPL) {
+  openTPLFile (pFolderID,pPath,pHashTPL);
+}
 function openTPLFile (pFolderID,pPath,pHashTPL) {
   //makedirpath(pPath);
   pPath = pathLinux2Win(pPath);

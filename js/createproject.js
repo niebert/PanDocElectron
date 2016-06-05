@@ -43,6 +43,8 @@ function createProject() {
     // vDefaultFile: Copy from this default Source File for new Project
     var vDefaultFile = vDir + "md" + vSep +"input.md";
     var vInFormat = getValueDOM("inputFORMAT");
+    var vOutFormat = getValueDOM("outputFORMAT");
+    alert("NEW vOutFormat="+vOutFormat);
     switch (vInFormat) {
       case "md":
         //alert("MD Create Project createProject():436:index.html");
@@ -68,7 +70,9 @@ function createProject() {
     makeProjectDirs(vPath); //audio, video, config, images
     //setInput4Project('inputNEWPROJECT','inputNEWFILE');
     write2innerHTML("inputFILE",vFilename);
-    changedOutFormat(getValueDOM(outputFORMAT));
+    //changedOutFormat(getValueDOM(outputFORMAT));
+    var vOutFilename = getPathFromFilename(vFilename)+"_"+vOutFormat+"."+vExtHash[vOutFormat];
+    write2innerHTML("outputFILE",vOutFilename);
     copyFile2Editor ("inputEDITOR",vFilename);
     //setFormat4Input();
     //write2value("inputFORMAT",)
