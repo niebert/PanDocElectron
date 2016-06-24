@@ -19,6 +19,7 @@ function openBrowserURL(pURL) {
   const {shell} = require('electron');
   shell.openExternal(pURL);
 }
+
 function openInputFile (pPath) {
   pPath = getProjectDir(pPath);
   openFile("inputFILE","inputEDITOR",pPath);
@@ -43,16 +44,25 @@ function pathLinux2Win(pPath) {
   var vOS = getOperatingSystem();
   if (vOS == "Windows") {
     pPath = replaceString(pPath,"/","\\");
+  } else {
+    pPath = replaceString(pPath,"\\","/");
   };
   return pPath;
 }
+
 function openCMDFile (pFolderID,pPath,pHashTPL) {
   openTPLFile (pFolderID,pPath,pHashTPL);
 }
+
+function openREFFile (pFolderID,pPath,pHashTPL) {
+  openTPLFile(pFolderID,pPath,pHashTPL);
+}
+
 function openTPLFile (pFolderID,pPath,pHashTPL) {
   //makedirpath(pPath);
-  pPath = pathLinux2Win(pPath);
-  pPath = getSoftwareDir(pPath);
+  //pPath = pathLinux2Win(pPath);
+  //pPath = getSoftwareDir(pPath);
+  pPath = getProjectDir(pPath);
   dialog.showOpenDialog({defaultPath: pPath},function (fileNames) {
     if (fileNames === undefined) return;
     var fileName = fileNames[0];
@@ -62,10 +72,6 @@ function openTPLFile (pFolderID,pPath,pHashTPL) {
     };
  });
 }
-function openREFFile (pFolderID,pPath,pHashTPL) {
-  openTPLFile(pFolderID,pPath,pHashTPL);
-}
-
 function openDirectory(pFolderID,pDefaultPath) {
   //dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]})
   var vFolder =dialog.showOpenDialog({ defaultPath: pDefaultPath , properties: [ 'openDirectory' ]});

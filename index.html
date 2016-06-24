@@ -21,8 +21,21 @@
     <script src="js/opsysdetect.js"></script>
     <script src="js/cmdpandoc.js"></script>
     <script>
+      const fs    = require('fs');
+      const exec = require('child_process').exec;
+      const child = require('child_process').execFile;
+  //const remote  = require('remote');
+      const remote = require('electron').remote;
+      var app    = remote.app;
+      var dialog = remote.dialog;
+      var vPathSeparator = "/";
+      var vOS = getOperatingSystem(); // is on Linux/Mac "/" on Windows "Backslash"
+      if (vOS == "Windows") {
+        vPathSeparator = "\\";
+      };
+      var vPandocDocs = app.getPath('documents')+vPathSeparator+"PanDoc";
       vHashTPL={};
-      vHashTPL["mainDIR"] = __dirname;
+      vHashTPL["mainDIR"] = vPandocDocs;
     </script>
   </head>
   <body>
@@ -51,7 +64,8 @@
           <button  id="bWebInput"  onclick="setPage(this.id);">Web-Input</button>
           <button  id="bBibliography"  onclick="setPage(this.id);">Bibliography</button>
           <button  id="bSettings"  onclick="setPage(this.id);">Settings</button>
-          <button  id="bTemplates"  onclick="setPage(this.id);">Templates</button>
+          <button  id="bTemplates"  onclick="setPage(this.id);">Templates</button> &nbsp;
+          <button  id="bHelp"  onclick="openBrowserURL('http://niebert.github.com/PanDocElectron');">Help</button>
           <hr/>
         </div>
       </div>
@@ -212,6 +226,80 @@
           </table>
           <hr/>
         </div>
+        <div class="apptab" id="bEditorPage"  hidden="hidden">
+          <h3>
+            Input Editor:
+            <input type="checkbox" name="checkEditor" id="checkEditor" onclick="toggleCheck('inputEDITOR',this.checked)" hidden="hidden"> --
+            <button onclick="saveEditorContent()"> Save </button>
+          </h3>
+          <textarea id="inputEDITOR" rows="15" ></textarea>
+          <textarea id="inputLOOP" rows="15" hidden="hidden"></textarea>
+          <textarea id="outputEDITOR" rows="15" hidden="hidden"></textarea>
+          <textarea id="tplTPL" rows="15" hidden="hidden">
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-xs"  id="openTPL___FORMAT___"  onclick="openTPLFile('___FORMAT___TPL','tpl/___FORMAT___',vHashTPL);">Template ___FORMAT___</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                Template ___TYPE___  <!-- -- <tt>[___FORMAT___TPL]</tt> -->
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>&nbsp;</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="___FORMAT___TPL">___TPLDEFAULT___</tt>
+              </td>
+            </tr>
+          </textarea>
+          <textarea id="tplREF" rows="15" hidden="hidden">
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-xs"  id="openREF___FORMAT___"  onclick="openREFFile('___FORMAT___REF','tpl/___FORMAT___',vHashTPL);">Style File ___TYPE___</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                Style Reference ___TYPE___ <!-- -- <tt>[___FORMAT___REF]</tt> -->
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>&nbsp;</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="___FORMAT___REF">___TPLDEFAULT___</tt>
+              </td>
+            </tr>
+          </textarea>
+          <textarea id="tplDIR" rows="15" hidden="hidden">
+            <tr>
+              <td>
+                <button class="btn btn-default"  id="defDIR___FOLDERID___"  onclick="openDirectory('___FOLDERID___','___PATHDEFAULT___');">___BUTTONTITLE___</button>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <tt id="___FOLDERID___">___PATHDEFAULT___</tt>
+                <!-- <br> <tt>[___FOLDERID___]</tt> -->
+              </td>
+            </tr>
+          </textarea>
+          <hr/>
+        </div>
+
         <div class="apptab" id="bNewPage" hidden="hidden">
           <h3>
             New-Project:
@@ -339,16 +427,6 @@
           </table>
           <hr/>
         </div>
-        <div class="apptab" id="bTemplatesPage"  hidden="hidden">
-          <h3>
-            Templates:
-            <input type="checkbox" name="checkTemplates" id="checkTemplates" onclick="toggleCheck('tabletemplates',this.checked)"  hidden="hidden">
-            <button class="bluebutton" onclick="updateSoftware()" hidden="hidden">Update Software</button>
-          </h3>
-          <table border="0"  cellspacing="30" id="tabletemplates" class="buttonstemplate" >
-          </table>
-          <hr/>
-        </div>
         <div class="apptab" id="bSettingsPage"  hidden="hidden">
           <h3>
             Settings:
@@ -371,17 +449,29 @@
             </tr>
             <tr>
               <td>
-                <button class="btn btn-primary btn-xs"  id="openIMConvert"  onclick="openCMDFile('imagemagickCMD','/',vHashTPL);">Convert ImageMagick</button>
+                <button class="btn btn-primary btn-xs"  id="openPanDocCMD"  onclick="openCMDFile('pandocCMD','/',vHashTPL);">PanDoc</button>
               </td>
               <td>
                 &nbsp;
               </td>
-              <td>
-                <tt id="imagemagickCMD">convert</tt> <br>(select Command Executable/Binary for 'convert')
+              <td> <!-- /usr/local/bin/pandoc -->
+                <tt id="pandocCMD">pandoc</tt> <br>(select Command Executable/Binary for 'pandoc')
               </td>
             </tr>
             <tr>
-              <td>
+              <tr>
+                <td>
+                  <button class="btn btn-primary btn-xs"  id="openIMConvert"  onclick="openCMDFile('imagemagickCMD','/',vHashTPL);">Convert ImageMagick</button>
+                </td>
+                <td>
+                  &nbsp;
+                </td>
+                <td> <!-- /opt/local/bin/ -->
+                  <tt id="imagemagickCMD">convert</tt> <br>(select Command Executable/Binary for 'convert')
+                </td>
+              </tr>
+              <tr>
+                <td>
                 <button class="btn btn-default"  id="defDIRmainDIR"  onclick="openDirectory('projectmainDIR',document.getElementById('projectmainDIR').innerHTML);">Main Folder</button>
               </td>
               <td>
@@ -394,15 +484,14 @@
           </table>
           <hr/>
         </div>
-        <div class="apptab" id="bEditorPage"  hidden="hidden">
+        <div class="apptab" id="bTemplatesPage"  hidden="hidden">
           <h3>
-            Input Editor:
-            <input type="checkbox" name="checkEditor" id="checkEditor" onclick="toggleCheck('inputEDITOR',this.checked)" hidden="hidden"> --
-            <button onclick="saveEditorContent()"> Save </button>
+            Templates:
+            <input type="checkbox" name="checkTemplates" id="checkTemplates" onclick="toggleCheck('tabletemplates',this.checked)"  hidden="hidden">
+            <button class="bluebutton" onclick="updateSoftware()" hidden="hidden">Update Software</button>
           </h3>
-          <textarea id="inputEDITOR" rows="15" ></textarea>
-          <textarea id="inputLOOP" rows="15" hidden="hidden"></textarea>
-          <textarea id="outputEDITOR" rows="15" idden="hidden"></textarea>
+          <table border="0"  cellspacing="30" id="tabletemplates" class="buttonstemplate" >
+          </table>
           <hr/>
         </div>
         <div class="divcommand">
@@ -410,7 +499,10 @@
         </div>
     </div>
     <footer>
-     <p class="version">PanDoc Electron - GUI <span id="version">0.4</span> - Engelbert Niehaus</p>
+     <p class="version">PanDoc Electron - GUI <span id="version"><script>
+        var pjson = require('./package.json');
+        document.write(pjson.version);
+    </script></span> - Engelbert Niehaus</p>
      <p><b><a href="javascript:openBrowserURL('http://pandoc.org/')">PanDoc</a></b> by <a href="javascript:openBrowserURL('http://johnmacfarlane.net/')">John MacFarlane</a>
        PanDoc Electron uses Node.js <script>document.write(process.versions.node)</script>,
        Chromium <script>document.write(process.versions.chrome)</script>,
@@ -420,11 +512,7 @@
     <!-- All of the Node.js APIs are available in this renderer process. -->
 <br />
 <script>
-const fs    = require('fs');
-const remote  = require('remote');
-var app     = remote.require('app');
-var dialog  = remote.require('dialog');
-var vPathSeparator = "/";
+
 
 function updateSoftware() {
   vAnswer = confirm("Do want to update PanDocElectron with GIT!");
@@ -438,7 +526,7 @@ function updateSoftware() {
 
 function runShellCommand (pCommand) {
   //pCommand="ls -a";
-  //alert(pCommand);
+  console.log("runShellCommand: "+ pCommand);
   const child = exec(pCommand,
    (error, stdout, stderr) => {
      console.log(`stdout: ${stdout}`);
@@ -451,15 +539,36 @@ function runShellCommand (pCommand) {
  });
 }
 
-function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButtonTitle) {
+function X_runShellCommand(pCommand) {
+    var vExecutable = pCommand.substr(0,pCommand.indexOf(" "));
+    var vParameters = pCommand.substr(pCommand.indexOf(" "),pCommand.length);
+    //alert("vExecutable="+vExecutable+"\nParameters="+vParameters);
+    execFileCommand(vExecutable,vParameters);
+    //execFileCommand("sh","rename_release.sh");
+};
+
+function execFileCommand(pExecutable,pParameters) {
+  var child = require('child_process').execFile;
+  //var executablePath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
+  var executablePath = pExecutable;
+  //var parameters = ["--incognito"];
+  var parameters = [pParameters];
+
+  child(executablePath, parameters, function(err, data) {
+      console.log(err)
+      console.log(data.toString());
+    });
+}
+
+function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButtonTitle,pTPL) {
   var vReplaceHash = {};
   vReplaceHash["FOLDERID"]    = pFolderID;
   vReplaceHash["BUTTONTITLE"] = pButtonTitle;
   vReplaceHash["TITLE"] = pTitle;
   vReplaceHash["PATHDEFAULT"] = pPathDefault;
-  appendTemplateHash(pID,pTemplate,vReplaceHash);
+  appendTemplateHash(pID,pTemplate,vReplaceHash,pTPL);
 };
-function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt,pHashTPL) {
+function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt,pHashTPL,pTPL) {
   var vTPLID = pOutputFORMAT+"TPL";
   if (pTemplate.indexOf("referencefile")>0) {
     vTPLID = pOutputFORMAT+"REF";
@@ -471,7 +580,7 @@ function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt,pHashTPL) {
     vDefaultName = "content"
   };
   if (pOutputFORMAT=="DEFAULT") {
-    vDefaultName = "input";
+    vDefaultName = pExt+vSep+"input";
   };
   vReplaceHash["FORMAT"] = pOutputFORMAT;
   vReplaceHash["TYPE"]   = pOutputFORMAT.toUpperCase();
@@ -482,9 +591,24 @@ function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt,pHashTPL) {
     //alert("Template: "+vTPLID+" does not exist!");
     pHashTPL[vTPLID] = vReplaceHash["TPLDEFAULT"];
   };
-  appendTemplateHash(pID,pTemplate,vReplaceHash);
+  appendTemplateHash(pID,pTemplate,vReplaceHash,pTPL);
 };
-function appendTemplateHash(pID,pTemplate,pReplaceHash) {
+
+function appendTemplateHash(pID,pTemplate,pReplaceHash,pTPL) {
+  var vContent = "Error: Template "+pTemplate+" undefined";
+  //} else {
+  if (pTPL) {
+      vContent = pTPL;
+      for (iID in pReplaceHash) {
+        vContent = replaceString(vContent,"___"+iID+"___", pReplaceHash[iID]);
+      };
+      //alert("REPLACED ["+pID+"]: \n"+vContent);
+      append2innerHTML(pID,vContent);
+      console.log('Template File \''+pTemplate+'\' loaded!');
+  };
+};
+
+function X_appendTemplateHash(pID,pTemplate,pReplaceHash) {
   var vContent = "Error: Template "+pTemplate+" undefined";
   //} else {
   fs.readFile(pTemplate, 'utf-8', function (err, tpldata) {
@@ -511,29 +635,45 @@ function setDefaultValues(pHashTPL) {
   setInput4Project('inputWEBPROJECT','downloadWebFILE',"md");
   // set vPath to Template Path and init the templates to default filenames
   //var vPath = app.getPath('documents')+vPathSeparator+"PanDoc";
-  var vPath = __dirname;
+  //require('path');
+  //var vPath = fs.realpathSync('.'); // __dirname not working
+  var vPath = vPandocDocs;
+  //alert("vPath="+vPath);
   //var vPath = app.getPath('home')+vPathSeparator+"ownCloudLD"+vPathSeparator+"PanDoc";
 
+  // Reading from App-Dir is not supported in packager
+  //var vTPL_HTML = fs.readFileSync('./html/template.html', 'utf8');
+  //var vREF_HTML = fs.readFileSync('./html/referencefile.html', 'utf8');
+  //var vDIR_HTML = fs.readFileSync('./html/defaultfolder.html', 'utf8');
+  var vTPL_HTML = document.getElementById("tplTPL").value;
+  var vREF_HTML = document.getElementById("tplREF").value;
+  var vDIR_HTML = document.getElementById("tplDIR").value;
+
   var vhtml ="html"+vPathSeparator;
-  appendTemplateInput("tabletemplates","DEFAULT",vhtml+'template.html',vPath,"md",pHashTPL);
-  appendTemplateInput("tabletemplates","reveal",vhtml+'template.html',vPath,"html",pHashTPL);
-  appendTemplateInput("tabletemplates","audioslides",vhtml+'template.html',vPath,"html",pHashTPL);
-  appendTemplateInput("tabletemplates","dzslides",vhtml+'template.html',vPath,"html",pHashTPL);
-  appendTemplateInput("tabletemplates","latex",vhtml+'template.html',vPath,"tex",pHashTPL);
-  appendTemplateInput("tabletemplates","odt",vhtml+'template.html',vPath,"xml",pHashTPL);
-  appendTemplateInput("tabletemplates","odt",vhtml+'referencefile.html',vPath,"odt",pHashTPL);
-  appendTemplateInput("tabletemplates","odt2col",vhtml+'referencefile.html',vPath,"odt",pHashTPL);
-  appendTemplateInput("tabletemplates","docx",vhtml+'referencefile.html',vPath,"docx",pHashTPL);
-  appendTemplateInput("tabletemplates","docx2col",vhtml+'referencefile.html',vPath,"docx",pHashTPL);
-  appendTemplateInput("tabletemplates","html",vhtml+'referencefile.html',vPath,"css",pHashTPL);
+  appendTemplateInput("tabletemplates","DEFAULT",vhtml+'template.html',vPath,"md",pHashTPL,vTPL_HTML);
+  appendTemplateInput("tabletemplates","reveal",vhtml+'template.html',vPath,"html",pHashTPL,vTPL_HTML);
+  appendTemplateInput("tabletemplates","audioslides",vhtml+'template.html',vPath,"html",pHashTPL,vTPL_HTML);
+  appendTemplateInput("tabletemplates","dzslides",vhtml+'template.html',vPath,"html",pHashTPL,vTPL_HTML);
+  appendTemplateInput("tabletemplates","latex",vhtml+'template.html',vPath,"tex",pHashTPL,vTPL_HTML);
+  appendTemplateInput("tabletemplates","odt",vhtml+'template.html',vPath,"xml",pHashTPL,vTPL_HTML);
+  appendTemplateInput("tabletemplates","odt",vhtml+'referencefile.html',vPath,"odt",pHashTPL,vREF_HTML);
+  appendTemplateInput("tabletemplates","odt2col",vhtml+'referencefile.html',vPath,"odt",pHashTPL,vREF_HTML);
+  appendTemplateInput("tabletemplates","docx",vhtml+'referencefile.html',vPath,"docx",pHashTPL,vREF_HTML);
+  appendTemplateInput("tabletemplates","docx2col",vhtml+'referencefile.html',vPath,"docx",pHashTPL,vREF_HTML);
+  appendTemplateInput("tabletemplates","html",vhtml+'referencefile.html',vPath,"css",pHashTPL,vREF_HTML);
   //alert(app.getPath('documents'))
-  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vPathSeparator+"reveal","Reveal Folder ");
-  appendDirectoryInput("tablefolders","MathJax",vhtml+"defaultfolder.html","mathjaxDIR",vPathMain+vPathSeparator+"mathjax","MathJax Folder ");
+  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vPathSeparator+"reveal","Reveal Folder ",vDIR_HTML);
+  appendDirectoryInput("tablefolders","MathJax",vhtml+"defaultfolder.html","mathjaxDIR",vPathMain+vPathSeparator+"mathjax","MathJax Folder ",vDIR_HTML);
   //copyFile2Editor ("audioslideMAIN",getInnerHTML("tplFILEaudioslides"));
   //copyFile2Editor ("inputLOOP",__dirname+'/tpl/imgslides/audiosection.txt');
 
   setColorSelected("bConvert");
-  setOS(getOperatingSystem());
+  var vOS = getOperatingSystem();
+  setOS(vOS);
+  if (vOS == "MacOSX") {
+    //alert("MacOSX");
+    //fixPath();
+  }
 }
 
 
@@ -598,6 +738,6 @@ setDefaultValues(vHashTPL);
     // You can also require other files to run in this process
     require('./renderer.js')
     //const fs = require('fs');
-    const exec = require('child_process').exec;
+    //alert("getSoftwareDir()="+getSoftwareDir());
   </script>
 </html>

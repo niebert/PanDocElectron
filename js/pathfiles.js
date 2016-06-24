@@ -1,4 +1,18 @@
 
+function getScriptPath() {
+  // __dirname is not available in the generated packages of
+  // PanDocElectron with electron-packager-interactive
+  var vFilename = document.location.href;
+  var vPath = "undefined";
+  vFilename = replaceString(vFilename,"file://","");
+  vPath = getPath4Filename(vFilename);
+  var vSep = getPathSeparator();
+  if (vSep == "\\") {
+    vPath = replaceString(vPath,"/","\\");
+  };
+  return vPath;
+}
+
 function makedirpath(pPathDir) {
   var mkdirp = require('mkdirp');
   mkdirp(pPathDir, function(err) {
@@ -47,7 +61,7 @@ function getSoftwareDir(pProject) {
   if (pProject) {
     vProject = vSep+pProject;
   };
-  return (__dirname+vProject);
+  return ("."+vProject);
 }
 /**
  * Souce: https://gist.github.com/eriwen/1211656

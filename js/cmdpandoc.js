@@ -23,6 +23,7 @@ function runPandocShell(pHash) {
 };
 
 function executePanDocCMD(pHash) {
+  var vPandoc_CMD = getValueDOM("pandocCMD");
   var vInFORMAT  = pHash["inputFORMAT"];
   var vOutFORMAT = pHash["outputFORMAT"];
   var vPanOutFORMAT = pHash["pandocOUTFORMAT"];
@@ -34,7 +35,7 @@ function executePanDocCMD(pHash) {
   if (document.getElementById("inputPARAMSUSE").checked) {
     vAdditionParams = " "+document.getElementById("inputPARAMS").value+" ";
   };
-  var vCMD = "pandoc -f "+vInFORMAT+vInputFilter+" -t "+vPanOutFORMAT + vAdditionParams;
+  var vCMD = vPandoc_CMD+" -f "+vInFORMAT+vInputFilter+" -t "+vPanOutFORMAT + vAdditionParams;
   vCMD += " "+pHash["inputFILE"]+" -o "+pHash["outputFILE"];
   vCMD += getBibCMD(pHash);
   vCMD += getTitleAuthorCMD(pHash);
@@ -216,7 +217,7 @@ function convertChecker(pHash,pHashTPL) {
       pHash["template"] = pHashTPL[vOutFormat+"TPL"]
     } else  {
       var vSep = getPathSeparator();
-      pHash["template"] = __dirname + vSep+ "tpl"+vSep+"pandoctemplates"+vSep+"default."+vOutFormat;
+      pHash["template"] = "." + vSep+ "tpl"+vSep+"pandoctemplates"+vSep+"default."+vOutFormat;
     };
     console.log("Template: "+pHash["template"]);
     setPandocOutFormat(pHash,pHashTPL);
@@ -271,7 +272,7 @@ function createImageSlide(pOutFile,pCount,pTemplate) {
   var vPathPrefix = "." + vSep + "images" + vSep + "img";
   var vOutSlides = "";
   var vPresentation = getFileContent (pTemplate);
-  var vSlideTPL     = getFileContent (__dirname+'/tpl/audioslides/defslide.html');
+  var vSlideTPL     = getFileContent ('./tpl/audioslides/defslide.html');
   //alert("after TPL and LOOP with getFileContent()");
   write2value("inputEDITOR",vPresentation);
   write2value("inputLOOP",vSlideTPL);
@@ -298,7 +299,7 @@ function convertPDF2PNG(pInputPDF,pCount) {
   var vOutPNG = vPath +i+".png";
   alert("Remark: Converting all slides could take up to "+pCount+" minutes!");
   console.log("convertPDF2PNG(pInputPDF,"+pCount+")");
-  var vIM_CMD = getImageMagicCMD();
+  var vIM_CMD = getValueDOM("imagemagickCMD");
   var vCount = parseInt(pCount);
   while ((i<vCount) && (i < 200)) {
     vOutPNG = vPath +i+".png";

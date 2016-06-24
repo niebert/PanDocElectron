@@ -10,7 +10,7 @@ function getOperatingSystem() {
 
   var OSName="Unknown OS";
   //--Recognition of Windows is not consistent--
-  OSName="Windows";
+  OSName="Linux";
   if (navigator.appVersion.indexOf("Win")!=-1) {
     OSName="Windows";
   } else if (navigator.appVersion.indexOf("Mac")!=-1) {
@@ -21,6 +21,7 @@ function getOperatingSystem() {
   } else if (navigator.appVersion.indexOf("Linux")!=-1) {
     OSName="Linux";
   };
+  //alert(OSName);
   return OSName
 }
 
@@ -60,7 +61,7 @@ function setRadioOS(pOS) {
   //alert("vOSRadio.length="+vOSRadio.length);
   for (var i = 0; i < vOSRadio.length; i++) {
     if (vOSRadio[i].value == pOS) {
-      vOSRadio[i].checked = true;
+      vOSRadio[i].checked = "checked";
     };
   };
 };

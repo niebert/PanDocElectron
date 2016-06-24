@@ -3,6 +3,7 @@ function downloadInputFile(pPath) {
   //alert("Download Input File and Convert Source File to MarkDown");
   var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
   makedirpath(vPath);
+  makeProjectDirs(vPath); //audio, video, config, images
   //alert("URL: "+getValueDOM("inputURL")+"\nDownload File: "+getValueDOM("downloadWebFILE")+"\nWeb Project: "+getValueDOM("inputWEBPROJECT"));
 
   var vCommand ="pandoc -s -r html "+getValueDOM("inputURL")+" -o "+getValueDOM("downloadWebFILE");
@@ -39,12 +40,14 @@ function createProject() {
   if (confirm("Do you want to create the following project?\nProject Folder: "+vName+"/\nFilename: "+vName+"."+vExt)) {
     makedirpath(vPath);
     //openFile (vFilenameID,"inputEDITOR",pPath)
-    var vDir = __dirname+vSep+"tpl"+vSep+"DEFAULT"+vSep;
+    var vDir = "."+vSep+"tpl"+vSep+"DEFAULT"+vSep;
     // vDefaultFile: Copy from this default Source File for new Project
     var vDefaultFile = vDir + "md" + vSep +"input.md";
     var vInFormat = getValueDOM("inputFORMAT");
     var vOutFormat = getValueDOM("outputFORMAT");
-    alert("NEW vOutFormat="+vOutFormat);
+    //alert("NEW Output Format="+vOutFormat);
+    //alert("NEW Output Format="+vOutFormat);
+    //alert("NEW Input Format="+vInFormat);
     switch (vInFormat) {
       case "md":
         //alert("MD Create Project createProject():436:index.html");
@@ -73,10 +76,11 @@ function createProject() {
     //changedOutFormat(getValueDOM(outputFORMAT));
     var vOutFilename = getPathFromFilename(vFilename)+"_"+vOutFormat+"."+vExtHash[vOutFormat];
     write2innerHTML("outputFILE",vOutFilename);
-    copyFile2Editor ("inputEDITOR",vFilename);
+    copyFile2Editor ("inputEDITOR",vDefaultFile);
     //setFormat4Input();
     //write2value("inputFORMAT",)
-    alert("Project: "+vName+" created!" );
+    alert("Project: "+vName+" created!\nInput Format: "+vInFormat+"\nOutput Format: "+vOutFormat);
+    setPage("bConvert");
   } else {
     // Do nothing!
     alert("Project Create: CANCEL Operation")
