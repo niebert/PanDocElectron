@@ -9,14 +9,15 @@ Electron is more or less a brower, that has full access to your filesystem. So E
 * MacOSX (see [section 6](http://niebert.github.io/PanDocElectron/index.html#SEC6))
 * Windows (see [section 7](http://niebert.github.io/PanDocElectron/index.html#SEC7))
 
+### Requirements for all Electron Applications ###
 If you want to use Electron Applications in general (including PanDocElectron) it is necessary to install the following software packages:
 * `git` to download and update the sources of Electron Applications (see [http://git-scm.com/](http://git-scm.com/) for installing the software git)
-* `npm` to install pre-build packages of Electron as a runtime environment.
-* `nodejs` allow with Javscript reading and writing files to the filesystem in Electron.
+* `nodejs` and `npm` allow to install pre-build packages of Electron as a runtime environment and other packages e.g. Javscript libraries that allow reading and writing files to the filesystem in Electron.
 
-PanDocElectron itself of
+### Requirements for all PanDocElectron ###
+PanDocElectron itself consists of
 * application `PanDocElectron` and additional packages (see section 2.1)
-* a `PanDoc` folder for `Documents` with necessary files to support certain output formats of pandoc.
+* a `PanDoc` folder for `Documents` with necessary files to support certain output formats of pandoc. Due to limitation of file size on GitHub the templates
 The necessary packages are downloaded with `git` (see section 2.2).
 
 For running and testing the `Electron` applications in general (like PanDocElectron) it is necessary to install the Electron environment on your Desktop Computer. With electron you download the application that is designed as cross-plattform application and install the Electron Framework for your operating system (OS).
@@ -31,8 +32,8 @@ PandocElectron uses other opensource packages for converting files:
 
 You can find more details in section 5 (Linux), 6 (Mac) and 7 (Windows) to install these packages.
 
-### 2.2 Installation of PanDocElectron
-When git installed on your operting system, you can download PanDocElectron with the following command in the shell:
+### 2.2 Installation of PanDocElectron and Templates
+When `git` is installed on your operating system, you can download PanDocElectron with the following command in the shell:
 
 Install PanDocElectron
 
@@ -42,7 +43,7 @@ Install PanDocElectron
 
 > `npm install`
 
-Install necessary files and folders that are used for generated pandoc output files:
+Templates and Support Files for PanDoc conversion are stored in a separate GitHub repository. Install these necessary files and folders with the following commands:
 
 > `cd  Documents`
 
@@ -52,13 +53,25 @@ You choose a location of your choice. The default folder of the support files is
 
 > ` Documents/PanDoc`
 
+Also the projects create by PanDocElectron are stored in this folders. In the settings of PanDocElectron you can define your path to templates and project folder.
+
+The directory `PanDoc` can also be created by downloading the [PanDoc.zip from SourceForge](https://sourceforge.net/projects/pandocelectron/files/zip4Documents/) and unzip the file in Documents:
+
+
+> `cd  Documents`
+
+> `unzip PanDoc.zip`
+
+
 ### 2.3 Starting PanDocElectron
+
 You can start PanDocElectron
+
 > `cd  path/to/app/PanDocElectron`
 
 > `npm install`
 
-Those commands can be automized in a shell script (Linux/Mac) or with a batch file (.BAT) on Windows. 
+Those commands can be automized in a shell script (Linux/Mac) or with a batch file (.BAT) on Windows.
 
 ## 3 PanDoc Projects
 PanDocElectron uses a project based approach for conversion. A project is a subdirectory of `Documents/Pandoc/` e.g. `Documents/Pandoc/MyProject`. This file contains the input files and the genrated output files by PanDoc. In general the input files are mainly WikiMedia-Files `Documents/Pandoc/MyProject/MyProject.wiki`.
@@ -135,7 +148,13 @@ Finally it is necessary to install the build essentials on the Linux system with
 ### 5.6 Install Electron as Runtime Environment for PanDocElectron
 Change directory to PanDocElectron and install prebuilt Electron binaries for your  operating system:
 
-> `cd  PanDocElectron` resp. `cd /path/to/application/PanDocElectron`
+> `cd  Documents` resp. `cd /path/to/Documents`
+
+> `mkdir  ElectronApps`
+
+> `git clone https://github.com/niebert/PanDocElectron.git`
+
+> `cd  PanDocElectron`
 
 > `rm -R node_modules/*`
 
@@ -199,6 +218,7 @@ Download and install from  the following website:
 * [https://atom.io/](https://atom.io/)
 
 ## 6 MacOSX - Electron Framework
+The following comamd assume, that [HomeBrew](http://brew.sh) to be installed on your MacOSX. 
 
 ### 6.1 Install GIT on MacOSX
 GIT as version control system is used to update PanDocElectron
