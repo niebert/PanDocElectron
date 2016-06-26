@@ -59,6 +59,7 @@ function executePanDocCMD(pHash) {
     case "latex":
       runShellCommand(vCMD);
       console.log(vCMD);
+      alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "html":
       var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
@@ -67,30 +68,35 @@ function executePanDocCMD(pHash) {
       vCMD += " -s -S --toc  -c pandoc.css";
       runShellCommand(vCMD);
       console.log(vCMD);
+      alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "odt":
        vCMD += " -S --reference-odt "+pHash["reference"]
        //vCMD += " --template=\""+pHash["template"]+"\"";
        runShellCommand(vCMD);
        console.log(vCMD);
-    break;
+       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
+     break;
     case "odt2col":
       vCMD += " -S --reference-odt "+pHash["reference"]
       //vCMD += " --template=\""+pHash["template"]+"\"";
       runShellCommand(vCMD);
       console.log(vCMD);
+      alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "docx":
       vCMD += " -S --reference-docx "+pHash["reference"]
       //vCMD += " --template=\""+pHash["template"]+"\"";
       runShellCommand(vCMD);
       console.log(vCMD);
+      alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "docx2col":
       vCMD += " -S --reference-docx "+pHash["reference"]
       //vCMD += " --template=\""+pHash["template"]+"\"";
       runShellCommand(vCMD);
       console.log(vCMD);
+      alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "reveal":
         //variable revealjs-url="../../reveal" mathjax-url="../../mathjax"
