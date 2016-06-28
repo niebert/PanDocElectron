@@ -236,11 +236,11 @@ $endif$
           { src: '$revealpath$/plugin/zoom-js/zoom.js', async: true },
           { src: '$revealpath$/plugin/notes/notes.js', async: true },
           { src: '$revealpath$/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '$revealpath$/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '$revealpath$/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+		  { src: '$revealpath$/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+		  { src: '$revealpath$/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
           { src: '$revealpath$/plugin/zoom-js/zoom.js', async: true },
           { src: '$revealpath$/plugin/notes/notes.js', async: true },
-          { src: '$revealpath$/reveal/plugin/math/math.js', async: true }
+          { src: '$revealpath$/plugin/math/math.js', async: true }
 				]
       });
     </script>
