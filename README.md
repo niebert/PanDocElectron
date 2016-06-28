@@ -12,7 +12,7 @@ Electron is more or less a brower, that has full access to your filesystem. So E
 ### Requirements for all Electron Applications ###
 If you want to use Electron Applications in general (including PanDocElectron) it is necessary to install the following software packages:
 * `git` to download and update the sources of Electron Applications (see [http://git-scm.com/](http://git-scm.com/) for installing the software git)
-* `nodejs` and `npm` allow to install pre-build packages of Electron as a runtime environment and other packages e.g. Javscript libraries that allow reading and writing files to the filesystem in Electron.
+* `nodejs` and `npm` allows to install pre-build packages of Electron as a runtime environment and other packages e.g. Javascript libraries that allow reading and writing files to the filesystem in Electron.
 
 ### Requirements for all PanDocElectron ###
 PanDocElectron itself consists of
@@ -86,7 +86,7 @@ Normally the basename of the input file is the same as the directory name, but t
 * convert `MyProject.wiki` to HTML presentation, creates a filename `MyProject_reveal.html`.
 * convert `MyProject.wiki` to [RevealJS](http://lab.hakim.se/reveal-js/#/) presentation, creates a filename `MyProject_reveal.html`.
 
-The basic version of output format get the standard extension `odt`, `docx` or `html`. To avoid overwriting the files with the same file extensions and underscore filename expand is used (eg. `_reveal` for RevealJS format as an output format with the file extension `.html`.
+The basic version of output format get the standard extension `odt`, `docx` or `html`. To avoid overwriting the files with the same file extensions (e.g. `html`), default filenames are expanded with the output format (eg. `_reveal` for RevealJS format as an output format with the file extension `.html`.
 
 ### 3.2 Project subdirectories
 In a PanDocElectron Project 4 subdirectories are created.
@@ -218,7 +218,7 @@ Download and install from  the following website:
 * [https://atom.io/](https://atom.io/)
 
 ## 6 MacOSX - Electron Framework
-The following comamd assume, that [HomeBrew](http://brew.sh) to be installed on your MacOSX. 
+The following command assumes, that [HomeBrew](http://brew.sh) to be installed on your MacOSX.
 
 ### 6.1 Install GIT on MacOSX
 GIT as version control system is used to update PanDocElectron
