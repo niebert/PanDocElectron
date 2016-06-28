@@ -34,7 +34,7 @@
 <p>PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Document Converter on the Command Shell on Linux, Mac or Windows. Or in simple words:</p>
 
 <ul>
-<li>converting documents is performed by <a href="http://pandoc.org">PanDoc</a>
+<li>documents are converted by <a href="http://pandoc.org">PanDoc</a>
 </li>
 <li>PanDocElectron frees the user from knowing and setting the parameters from the command line.</li>
 </ul>
@@ -643,10 +643,17 @@ Download and install from  the following website:</p>
 <h3>
 <a id="82-electron-builder-packager" class="anchor" href="#82-electron-builder-packager" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>8.2 Electron Builder Packager</h3>
 
-<p>Builder and Packager is used to create Desktop Application</p>
+<p> Now you can run the Electron application by using the command <code>npm start</code> in the directory of your application.
+  If you want to start your Electron application from anywhere in the directory tree, if you installed your application globally
+  (e.g. <tt>npm install -g pandoc-electron</tt> or <tt>npm install -g electron-quick-start</tt>).
+  Then users can type simply with the command: <tt>pandoc-electron</tt> . You should just add that line into your package.json to let npm know about it:
+
+  Builder and Packager is used to create Desktop Application</p>
 
 <div class="highlight highlight-source-shell"><pre>npm install electron-builder
 npm install electron-packager
+npm install electron-packager-interactive
+
 </pre></div>
 
 <p>See <a href="https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build">Multiplattform Build with Electron</a> for further details.
