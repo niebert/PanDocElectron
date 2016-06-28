@@ -2,6 +2,8 @@ function loadConfig(pConfigFile) {
   var vConfigFile = pConfigFile || "default.cfg";
   // simnply load config file into the innerHTML of DIV node 'divconfig'
   fs.readFile("." +'/node_modules/'+vConfigFile, 'utf-8', function (err, data) {
+    // Throw Error if file does not exist
+    if (err) throw err;
     write2innerHTML("divconfig", data);
     console.log('Config File \''+vConfigFile+' loaded!');
     write2value("inputFORMAT",getInnerHTML("selectInputFORMAT"));

@@ -397,8 +397,42 @@ Builder and Packager is used to create Desktop Application
 ```bash
 npm install electron-builder
 npm install electron-packager
+npm install electron-packager-interactive
+npm install electron-rebuild
 
 ```
+Electron use a version of Chromium that is different from node.js. So native packages cannot work without being rebuilt.
+
+Rebuilding can be painful, hopefully electron-rebuild is here to do the job for us.
+
+You should have installed it using npm install electron-rebuild --save already.
+
+Anytime you install some packages featuring native code, you should run electron-rebuild afterward. E.g. if we want to install the package whatever, we have to do it in two step:
+
+```
+npm install mynewmodule --save  
+./node_modules/.bin/electron-rebuild
+```
+Call `electron-rebuild` any time when you install new modules that are not part
+of the listed electron APIs (sess [http://electron.atom.io/docs/api](http://electron.atom.io/docs/api))
+It was reported that electron-rebuild could be very slow and creates no output in the
+command shell. So be patient wn:
+“electron-rebuild is REALLY slow”
+
+... and aside from that:
+“electron-rebuild does NOT output ANYTHING”
+
+It's really misleading...
+
+The first time I used it, I was thinking that it was not working at all, and I Ctrl-C it multiple times... Then, I finally give it a last chance to shine, while I was making a tea. On my two year old laptop, it takes few minutes.
+
+Also people installing your supa-ground-breaking package are not aware of electron-rebuild, so you have to add a line into your package.json, so it will kick-in at installation time. Here is the line:
+
+"scripts": {
+    "install": "electron-rebuild"
+},
+
+You should also warn your user that the installation process can take a while...
 
 See [Multiplattform Build with Electron](https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build) for further details.
             `

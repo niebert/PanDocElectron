@@ -1,7 +1,7 @@
 {
   "name": "pandocelectron",
   "version": "1.0.0",
-  "description": "A PanDoc Wrapper as Electron application",
+  "description": "A Graphical User Interface for PanDoc as Electron application",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js"
@@ -14,21 +14,19 @@
     "Electron",
     "PanDoc",
     "GUI",
-    "Wrapper PanDoc"
+    "Wrapper"
   ],
-  "author": "GitHub",
+  "author": "Engelbert Niehaus",
   "license": "CC0-1.0",
   "bugs": {
     "url": "https://github.com/niebert/PanDocElectron/issues"
   },
-  "homepage": "https://github.com/niebert/PanDocElectron#readme",
+  "homepage": "https://github.com/niebert/PanDocElectron",
   "devDependencies": {
-    "electron-builder": "^5.4.2",
-    "electron-packager": "^7.0.4",
     "electron-prebuilt": "^1.2.0"
   },
   "dependencies": {
-    "fix-path": "^2.0.0",
+    "electron-open-link-in-browser": "^1.0.2",
     "mkdirp": "^0.5.1"
   }
 }
