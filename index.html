@@ -626,10 +626,10 @@ function X_appendTemplateHash(pID,pTemplate,pReplaceHash) {
 
 function setDefaultValues(pHashTPL) {
   var vPathSeparator = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
-  var vPathMain = app.getPath('documents')+vPathSeparator+"PanDoc";
   if (vPathSeparator == "\\") {
-    vPathMain = vPathSeparator + vPathMain;
+    // alert("Windows setDefaultValues()");
   };
+  var vPathMain = app.getPath('documents')+vPathSeparator+"PanDoc";
   write2innerHTML("projectmainDIR",vPathMain);
   //setInput4WebDownload();
   setInput4Project('inputNEWPROJECT','inputNEWFILE');
