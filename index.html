@@ -123,12 +123,12 @@
               <td>
                 <input type="checkbox" id="inputFILTERUSE" >
                 <input type="text" id="inputFILTER" size="30" value="+simple_tables+footnotes">
-                <button id="bHelpFilter" onclick="openBrowserURL('http://pandoc.org')"> ? </button>
+                <button id="bHelpFilter" onclick="openBrowserURL('http://pandoc.org/README.html#general-options')"> ? </button>
                 &nbsp;
                 <b>Parameter:</a>
                   <input type="checkbox" id="inputPARAMSUSE" >
                   <input type="text" id="inputPARAMS" size="30" value="--toc">
-                <button id="bHelpFilter" onclick="openBrowserURL('http://pandoc.org')"> ? </button>
+                <button id="bHelpFilter" onclick="openBrowserURL('http://pandoc.org/demos.html')"> ? </button>
 
               </td>
             </tr>
@@ -158,12 +158,13 @@
                   <option value="context">ConTeXt</option>
                   <option value="docbook">DocBook</option>
                   <option value="dokuwiki">DokuWiki</option>
-                  <option value="man">Groff man</option>
                   <option value="icml">ICML</option>
+                  <option value="man">Groff man</option>
                   <option value="markdown_strict">Markdown (strict)</option>
                   <option value="markdown_phpextra">Markdown (PHP Markdown Extra)</option>
                   <option value="markdown_github">Markdown (GitHub)</option>
                   <option value="markdown_mmd">MultiMarkdown</option>
+                  <option value="pdf">PDF</option>
                   <option value="rst">reStructuredText</option>
                   <option value="textile">Textile</option>
                   <option value="org">Org Mode</option>
@@ -315,6 +316,18 @@
               <td>
                 <input type="text" size="35" id="inputNEWPROJECT" value="myproject" onchange="setInput4Project(this.id,'inputNEWFILE')">
                 <button class="btn btn-primary btn-xs"  id="createNewProjectBTN"  onclick="createProject();">Create Project</button>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <b>New Input Format:</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <select id="inputNEWFORMAT" onchange="document.getElementById('inputFORMAT').value=this.value;changedInFormat(this.value)">
+                </select>
               </td>
             </tr>
             <tr>
@@ -525,8 +538,14 @@ function updateSoftware() {
   };
 }
 
-function runShellCommand (pCommand) {
+function runShellCommand (pCommand,pShellHash) {
   //pCommand="ls -a";
+  if (pShellHash) {
+    pShellHash["savefile"] += "Y";
+    pShellHash["commands"] +="\n"+pCommand;
+  } else {
+    alert("pShellHash undefined for ''"+ pCommand+"'");
+  };
   console.log("runShellCommand: "+ pCommand);
   const child = exec(pCommand,
    (error, stdout, stderr) => {
@@ -569,6 +588,7 @@ function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButto
   vReplaceHash["PATHDEFAULT"] = pPathDefault;
   appendTemplateHash(pID,pTemplate,vReplaceHash,pTPL);
 };
+
 function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt,pHashTPL,pTPL) {
   var vTPLID = pOutputFORMAT+"TPL";
   if (pTemplate.indexOf("referencefile")>0) {
@@ -667,13 +687,29 @@ function setDefaultValues(pHashTPL) {
   appendDirectoryInput("tablefolders","MathJax",vhtml+"defaultfolder.html","mathjaxDIR",vPathMain+vPathSeparator+"mathjax","MathJax Folder ",vDIR_HTML);
   //copyFile2Editor ("audioslideMAIN",getInnerHTML("tplFILEaudioslides"));
   //copyFile2Editor ("inputLOOP",__dirname+'/tpl/imgslides/audiosection.txt');
-
+  document.getElementById("inputNEWFORMAT").innerHTML = document.getElementById("inputFORMAT").innerHTML;
   setColorSelected("bConvert");
   var vOS = getOperatingSystem();
   setOS(vOS);
-  if (vOS == "MacOSX") {
-    //alert("MacOSX");
-    //fixPath();
+  switch (vOS) {
+    //case "MacOSX":
+    case "Windows":
+      //alert("Windows");
+      var vSep = vPathSeparator;
+      var vWinOS = vPathMain + vSep+ "WinOS"  + vSep;
+      write2innerHTML("pandocCMD",vWinOS + "PanDoc_Win" + vSep + "pandoc.exe");
+      write2innerHTML("imagemagickCMD",vWinOS + "ImageMagick_Win" + vSep + "convert.exe");
+      break;
+    case "1MacOSX":
+          //alert("MacOSX");
+
+      break;
+    case "Linux":
+          //alert("Linux");
+
+      break;
+    default:
+
   }
 }
 

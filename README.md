@@ -2,6 +2,12 @@
 PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Document Converter on the Command Shell on Linux, Mac or Windows. Or in simple words:
 * converting documents is performed by [PanDoc](http://pandoc.org)
 * PanDocElectron frees the user from knowing and setting the parameters from the command line.
+* List of other GUIs and PanDoc Wrappers are available at [GitHub jgm](https://github.com/jgm/pandoc/wiki/Pandoc-Extras#pandoc-wrappers-and-interfaces)
+
+## Last Update
+* (2016-06-30) Create New Projects - correted Pathnames
+* (2016-06-29) Calling pandoc on windows changed, create BAT and SH files from PanDocElectron.
+* (2016-06-28) imagemagick folder added, due to inkonsistent filename for convert by Windows (instead of fat2ntfs.exe)
 
 ## 1 General Requirements for Electron
 Electron is more or less a brower, that has full access to your filesystem. So Electron/Atom allows to write multiplattform application just with HTML and Javascript, than runs on:
@@ -415,16 +421,8 @@ npm install mynewmodule --save
 ```
 Call `electron-rebuild` any time when you install new modules that are not part
 of the listed electron APIs (sess [http://electron.atom.io/docs/api](http://electron.atom.io/docs/api))
-It was reported that electron-rebuild could be very slow and creates no output in the
-command shell. So be patient wn:
-“electron-rebuild is REALLY slow”
-
-... and aside from that:
-“electron-rebuild does NOT output ANYTHING”
-
-It's really misleading...
-
-The first time I used it, I was thinking that it was not working at all, and I Ctrl-C it multiple times... Then, I finally give it a last chance to shine, while I was making a tea. On my two year old laptop, it takes few minutes.
+It was reported that `electron-rebuild` could be very slow and creates no output in the
+command shell. So be patient if you start `electron-rebuild` and do not stop with Ctrl-C.
 
 Also people installing your supa-ground-breaking package are not aware of electron-rebuild, so you have to add a line into your package.json, so it will kick-in at installation time. Here is the line:
 

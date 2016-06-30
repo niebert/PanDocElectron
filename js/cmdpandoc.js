@@ -22,7 +22,28 @@ function runPandocShell(pHash) {
   executePanDocCMD(pHash);
 };
 
+function initShellScript(pHash) {
+  var vPath = getPath4Filename(pHash["inputFILE"]);
+  pHash['filename'] = vPath + "/callpandoc.sh";
+  pHash['commands'] = "#!/bin/sh";
+  pHash['done'] = "0";
+  if (getOperatingSystem() == "Windows") {
+    pHash['filename'] = vPath + "\\callpandoc.bat";
+    pHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
+  };
+};
+
+function saveShellScript(pShellHash) {
+  //get ProjectPath if the path is defined
+  var vFileName = pShellHash["filename"];
+  //save script to filename in pShellHash
+  saveFile(vFileName,pShellHash["commands"]);
+  alert("PanDoc-Script: "+vFilename+" saved");
+};
+
 function executePanDocCMD(pHash) {
+  initShellScript(pHash);
+  var vShellHash = pHash;
   var vPandoc_CMD = getValueDOM("pandocCMD");
   var vInFORMAT  = pHash["inputFORMAT"];
   var vOutFORMAT = pHash["outputFORMAT"];
@@ -35,10 +56,13 @@ function executePanDocCMD(pHash) {
   if (document.getElementById("inputPARAMSUSE").checked) {
     vAdditionParams = " "+document.getElementById("inputPARAMS").value+" ";
   };
-  var vCMD = vPandoc_CMD+" -f "+vInFORMAT+vInputFilter+" -t "+vPanOutFORMAT + vAdditionParams;
-  vCMD += " "+pHash["inputFILE"]+" -o "+pHash["outputFILE"];
-  vCMD += getBibCMD(pHash);
-  vCMD += getTitleAuthorCMD(pHash);
+  var vCMD_pre = vPandoc_CMD+" -f "+vInFORMAT+vInputFilter;
+  var vCMD = vPandoc_CMD+" -f "+vInFORMAT+vInputFilter+" -t "+vPanOutFORMAT;
+  var vCMD_post = " " + vAdditionParams;
+  vCMD_post += " "+pHash["inputFILE"]+" -o "+pHash["outputFILE"];
+  vCMD_post += getBibCMD(pHash);
+  vCMD_post += getTitleAuthorCMD(pHash);
+  vCMD += vCMD_post;
   switch (vOutFORMAT) {
     case "audioslides":
       //-----CONVERT AUDIOSLIDES-------
@@ -46,12 +70,12 @@ function executePanDocCMD(pHash) {
       var vInputPDF = getInnerHTML("inputFILE");
       if (vInFORMAT == "pdf") {
         //alert("Input Format is PDF ");
-        convertPDF2PNG(vInputPDF,vCount);
+        convertPDF2PNG(vInputPDF,vCount,vShellHash);
       } else {
         var vMSG = "No PDF-Input:\n Please copy your slides into folder '/images' of your project";
         vMSG += "\n(e.g. img0.png for title slide img1.png for first slide,...)";
-        vMSG += "\nIf you select 16 Slides, last image is 'img15.png'.";
-        vMSG += "\nYou can use LibreOffice HTML-Export into '/images' to create file 'img0.png',...";
+        vMSG += "\nIf you select 16 Slides, title slide is 'img0.png' and last image is 'img15.png'.";
+        vMSG += "\nYou can use LibreOffice HTML-Export into '/images' to create the files 'img0.png',...";
         alert(vMSG);
       };
       createImageSlide(pHash["outputFILE"],vCount,pHash["template"]);
@@ -66,35 +90,42 @@ function executePanDocCMD(pHash) {
       var vSep = getPathSeparator();
       copyFile(pHash["reference"],vProjectDir+vSep+"pandoc.css");
       vCMD += " -s -S --toc  -c pandoc.css";
-      runShellCommand(vCMD);
+      runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "odt":
-       vCMD += " -S --reference-odt "+pHash["reference"]
+       vCMD += " -S --reference-odt "+pHash["reference"];
        //vCMD += " --template=\""+pHash["template"]+"\"";
-       runShellCommand(vCMD);
+       runShellCommand(vCMD,vShellHash);
        console.log(vCMD);
        alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
      break;
-    case "odt2col":
+     case "pdf":
+        vCMD = vCMD_pre + " --latex-engine=xelatex " + vCMD_post;
+        //vCMD += " --template=\""+pHash["template"]+"\"";
+        runShellCommand(vCMD,vShellHash);
+        console.log(vCMD);
+        alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
+      break;
+     case "odt2col":
       vCMD += " -S --reference-odt "+pHash["reference"]
       //vCMD += " --template=\""+pHash["template"]+"\"";
-      runShellCommand(vCMD);
+      runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "docx":
-      vCMD += " -S --reference-docx "+pHash["reference"]
+      vCMD += " -S --reference-docx "+pHash["reference"];
       //vCMD += " --template=\""+pHash["template"]+"\"";
-      runShellCommand(vCMD);
+      runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "docx2col":
-      vCMD += " -S --reference-docx "+pHash["reference"]
+      vCMD += " -S --reference-docx "+pHash["reference"];
       //vCMD += " --template=\""+pHash["template"]+"\"";
-      runShellCommand(vCMD);
+      runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
@@ -106,7 +137,7 @@ function executePanDocCMD(pHash) {
       vCMD += " --template=\""+pHash["template"]+"\"";
       //saveFile()
       console.log("Start PanDoc REVEAL");
-      runShellCommand(vCMD);
+      runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
       //var vOutContent = getFileContent(pHash["outputFILE"]);
       //vOutContent = replaceString(vOutContent,"___REVEAL___",pHash["revealCMD"]);
@@ -118,13 +149,15 @@ function executePanDocCMD(pHash) {
         break;
     default:
       // perform default task
-      runShellCommand(vCMD);
+      runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
       //alert("Perform PanDoc Default")
       //alert("pandoc -f "+vInFORMAT+" -t "+vPanOutFORMAT);
-  }
-}
+  };
+  saveShellScript(vShellHash);
+};
+
 function getTitleAuthorCMD(pHash) {
   var vReturn = "";
   var vTitle = getValueDOM("outputTITLE");
@@ -231,6 +264,7 @@ function convertChecker(pHash,pHashTPL) {
   console.log("convertChecker() inputFORMAT="+pHash["inputFORMAT"]);
   return vReturn;
 }
+
 function setPandocOutFormat(pHash,pHashTPL) {
   var vOutFormat = pHash["outputFORMAT"]
   switch (vOutFormat) {
@@ -297,27 +331,33 @@ function createImageSlide(pOutFile,pCount,pTemplate) {
   saveFile(getInnerHTML("outputFILE"),vPresentation);
   alert("Convert Finished:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,..." );
 };
-function convertPDF2PNG(pInputPDF,pCount) {
-  var vPath = getPathFromFilename(pInputPDF);
-  var vSep = getPathSeparator();
-  vPath += vSep + "images" + vSep + "img";
-  var i = 0;
-  var vOutPNG = vPath +i+".png";
-  alert("Remark: Converting all slides could take up to "+pCount+" minutes!");
-  console.log("convertPDF2PNG(pInputPDF,"+pCount+")");
-  var vIM_CMD = getValueDOM("imagemagickCMD");
-  var vCount = parseInt(pCount);
-  while ((i<vCount) && (i < 200)) {
-    vOutPNG = vPath +i+".png";
-    i++;
-    //vNode.value += ">";
-    //setTimeout("document.getElementById('pandocprogress').value += 'o'",100);
-    //alert("Create Image "+i+" from PDF");
-    // convert -density 300 -depth 8 -quality 85 ${FilePDF}[${COUNTER}] outtmp.png
-    var vCMD = vIM_CMD+" -density 300 -depth 8 -quality 85 "+pInputPDF+"["+i+"] " + vOutPNG;
-    //alert(vCMD);
-    runShellCommand(vCMD);
-  };
-  alert("Generating "+pCount+" PNG Files from PDF done!");
+function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
+  var vExt = getExtensionOfFilename(pInputPDF);
+  vExt = vExt.toUpperCase();
+  if (vExt != "PDF") {
+    alert("WARNING: Input file is not an PDF document!");
+  } else {
+    var vPath = getPathFromFilename(pInputPDF);
+    var vSep = getPathSeparator();
+    vPath += vSep + "images" + vSep + "img";
+    var i = 0;
+    var vOutPNG = vPath +i+".png";
+    alert("Remark: Converting all slides could take up to "+pCount+" minutes!");
+    console.log("convertPDF2PNG(pInputPDF,"+pCount+")");
+    var vIM_CMD = getValueDOM("imagemagickCMD");
+    var vCount = parseInt(pCount);
+    while ((i<vCount) && (i < 200)) {
+      vOutPNG = vPath +i+".png";
+      i++;
+      //vNode.value += ">";
+      //setTimeout("document.getElementById('pandocprogress').value += 'o'",100);
+      //alert("Create Image "+i+" from PDF");
+      // convert -density 300 -depth 8 -quality 85 ${FilePDF}[${COUNTER}] outtmp.png
+      var vCMD = vIM_CMD+" -density 300 -depth 8 -quality 85 "+pInputPDF+"["+i+"] " + vOutPNG;
+      //alert(vCMD);
+      runShellCommand(vCMD,pShellHash);
+    };
+    alert("Generating "+pCount+" PNG Files from PDF done!");
+  }
 }
 // The following hash defines the extension for the Output Format

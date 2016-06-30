@@ -40,7 +40,7 @@ function createProject() {
   if (confirm("Do you want to create the following project?\nProject Folder: "+vName+"/\nFilename: "+vName+"."+vExt)) {
     makedirpath(vPath);
     //openFile (vFilenameID,"inputEDITOR",pPath)
-    var vDir = "."+vSep+"tpl"+vSep+"DEFAULT"+vSep;
+    var vDir = getValueDOM("projectmainDIR")+vSep+"tpl"+vSep+"DEFAULT"+vSep;
     // vDefaultFile: Copy from this default Source File for new Project
     var vDefaultFile = vDir + "md" + vSep +"input.md";
     var vInFormat = getValueDOM("inputFORMAT");
@@ -49,14 +49,16 @@ function createProject() {
     //alert("NEW Output Format="+vOutFormat);
     //alert("NEW Input Format="+vInFormat);
     switch (vInFormat) {
-      case "md":
+      case "markdown": // not "md" - which is the extension
         //alert("MD Create Project createProject():436:index.html");
         vDefaultFile = vDir + vInFormat + vSep +"default."+vInFormat;
+        //copyFile2Editor("inputEDITOR",vDefaultFile);
         copyFile(vDefaultFile,vFilename);
         break;
       case "mediawiki":
         //alert("WIKI Create Project createProject():441:index.html");
         vDefaultFile = vDir + "wiki" + vSep +"default.wiki";
+        //copyFile2Editor("inputEDITOR",vFilename);
         copyFile(vDefaultFile,vFilename);
         break;
       case "pdf":
@@ -65,7 +67,7 @@ function createProject() {
           copyFile(vDefaultFile,vFilename);
           break;
       default:
-        //alert("["+vInFormat+"] Create Project createProject():441:index.html");
+        alert("Default ["+vInFormat+"] Create Project createProject():441:index.html");
         vDefaultFile = getInnerHTML("DEFAULTTPL");
         //alert(vDefaultFile);
         runShellCommand("pandoc -f markdown -t "+vInFormat+" "+vDefaultFile+" -o "+vFilename);
@@ -73,10 +75,10 @@ function createProject() {
     makeProjectDirs(vPath); //audio, video, config, images
     //setInput4Project('inputNEWPROJECT','inputNEWFILE');
     write2innerHTML("inputFILE",vFilename);
+    write2value("inputEDITOR","");
     //changedOutFormat(getValueDOM(outputFORMAT));
-    var vOutFilename = getPathFromFilename(vFilename)+"_"+vOutFormat+"."+vExtHash[vOutFormat];
+    var vOutFilename = getPathFromFilename(vFilename)+vSep+vName+"_"+vOutFormat+"."+vExtHash[vOutFormat];
     write2innerHTML("outputFILE",vOutFilename);
-    copyFile2Editor ("inputEDITOR",vDefaultFile);
     //setFormat4Input();
     //write2value("inputFORMAT",)
     alert("Project: "+vName+" created!\nInput Format: "+vInFormat+"\nOutput Format: "+vOutFormat);

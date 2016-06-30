@@ -12,7 +12,7 @@ function copyFile(pSource,pDestination) {
     if (getOperatingSystem() == "Windows") {
       var vCommand = "copy "+pSource+" "+pDestination;
     }
-    runShellCommand(vCommand);
+    runShellCommand(vCommand,{});
   };
 };
 function saveEditorContent(pFilename) {

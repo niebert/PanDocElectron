@@ -3,11 +3,14 @@ function loadConfig(pConfigFile) {
   // simnply load config file into the innerHTML of DIV node 'divconfig'
   fs.readFile("." +'/node_modules/'+vConfigFile, 'utf-8', function (err, data) {
     // Throw Error if file does not exist
-    if (err) throw err;
-    write2innerHTML("divconfig", data);
-    console.log('Config File \''+vConfigFile+' loaded!');
-    write2value("inputFORMAT",getInnerHTML("selectInputFORMAT"));
-    write2value("outputFORMAT",getInnerHTML("selectOutputFORMAT"));
+    if (err) {
+      alert("ERROR: '/node_modules/"+vConfigFile+"' open file was not successful!\n(e.g. File does not exist)");
+    } else {
+      write2innerHTML("divconfig", data);
+      console.log('Config File \''+vConfigFile+' loaded!');
+      write2value("inputFORMAT",getInnerHTML("selectInputFORMAT"));
+      write2value("outputFORMAT",getInnerHTML("selectOutputFORMAT"));
+    };
   });
 }
 
