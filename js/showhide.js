@@ -9,6 +9,18 @@ function setPage(pButtonID) {
 	show(pButtonID+"Page");
 	setColorSelected(pButtonID);
 }
+
+function showEditPath(pID) {
+	document.getElementById('EDIT'+pID+'CMD').value = document.getElementById(pID+'CMD').innerHTML;
+	hide('P'+pID+'CMD');
+	show('PEDIT'+pID+'CMD');
+}
+
+function hideEditPath(pID) {
+	document.getElementById(pID+'CMD').innerHTML = document.getElementById('EDIT'+pID+'CMD').value;
+	hide('PEDIT'+pID+'CMD');
+	show('P'+pID+'CMD');
+}
 function setColorSelected(pButtonID) {
 	setButtonColor(pButtonID,"#3D8CD1");
 }

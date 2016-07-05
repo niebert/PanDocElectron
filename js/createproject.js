@@ -1,6 +1,7 @@
 
 function downloadInputFile(pPath) {
   //alert("Download Input File and Convert Source File to MarkDown");
+  var vSep = getPathSeparator();
   var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
   makedirpath(vPath);
   makeProjectDirs(vPath); //audio, video, config, images
@@ -29,6 +30,7 @@ function setInput4WebDownload() {
 };
 
 function createProject() {
+  var vPandoc_CMD = getValueDOM("pandocCMD");
   var vSep = getPathSeparator();
   var vName = getValueDOM("inputNEWPROJECT");
   var vPath = getValueDOM("projectmainDIR")+vSep+vName;
@@ -36,6 +38,10 @@ function createProject() {
   var vExt = vExtHash[vInFormat];
   // vFilename is the new Input Filename for the new project
   var vFilename = vPath+vSep+vName+"."+vExt;
+  var vShellHash = {};
+  vShellHash["inputFILE"] = vFilename;
+  vShellHash['savefile'] = "N";
+  initShellScript(vShellHash);
   // vFile
   if (confirm("Do you want to create the following project?\nProject Folder: "+vName+"/\nFilename: "+vName+"."+vExt)) {
     makedirpath(vPath);
@@ -51,26 +57,26 @@ function createProject() {
     switch (vInFormat) {
       case "markdown": // not "md" - which is the extension
         //alert("MD Create Project createProject():436:index.html");
-        vDefaultFile = vDir + vInFormat + vSep +"default."+vInFormat;
+        vDefaultFile = vDir + "md" + vSep +"input.md";
         //copyFile2Editor("inputEDITOR",vDefaultFile);
         copyFile(vDefaultFile,vFilename);
         break;
       case "mediawiki":
         //alert("WIKI Create Project createProject():441:index.html");
-        vDefaultFile = vDir + "wiki" + vSep +"default.wiki";
+        vDefaultFile = vDir + "wiki" + vSep +"input.wiki";
         //copyFile2Editor("inputEDITOR",vFilename);
         copyFile(vDefaultFile,vFilename);
         break;
       case "pdf":
           //alert("MD Create Project createProject():436:index.html");
-          vDefaultFile = vDir + vInFormat + vSep +"default."+vInFormat;
+          vDefaultFile = vDir + "pdf" + vSep +"input.pdf";
           copyFile(vDefaultFile,vFilename);
           break;
       default:
         alert("Default ["+vInFormat+"] Create Project createProject():441:index.html");
         vDefaultFile = getInnerHTML("DEFAULTTPL");
         //alert(vDefaultFile);
-        runShellCommand("pandoc -f markdown -t "+vInFormat+" "+vDefaultFile+" -o "+vFilename);
+        runShellCommand(vPandoc_CMD+" -f markdown -t "+vInFormat+" "+vDefaultFile+" -o "+vFilename,vShellHash);
     };
     makeProjectDirs(vPath); //audio, video, config, images
     //setInput4Project('inputNEWPROJECT','inputNEWFILE');

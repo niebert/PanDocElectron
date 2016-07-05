@@ -1,6 +1,6 @@
 {
-  "name": "pandocelectron",
-  "version": "1.0.0",
+  "name": "PanDocElectron",
+  "version": "0.9.0",
   "description": "A Graphical User Interface for PanDoc as Electron application",
   "main": "main.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/niebert/PanDocElectron",
   "devDependencies": {
-    "electron-prebuilt": "^1.2.0"
+    "electron-prebuilt": "^1.2.5"
   },
   "dependencies": {
     "electron-open-link-in-browser": "^1.0.2",

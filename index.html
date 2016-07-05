@@ -445,7 +445,7 @@
             <input type="checkbox" name="checkFolders" id="checkFolders" onclick="toggleCheck('tablefolders',this.checked)"  hidden="hidden">
           </h3>
           <table border="0"  cellspacing="30" id="tablefolders" class="buttonstemplate" >
-            <tr>
+            <tr hidden="hidden">
               <td>
                 <b>Operating System:</b>
               </td>
@@ -467,7 +467,15 @@
                 &nbsp;
               </td>
               <td> <!-- /usr/local/bin/pandoc -->
-                <tt id="pandocCMD">pandoc</tt> <br>(select Command Executable/Binary for 'pandoc')
+                <marker id="PpandocCMD" >
+                  <tt id="pandocCMD">pandoc</tt>
+                  <input type="button" value="Edit" onclick="showEditPath('pandoc')">
+                </marker>
+                <marker id="PEDITpandocCMD"  hidden="hidden" >
+                  <input type="text" id="EDITpandocCMD" size="50" >
+                  <input type="button" value="OK" onclick="hideEditPath('pandoc')"><br/>
+                  (enter path for Executable/Binary  'pandoc')
+                </marker>
               </td>
             </tr>
             <tr>
@@ -479,7 +487,15 @@
                   &nbsp;
                 </td>
                 <td> <!-- /opt/local/bin/ -->
-                  <tt id="imagemagickCMD">convert</tt> <br>(select Command Executable/Binary for 'convert')
+                  <marker id="PimagemagickCMD" >
+                    <tt id="imagemagickCMD">convert</tt>
+                    <input type="button" value="Edit" onclick="showEditPath('imagemagick')">
+                  </marker>
+                  <marker id="PEDITimagemagickCMD"  hidden="hidden" >
+                    <input type="text" id="EDITimagemagickCMD" size="50" >
+                    <input type="button" value="OK" onclick="hideEditPath('imagemagick')"><br/>
+                    (enter path for ImageMagick Command 'convert')
+                  </marker>
                 </td>
               </tr>
               <tr>
@@ -535,6 +551,33 @@ function updateSoftware() {
     alert("Update of PanDocElectron was performed with GIT.\nPlease restart PanDocElectron");
   } else {
     alert("CANCEL: Updating Software was cancelled!");
+  };
+}
+
+function whichPath(pCommand,pDOM,pDefaultCommand) {
+  var vDefaultCommand = pDefaultCommand || pCommand;
+  var vNode = document.getElementById(pDOM);
+  if (vNode) {
+    const child = exec("which "+pCommand,
+     (error, stdout, stderr) => {
+       console.log(`stdout: ${stdout}`);
+       //alert(`stdout: ${stdout}`);
+       if (error !== null) {
+         console.log(`exec error: ${error}`);
+         //alert("Settings Error:\nCommand '"+pCommand+"' not found or no permission.\nPlease install '"+pCommand+"'!");
+         vNode.innerHTML = vDefaultCommand;
+       } else {
+         if (`${stdout}` != "") {
+           vNode.innerHTML = `${stdout}`;
+           console.log("'"+pCommand+"' was successful");
+         } else {
+           alert("Command '"+pCommand+"' is undefined!\nwhichPath():555 - index.html");
+           vNode.innerHTML = vDefaultCommand;
+           }
+       }
+    });
+  } else {
+    alert("DOM Node ["+pDOM+"] is undefined");
   };
 }
 
@@ -700,13 +743,15 @@ function setDefaultValues(pHashTPL) {
       write2innerHTML("pandocCMD",vWinOS + "PanDoc_Win" + vSep + "pandoc.exe");
       write2innerHTML("imagemagickCMD",vWinOS + "ImageMagick_Win" + vSep + "convert.exe");
       break;
-    case "1MacOSX":
-          //alert("MacOSX");
-
+    case "MacOSX":
+      //alert("MacOSX");
+      whichPath("pandoc","pandocCMD","/usr/local/bin/pandoc");
+      whichPath("convert","imagemagickCMD","/usr/local/bin/convert");
       break;
     case "Linux":
-          //alert("Linux");
-
+      //alert("Linux");
+      whichPath("pandoc","pandocCMD");
+      whichPath("convert","imagemagickCMD");
       break;
     default:
 

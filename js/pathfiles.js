@@ -36,10 +36,12 @@ function getPathFromFilename(pFilename) {
   return getPath4Filename(pFilename);
 }
 function getPath4Filename(pFilename) {
-  return pFilename.substr(0, pFilename.lastIndexOf('/'));
+  var vSep = getPathSeparator();
+  return pFilename.substr(0, pFilename.lastIndexOf(vSep));
 };
 function getNameExt4Filename(pFilename) {
-  return pFilename.substr(pFilename.lastIndexOf('/')+1,pFilename.length);
+  var vSep = getPathSeparator();
+  return pFilename.substr(pFilename.lastIndexOf(vSep)+1,pFilename.length);
 };
 function getName4Filename(pFilename) {
   return removeExtension(getNameExt4Filename(pFilename));

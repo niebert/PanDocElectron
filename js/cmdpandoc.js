@@ -12,6 +12,7 @@ function convertFile() {
   };
 };
 function runPandocShell(pHash) {
+  initShellScript(pHash);
   var vID = ["inputFORMAT","inputFILE","outputFILE","bibFILE","cslFILE","mathjaxDIR","revealDIR"];
   for (var i=0;i<vID.length;i++) {
     pHash[vID[i]] = getValueDOM(vID[i]);
@@ -26,7 +27,7 @@ function initShellScript(pHash) {
   var vPath = getPath4Filename(pHash["inputFILE"]);
   pHash['filename'] = vPath + "/callpandoc.sh";
   pHash['commands'] = "#!/bin/sh";
-  pHash['done'] = "0";
+  pHash['savefile'] = "N";
   if (getOperatingSystem() == "Windows") {
     pHash['filename'] = vPath + "\\callpandoc.bat";
     pHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
@@ -37,8 +38,20 @@ function saveShellScript(pShellHash) {
   //get ProjectPath if the path is defined
   var vFileName = pShellHash["filename"];
   //save script to filename in pShellHash
-  saveFile(vFileName,pShellHash["commands"]);
-  alert("PanDoc-Script: "+vFilename+" saved");
+  if (typeof vFilename === 'undefined' || !vFilename) {
+    var vPath = getPath4Filename(pHash["inputFILE"]);
+    pShellHash['filename'] = vPath + "/callpandoc.sh";
+    pShellHash['commands'] = "#!/bin/sh";
+    pShellHash["savefile"] = "Y";
+    if (getOperatingSystem() == "Windows") {
+      pShellHash['filename'] = vPath + "\\callpandoc.bat";
+      pShellHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
+    };
+  };
+  if (pShellHash["savefile"] != "N") {
+    saveFile(vFileName,pShellHash["commands"]);
+    alert("PanDoc-Script: "+vFilename+" saved");
+  }
 };
 
 function executePanDocCMD(pHash) {
@@ -70,6 +83,7 @@ function executePanDocCMD(pHash) {
       var vInputPDF = getInnerHTML("inputFILE");
       if (vInFORMAT == "pdf") {
         //alert("Input Format is PDF ");
+        pHash["savefile"] = "Y";
         convertPDF2PNG(vInputPDF,vCount,vShellHash);
       } else {
         var vMSG = "No PDF-Input:\n Please copy your slides into folder '/images' of your project";
