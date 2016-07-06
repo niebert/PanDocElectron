@@ -15,12 +15,19 @@ Electron is more or less a brower, that has full access to your filesystem. So E
 * MacOSX (see [section 6](http://niebert.github.io/PanDocElectron/index.html#SEC6))
 * Windows (see [section 7](http://niebert.github.io/PanDocElectron/index.html#SEC7))
 
-### Requirements for all Electron Applications ###
+### 1.1 Quickstart for Installation ###
+Packages for Linux, Windows can be downloaded from [Sourceforge PanDocElectron](https://sourceforge.net/projects/pandocelectron/files)
+On GitHub there is a limit for the binary file size, download is made available Sourceforge.
+Just unzip the zip-File and start <tt>PanDocElectron</tt>.
+
+For further Information see  [Quickstart Section 1.1](http://niebert.github.io/PanDocElectron/index.html#SECQuickStart))
+
+### 1.2 Requirements for all Electron Applications ###
 If you want to use Electron Applications in general (including PanDocElectron) it is necessary to install the following software packages:
 * `git` to download and update the sources of Electron Applications (see [http://git-scm.com/](http://git-scm.com/) for installing the software git)
 * `nodejs` and `npm` allows to install pre-build packages of Electron as a runtime environment and other packages e.g. Javascript libraries that allow reading and writing files to the filesystem in Electron.
 
-### Requirements for all PanDocElectron ###
+### 1.3 Requirements for all PanDocElectron ###
 PanDocElectron itself consists of
 * application `PanDocElectron` and additional packages (see section 2.1)
 * a `PanDoc` folder for `Documents` with necessary files to support certain output formats of pandoc. Due to limitation of file size on GitHub the templates
