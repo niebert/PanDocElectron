@@ -50,18 +50,52 @@
 <li>Windows (see <a href="#SEC7">section 7</a>)</li>
 </ul>
 
-Packages for Linux, Windows can be downloaded from <a href="https://sourceforge.net/projects/pandocelectron/files" target="_blank">Sourceforge PanDocElectron</a>.
-On GitHub there is a limit for the binary file size, download is made available Sourceforge.
+<h3 id="SECQuickStart">1.1 Software Download - Quickstart</h3>
 
-<h3>Install Script</h3>
-<b>Installation Scripts are available for </b>
+Please install for your Operating System the following 4 Packages (1.1.2 PanDoc is an absolute Requirements for PanDocElectron to work).
+<ul>
+  <li><b>1.1.1 PanDocElectron</b> (the Graphical User Interface for PanDoc)<br>
+    Packages for Linux, Windows can be downloaded from <a href="https://sourceforge.net/projects/pandocelectron/files" target="_blank">Sourceforge PanDocElectron</a>.
+    On GitHub there is a limit for the binary file size, download is made available Sourceforge.
+    Just unzip the zip-File and start <tt>PanDocElectron</tt>.
+  </li>
+  <li><b>1.1.2 PanDoc</b> (the core tool for converting documents)
+    <ul>
+      <li>PanDoc Linux (see <a href="#SEC5pandoc">section 5</a>) </li>
+      <li>PanDoc MacOSX (see <a href="#SEC6pandoc">section 6</a>) </li>
+      <li>PanDoc Windows (see <a href="#SEC7pandoc">section 7</a>)</li>
+    </ul>
+  </li>
+  <li><b>1.1.3ImageMagick</b> (needed PDF to audio comment presentation)
+    <ul>
+      <li>ImageMagick Linux (see <a href="#SEC5imagemagick">section 5</a>) </li>
+      <li>ImageMagick MacOSX (see <a href="#SEC6imagemagick">section 6</a>) </li>
+      <li>ImageMagick Windows (see <a href="#SEC7imagemagick">section 7</a>)</li>
+    </ul>
+  </li>
+  <li><b>1.1.4 LaTeX</b> (for LaTeX export and PDF output)
+    <ul>
+      <li>LaTeX Linux (see <a href="#SEC5latex">section 5</a>) </li>
+      <li>LaTeX MacOSX (see <a href="#SEC6latex">section 6</a>) </li>
+      <li>LaTeX Windows (see <a href="#SEC7latex">section 7</a>)</li>
+    </ul>
+  </li>
+  <li><b>1.1.5 Templates</b> Download <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">Support Files and Templates</a>
+  for all Operating Systems and unzip the folder into your folder <tt>Documents/PanDoc</tt>
+</ul>
+
+
+<h3>1.2 Install Script</h3>
+<b>Installation Scripts install PanDocElectron with all packages for developing PanDocElectron. You can run PanDocElectron
+  and you can change the layout and options of the application according to your requirements.
+  Installation scripts are available for following operating systems</b>
 <ul>
 <li><b>Linux:</b> Install Script  <a href="install/install_linux.sh" target="_blank">Linux - Debian/Ubuntu/Mint</a></li>
 <li><b>MacOSX:</b> Install Script <a href="install/install_mac.sh" target="_blank">MacOSX - Apple Mac</a></li>
 </ul>
 Run script in your Documents folders (open Terminal). Scripts will download PanDoc templates and PanDocElectron.
 
-<h3>Requirements for Electron Installation</h3>
+<h3>1.3 General Requirements for Electron Applications</h3>
 <p>If you want to use Electron Applications in general (including PanDocElectron) it is necessary to install the following software packages:</p>
 
 <ul>
@@ -165,7 +199,8 @@ To avoid overwriting the files with the same file extensions (e.g. `html`), defa
 
 <h2 id="SEC5">
 <a id="5-linux---electron-framework" class="anchor" href="#5-linux---electron-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5 Linux - Electron Framework</h2>
-
+This section describes the installation of the electron developing environment for PanDocElectron.
+If you just want to use the software, follow the <a href="#SECQuickStart">Guide</a>.
 <h3>
 <a id="51-install-git" class="anchor" href="#51-install-git" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.1 Install GIT</h3>
 
@@ -230,6 +265,7 @@ To avoid overwriting the files with the same file extensions (e.g. `html`), defa
 <p><code>git clone https://github.com/niebert/PanDoc.git</code></p>
 </blockquote>
 
+When git is not installed, you can download
 <h3>
 <a id="55-install-build-essentials-on-linux" class="anchor" href="#55-install-build-essentials-on-linux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.5 Install Build essentials on Linux</h3>
 
@@ -256,7 +292,7 @@ To avoid overwriting the files with the same file extensions (e.g. `html`), defa
 
 </blockquote>
 
-<h3>
+<h3 id="SEC5latex">
 <a id="57-install-latex" class="anchor" href="#57-install-latex" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.7 Install LaTeX</h3>
 
 <p>LaTeX is needed to convert the Documents.</p>
@@ -285,7 +321,7 @@ To avoid overwriting the files with the same file extensions (e.g. `html`), defa
 </li>
 </ul>
 
-<h3>
+<h3 id="SEC5imagemagick">
 <a id="58-install-imagemagick-on-linux" class="anchor" href="#58-install-imagemagick-on-linux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.8 Install ImageMagick on Linux</h3>
 
 <p>ImageMagick is needed to convert the PDF documents into PNG files as slides.</p>
@@ -331,7 +367,7 @@ To avoid overwriting the files with the same file extensions (e.g. `html`), defa
 <p><code>npm install &amp;&amp; npm start</code></p>
 </blockquote>
 
-<h3>
+<h3 id="SEC5pandoc">
 <a id="510-install-pandoc-on-linux" class="anchor" href="#510-install-pandoc-on-linux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.10 Install PanDoc on Linux</h3>
 
 <p>The main package used by PanDocElectron is PanDoc itself</p>
@@ -353,7 +389,10 @@ Download and install from  the following website:</p>
 
 <h2 id="SEC6">
 <a id="6-macosx---electron-framework" class="anchor" href="#6-macosx---electron-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6 MacOSX - Electron Framework</h2>
-<p>The following command assumes, that <a href="http://brew.sh" target="_blank">HomeBrew</a> to be installed on your MacOSX. If not please follow the <a href="http://brew.sh" target="_blank">HomeBrew installation guide</a></p>
+<p>This section describes the installation of the electron developing environment for PanDocElectron.
+If you just want to use the software, follow the <a href="#SECQuickStart">Guide</a>.
+
+The following command assumes, that <a href="http://brew.sh" target="_blank">HomeBrew</a> to be installed on your MacOSX. If not please follow the <a href="http://brew.sh" target="_blank">HomeBrew installation guide</a></p>
 <h3>
 <a id="61-install-git-on-macosx" class="anchor" href="#61-install-git-on-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6.1 Install GIT on MacOSX</h3>
 
@@ -430,7 +469,7 @@ Download and install from  the following website:</p>
 <p><code>npm install &amp;&amp; npm start</code></p>
 </blockquote>
 
-<h3>
+<h3 id="SEC6imagemagick">
 <a id="66-install-imagemagick-on-macosx" class="anchor" href="#66-install-imagemagick-on-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6.6 Install ImageMagick on MacOSX</h3>
 
 <p>ImageMagick is needed to convert the PDF documents into PNG files as slides.</p>
@@ -439,7 +478,7 @@ Download and install from  the following website:</p>
 <p><code>brew install imagemagick imagemagick-doc</code></p>
 </blockquote>
 
-<h3>
+<h3 id="SEC6latex">
 <a id="67-install-latex-on-macosx" class="anchor" href="#67-install-latex-on-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6.7 Install LaTeX on MacOSX</h3>
 
 <p>LaTeX is needed to convert the Documents.</p>
@@ -449,7 +488,7 @@ Download and install from  the following website:</p>
 </li>
 </ul>
 
-<h3>
+<h3 id="SEC6pandoc">
 <a id="68-install-pandoc-on-linux" class="anchor" href="#68-install-pandoc-on-linux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6.8 Install PanDoc on Linux</h3>
 
 <p>The main package used by PanDocElectron is PanDoc itself</p>
@@ -458,7 +497,7 @@ Download and install from  the following website:</p>
 <p><code>brew install pandoc</code></p>
 </blockquote>
 
-<h3>
+<h3 id="SEC6pandoc">
 <a id="69-optional-install-atom-editor-to-modify-the-pandocelectron" class="anchor" href="#69-optional-install-atom-editor-to-modify-the-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6.9 Optional: Install Atom Editor to Modify the PanDocElectron</h3>
 
 <p>PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
@@ -492,7 +531,8 @@ Download and install from  the following website:</p>
 
 <h2 id="SEC7">
 <a id="7-pandocelectron-on-windows" class="anchor" href="#7-pandocelectron-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>7 PanDocElectron on Windows</h2>
-
+This section describes the installation of the electron developing environment for PanDocElectron.
+If you just want to use the software, follow the <a href="#SECQuickStart">Guide</a>.
 <h3>
 <a id="71-install-git-on-windows" class="anchor" href="#71-install-git-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>7.1 Install GIT on Windows</h3>
 
@@ -569,17 +609,21 @@ When git is installed on your operting system, you can download PanDocElectron w
 <p><code>$ npm install &amp;&amp; npm start</code></p>
 </blockquote>
 
-<h3>
+<h3 id="SEC7imagemagick">
 <a id="76-install-imagemagick-on-windows" class="anchor" href="#76-install-imagemagick-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>7.6 Install ImageMagick on Windows</h3>
 
 <p>ImageMagick is needed to convert the PDF documents into PNG files as slides.</p>
 
 <ul>
-<li>Installation Binaries for ImageMagick are available on <a href="http://www.imagemagick.org/script/binary-releases.php">ImageMagick.org</a>
-</li>
+  <li>
+    Download <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">PanDoc Support Files and Templates</a>
+    and unzip the folder in your Documents/PanDoc Folder. The zip-file contains the binaries of PanDoc and ImageMagick for Windows.
+  </li>
+  <li>or (Aternative) Installation Binaries for ImageMagick are available on <a href="http://www.imagemagick.org/script/binary-releases.php">ImageMagick.org</a>
+  </li>
 </ul>
 
-<h3>
+<h3 id="SEC7latex">
 <a id="77-install-latex-on-windows" class="anchor" href="#77-install-latex-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>7.7 Install LaTeX on Windows</h3>
 
 <p>LaTeX is needed to convert the Documents.</p>
@@ -589,13 +633,17 @@ When git is installed on your operting system, you can download PanDocElectron w
 </li>
 </ul>
 
-<h3>
+<h3 id="SEC7pandoc">
 <a id="78-install-pandoc-on-windows" class="anchor" href="#78-install-pandoc-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>7.8 Install PanDoc on Windows</h3>
 
 <p>The main package used by PanDocElectron is PanDoc itself</p>
 
 <ul>
-<li><a href="http://pandoc.org/installing.html#windows">http://pandoc.org/installing.html</a></li>
+  <li>
+    Download <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">PanDoc Support Files and Templates</a>
+    and unzip the folder in your Documents/PanDoc Folder. The zip-file contains the binaries of PanDoc and ImageMagick for Windows.
+  </li>
+  <li>or Alternative <a href="http://pandoc.org/installing.html#windows">http://pandoc.org/installing.html</a></li>
 </ul>
 
 <h3>
