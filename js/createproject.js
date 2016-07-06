@@ -1,13 +1,14 @@
 
 function downloadInputFile(pPath) {
   //alert("Download Input File and Convert Source File to MarkDown");
+  var vPandoc_CMD = getValueDOM("pandocCMD");
   var vSep = getPathSeparator();
   var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
   makedirpath(vPath);
   makeProjectDirs(vPath); //audio, video, config, images
   //alert("URL: "+getValueDOM("inputURL")+"\nDownload File: "+getValueDOM("downloadWebFILE")+"\nWeb Project: "+getValueDOM("inputWEBPROJECT"));
 
-  var vCommand ="pandoc -s -r html "+getValueDOM("inputURL")+" -o "+getValueDOM("downloadWebFILE");
+  var vCommand = vPandoc_CMD + " -s -r html "+getValueDOM("inputURL")+" -o "+getValueDOM("downloadWebFILE");
   console.log(vCommand);
   var vAnswer = true;
   if (checkFileExists(getValueDOM("downloadWebFILE"))) {

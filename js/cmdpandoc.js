@@ -39,7 +39,7 @@ function saveShellScript(pShellHash) {
   var vFileName = pShellHash["filename"];
   //save script to filename in pShellHash
   if (typeof vFilename === 'undefined' || !vFilename) {
-    var vPath = getPath4Filename(pHash["inputFILE"]);
+    var vPath = getPath4Filename(pShellHash["inputFILE"]);
     pShellHash['filename'] = vPath + "/callpandoc.sh";
     pShellHash['commands'] = "#!/bin/sh";
     pShellHash["savefile"] = "Y";
