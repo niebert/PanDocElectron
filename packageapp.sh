@@ -1,7 +1,14 @@
+#!/bin/sh
 AppName="PanDocElectron"
+
+echo "Delete previous Release of ${AppName} "
+sudo rm -R releases/*
+
+electron-packager-interactive
+
 vReleasDir="releases/"
 vVersion=""
-cd "${vReleasDir}"
+d "${vReleasDir}"
 
 rm -R "${AppName}-mas-x64"
 
@@ -9,9 +16,9 @@ vArchOld="x64"
 vArchNew="64Bit"
 vOSOld="darwin"
 vOSNew="MacOSX"
-mv "${AppName}-${vOSOld}-${vArchOld}" "${AppName}-${vOSNew}-${vArchNew}${vVersion}"
+cmv "${AppName}-${vOSOld}-${vArchOld}" "${AppName}-${vOSNew}-${vArchNew}${vVersion}"
 zip -r "${AppName}-${vOSNew}-${vArchNew}${vVersion}.zip" "${AppName}-${vOSNew}-${vArchNew}${vVersion}"
-sudo rm -R "${AppName}-${vOSNew}-${vArchNew}${vVersion}"
+# sudo rm -R "${AppName}-${vOSNew}-${vArchNew}${vVersion}"
 
 vOSOld="win32"
 vOSNew="Win32"
