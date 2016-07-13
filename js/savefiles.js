@@ -8,11 +8,13 @@ function copyFile(pSource,pDestination) {
   } else {
     //var fs = require('fs');
     //fs.createReadStream(pSource).pipe(fs.createWriteStream(pDestination));
-    var vCommand = "cp "+pSource+" "+pDestination;
+    var vCommand = "cp";
     if (getOperatingSystem() == "Windows") {
       var vCommand = "copy "+pSource+" "+pDestination;
-    }
-    runShellCommand(vCommand,{});
+    };
+    var vParams=[pSource,pDestination];
+    execFileCommand(vCommand,vParams);
+    console.log("execFile: "+vCommand+" "+vParams.join(" "));
   };
 };
 function saveEditorContent(pFilename) {

@@ -32,25 +32,34 @@ function initShellScript(pHash) {
     pHash['filename'] = vPath + "\\callpandoc.bat";
     pHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
   };
+  pHash["executeable"] = "";
+  pHash["paramarray"] = [];
 };
 
 function saveShellScript(pShellHash) {
   //get ProjectPath if the path is defined
   var vFileName = pShellHash["filename"];
   //save script to filename in pShellHash
+  //alert("COMMANDS:\n"+pShellHash["commands"]);
   if (typeof vFilename === 'undefined' || !vFilename) {
     var vPath = getPath4Filename(pShellHash["inputFILE"]);
     pShellHash['filename'] = vPath + "/callpandoc.sh";
-    pShellHash['commands'] = "#!/bin/sh";
     pShellHash["savefile"] = "Y";
     if (getOperatingSystem() == "Windows") {
       pShellHash['filename'] = vPath + "\\callpandoc.bat";
-      pShellHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
     };
+    vFileName = pShellHash["filename"];
+  };
+  if (!(pShellHash["commands"])) {
+    alert("pShellHash[commands] were undefined!");
+    pShellHash['commands'] = "#!/bin/sh";
+    if (getOperatingSystem() == "Windows") {
+      pShellHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
+    }
   };
   if (pShellHash["savefile"] != "N") {
     saveFile(vFileName,pShellHash["commands"]);
-    alert("PanDoc-Script: "+vFilename+" saved");
+    alert("PanDoc-Script: "+vFileName+" saved");
   }
 };
 
@@ -58,9 +67,17 @@ function executePanDocCMD(pHash) {
   initShellScript(pHash);
   var vShellHash = pHash;
   var vPandoc_CMD = getValueDOM("pandocCMD");
+  vPandoc_CMD = replaceString(vPandoc_CMD,"\n","");
   var vInFORMAT  = pHash["inputFORMAT"];
   var vOutFORMAT = pHash["outputFORMAT"];
   var vPanOutFORMAT = pHash["pandocOUTFORMAT"];
+  if ((vOutFORMAT != "pdf") && (vOutFORMAT != "audioslides")){
+    pHash["savefile"] = "Y";
+    pushArgsCMD(pHash,"-f");
+    pushArgsCMD(pHash,vInFORMAT+vInputFilter);
+    pushArgsCMD(pHash,"-t");
+    pushArgsCMD(pHash,vPanOutFORMAT);
+  };
   var vInputFilter = "";
   var vAdditionParams = "";
   if (document.getElementById("inputFILTERUSE").checked) {
@@ -76,6 +93,7 @@ function executePanDocCMD(pHash) {
   vCMD_post += getBibCMD(pHash);
   vCMD_post += getTitleAuthorCMD(pHash);
   vCMD += vCMD_post;
+  pHash["executeable"] = vPandoc_CMD;
   switch (vOutFORMAT) {
     case "audioslides":
       //-----CONVERT AUDIOSLIDES-------
@@ -84,7 +102,7 @@ function executePanDocCMD(pHash) {
       if (vInFORMAT == "pdf") {
         //alert("Input Format is PDF ");
         pHash["savefile"] = "Y";
-        convertPDF2PNG(vInputPDF,vCount,vShellHash);
+        convertPDF2PNG(vInputPDF,vCount,pHash);
       } else {
         var vMSG = "No PDF-Input:\n Please copy your slides into folder '/images' of your project";
         vMSG += "\n(e.g. img0.png for title slide img1.png for first slide,...)";
@@ -95,7 +113,7 @@ function executePanDocCMD(pHash) {
       createImageSlide(pHash["outputFILE"],vCount,pHash["template"]);
     break;
     case "latex":
-      runShellCommand(vCMD);
+      runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
@@ -103,27 +121,37 @@ function executePanDocCMD(pHash) {
       var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
       var vSep = getPathSeparator();
       copyFile(pHash["reference"],vProjectDir+vSep+"pandoc.css");
-      vCMD += " -s -S --toc  -c pandoc.css";
+      pushArgsCMD(pHash,"-s");
+      pushArgsCMD(pHash,"-S");
+      pushArgsCMD(pHash,"-c");
+      pushArgsCMD(pHash,"pandoc.css");
+      vCMD += " -s -S -c pandoc.css";
       runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
-    case "odt":
-       vCMD += " -S --reference-odt "+pHash["reference"];
+    case "pdf":
+       vCMD = vCMD_pre + " --latex-engine=xelatex " + vCMD_post;
        //vCMD += " --template=\""+pHash["template"]+"\"";
        runShellCommand(vCMD,vShellHash);
        console.log(vCMD);
        alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
      break;
-     case "pdf":
-        vCMD = vCMD_pre + " --latex-engine=xelatex " + vCMD_post;
-        //vCMD += " --template=\""+pHash["template"]+"\"";
-        runShellCommand(vCMD,vShellHash);
-        console.log(vCMD);
-        alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
-      break;
-     case "odt2col":
+    case "odt":
+       vCMD += " -S --reference-odt "+pHash["reference"];
+       pushArgsCMD(pHash,"-S");
+       pushArgsCMD(pHash,"--reference-odt");
+       pushArgsCMD(pHash,pHash["reference"]);
+       //vCMD += " --template=\""+pHash["template"]+"\"";
+       runShellCommand(vCMD,vShellHash);
+       console.log(vCMD);
+       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
+     break;
+   case "odt2col":
       vCMD += " -S --reference-odt "+pHash["reference"]
+      pushArgsCMD(pHash,"-S");
+      pushArgsCMD(pHash,"--reference-odt");
+      pushArgsCMD(pHash,pHash["reference"]);
       //vCMD += " --template=\""+pHash["template"]+"\"";
       runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
@@ -131,6 +159,9 @@ function executePanDocCMD(pHash) {
     break;
     case "docx":
       vCMD += " -S --reference-docx "+pHash["reference"];
+      pushArgsCMD(pHash,"-S");
+      pushArgsCMD(pHash,"--reference-docx");
+      pushArgsCMD(pHash,pHash["reference"]);
       //vCMD += " --template=\""+pHash["template"]+"\"";
       runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
@@ -138,6 +169,9 @@ function executePanDocCMD(pHash) {
     break;
     case "docx2col":
       vCMD += " -S --reference-docx "+pHash["reference"];
+      pushArgsCMD(pHash,"-S");
+      pushArgsCMD(pHash,"--reference-docx");
+      pushArgsCMD(pHash,pHash["reference"]);
       //vCMD += " --template=\""+pHash["template"]+"\"";
       runShellCommand(vCMD,vShellHash);
       console.log(vCMD);
@@ -149,6 +183,9 @@ function executePanDocCMD(pHash) {
       console.log("getRevealCMD() finished");
       vCMD += " --standalone --section-divs";
       vCMD += " --template=\""+pHash["template"]+"\"";
+      pushArgsCMD(pHash,"--standalone");
+      pushArgsCMD(pHash,"--section-divs");
+      pushArgsCMD(pHash,"--template=\""+pHash["template"]+"\"");
       //saveFile()
       console.log("Start PanDoc REVEAL");
       runShellCommand(vCMD,vShellHash);
@@ -182,11 +219,27 @@ function getTitleAuthorCMD(pHash) {
   //vAuthor = replaceString(vAuthor,"\"","''");
   if (vTitle != "") {
     vReturn += "  --variable title=\""+vTitle+"\"";
+    //pushArgsCMD(pHash,"--variable");
+    pushVariableCMD(pHash,"title=\""+vTitle+"\"");
   };
   if (vAuthor != "") {
     vReturn += "  --variable author=\""+vAuthor+"\"";
+    //pushArgsCMD(pHash,"--variable");
+    pushVariableCMD(pHash,"author=\""+vAuthor+"\"");
   }
   return vReturn;
+};
+
+function pushArgsCMD(pHash,pParam) {
+  if (typeof(pHash["paramarray"]) == "undefined") {
+    pHash["paramarray"] = [];
+  };
+  pHash["paramarray"].push(pParam);
+};
+
+function pushVariableCMD(pHash,pVarContent) {
+  pushArgsCMD(pHash,"--variable");
+  pushArgsCMD(pHash,pVarContent);
 };
 
 function getMathJaxCMD(pHash) {
@@ -200,6 +253,8 @@ function getMathJaxCMD(pHash) {
   };
   pHash["mathjaxCMD"] = mathjaxDIR;
   //vReturn += "  --variable mathjax-url= "+mathjaxDIR;
+  pushArgsCMD(pHash,"--mathjax");
+  pushVariableCMD(pHash,"mathjaxpath=\""+mathjaxDIR+"\"");
   return "  --mathjax  --variable mathjaxpath=\""+mathjaxDIR+"\"";
   //return "  --mathjax";
 };
@@ -213,9 +268,11 @@ function getRevealCMD(pHash) {
   } else {
     revealDIR = "http://lab.hakim.se/reveal-js";
   };
-  vReturn += "  --variable revealpath="+revealDIR;
-  vReturn += "  --variable theme="+getValueDOM("themeREVEAL");
   pHash["revealCMD"] = revealDIR;
+  pushVariableCMD(pHash,"mathjaxpath=\""+revealDIR+"\"");
+  pushVariableCMD(pHash,"theme="+getValueDOM("themeREVEAL"));
+  vReturn += "  --variable revealpath=\""+revealDIR+"\"";
+  vReturn += "  --variable theme="+getValueDOM("themeREVEAL");
   return vReturn;
 };
 
@@ -228,11 +285,16 @@ function getBibCMD(pHash) {
   if (bibFILE != "") {
     if (pHash["outputFORMAT"] == "latex") {
       vReturn += " --natbib"
+      pushArgsCMD(pHash,"--natbib");
     };
     bibFILE = getRelativePath(vInputDir,bibFILE);
     vReturn += "  --bibliography  "+bibFILE;
+    pushArgsCMD(pHash,"--bibliography");
+    pushArgsCMD(pHash,""+bibFILE+"");
     if (cslFILE != "") {
       cslFILE = getRelativePath(vInputDir,cslFILE);
+      pushArgsCMD(pHash,"--csl");
+      pushArgsCMD(pHash,""+cslFILE+"");
       vReturn += "  --csl "+cslFILE;
     };
   } else {
@@ -345,6 +407,7 @@ function createImageSlide(pOutFile,pCount,pTemplate) {
   saveFile(getInnerHTML("outputFILE"),vPresentation);
   alert("Convert Finished:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,..." );
 };
+
 function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
   var vExt = getExtensionOfFilename(pInputPDF);
   vExt = vExt.toUpperCase();
@@ -359,6 +422,7 @@ function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
     alert("Remark: Converting all slides could take up to "+pCount+" minutes!");
     console.log("convertPDF2PNG(pInputPDF,"+pCount+")");
     var vIM_CMD = getValueDOM("imagemagickCMD");
+    vIM_CMD = replaceString(vIM_CMD,"\n","");
     var vCount = parseInt(pCount);
     while ((i<vCount) && (i < 200)) {
       vOutPNG = vPath +i+".png";
@@ -368,6 +432,8 @@ function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
       //alert("Create Image "+i+" from PDF");
       // convert -density 300 -depth 8 -quality 85 ${FilePDF}[${COUNTER}] outtmp.png
       var vCMD = vIM_CMD+" -density 300 -depth 8 -quality 85 "+pInputPDF+"["+i+"] " + vOutPNG;
+      pShellHash["executeable"] = vIM_CMD;
+      pShellHash["paramarray"] = ["-density","300", "-depth","8", "-quality","85", pInputPDF+"["+i+"]", vOutPNG];
       //alert(vCMD);
       runShellCommand(vCMD,pShellHash);
     };

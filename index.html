@@ -19,10 +19,13 @@
     <script src="js/writedom.js"></script>
     <script src="js/ioformat.js"></script>
     <script src="js/opsysdetect.js"></script>
+    <script src="js/execspawn.js"></script>
     <script src="js/cmdpandoc.js"></script>
+    <script src="js/marked.js"></script>
     <script>
       const fs    = require('fs');
       const exec = require('child_process').exec;
+      const spawn = require('child_process').spawn;
       const child = require('child_process').execFile;
       const shell = require('electron').shell;
       //const remote  = require('remote');
@@ -544,85 +547,6 @@
 //var dialog = remote.dialog;
 
 
-function updateSoftware() {
-  vAnswer = confirm("Do want to update PanDocElectron with GIT!");
-  if (vAnswer) {
-    //runShellCommand("cd \""+__dirname+"\"; git update");
-    alert("Update of PanDocElectron was performed with GIT.\nPlease restart PanDocElectron");
-  } else {
-    alert("CANCEL: Updating Software was cancelled!");
-  };
-}
-
-function whichPath(pCommand,pDOM,pDefaultCommand) {
-  var vDefaultCommand = pDefaultCommand || pCommand;
-  var vNode = document.getElementById(pDOM);
-  if (vNode) {
-    const child = exec("which "+pCommand,
-     (error, stdout, stderr) => {
-       console.log(`stdout: ${stdout}`);
-       //alert(`stdout: ${stdout}`);
-       if (error !== null) {
-         console.log(`exec error: ${error}`);
-         //alert("Settings Error:\nCommand '"+pCommand+"' not found or no permission.\nPlease install '"+pCommand+"'!");
-         vNode.innerHTML = vDefaultCommand;
-       } else {
-         if (`${stdout}` != "") {
-           vNode.innerHTML = `${stdout}`;
-           console.log("'"+pCommand+"' was successful");
-         } else {
-           alert("Command '"+pCommand+"' is undefined!\nwhichPath():555 - index.html");
-           vNode.innerHTML = vDefaultCommand;
-           }
-       }
-    });
-  } else {
-    alert("DOM Node ["+pDOM+"] is undefined");
-  };
-}
-
-function runShellCommand (pCommand,pShellHash) {
-  //pCommand="ls -a";
-  if (pShellHash) {
-    pShellHash["savefile"] += "Y";
-    pShellHash["commands"] +="\n"+pCommand;
-  } else {
-    alert("pShellHash undefined for ''"+ pCommand+"'");
-  };
-  console.log("runShellCommand: "+ pCommand);
-  const child = exec(pCommand,
-   (error, stdout, stderr) => {
-     console.log(`stdout: ${stdout}`);
-     //alert(`stdout: ${stdout}`);
-     if (error !== null) {
-       console.log(`exec error: ${error}`);
-     } else {
-       console.log("'"+pCommand+"' was successful");
-     }
- });
-}
-
-function X_runShellCommand(pCommand) {
-    var vExecutable = pCommand.substr(0,pCommand.indexOf(" "));
-    var vParameters = pCommand.substr(pCommand.indexOf(" "),pCommand.length);
-    //alert("vExecutable="+vExecutable+"\nParameters="+vParameters);
-    execFileCommand(vExecutable,vParameters);
-    //execFileCommand("sh","rename_release.sh");
-};
-
-function execFileCommand(pExecutable,pParameters) {
-  var child = require('child_process').execFile;
-  //var executablePath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
-  var executablePath = pExecutable;
-  //var parameters = ["--incognito"];
-  var parameters = [pParameters];
-
-  child(executablePath, parameters, function(err, data) {
-      console.log(err)
-      console.log(data.toString());
-    });
-}
-
 function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButtonTitle,pTPL) {
   var vReplaceHash = {};
   vReplaceHash["FOLDERID"]    = pFolderID;
@@ -811,7 +735,6 @@ vHashTPL={};
 vHashTPL["mainDIR"] = vPandocDocs;
 
 setDefaultValues(vHashTPL);
-
 </script>
 <script src="js/configfile.js"></script>
 <script src="js/createproject.js"></script>

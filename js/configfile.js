@@ -1,13 +1,17 @@
+function getDefaultConfig() {
+  return getInnerHTML("projectmainDIR")+"/"+"default.cfg"
+};
+
 function loadConfig(pConfigFile) {
-  var vConfigFile = pConfigFile || "default.cfg";
+  var vConfigFile = pConfigFile || getDefaultConfig();
   // simnply load config file into the innerHTML of DIV node 'divconfig'
-  fs.readFile("." +'/node_modules/'+vConfigFile, 'utf-8', function (err, data) {
+  fs.readFile(vConfigFile, 'utf-8', function (err, data) {
     // Throw Error if file does not exist
     if (err) {
-      alert("ERROR: '/node_modules/"+vConfigFile+"' open file was not successful!\n(e.g. File does not exist)");
+      alert("ERROR: '"+vConfigFile+"' open file was not successful!\n(e.g. File does not exist)");
     } else {
       write2innerHTML("divconfig", data);
-      console.log('Config File \''+vConfigFile+' loaded!');
+      console.log('Config File \''+vConfigFile+'\' loaded!');
       write2value("inputFORMAT",getInnerHTML("selectInputFORMAT"));
       write2value("outputFORMAT",getInnerHTML("selectOutputFORMAT"));
     };
@@ -15,15 +19,15 @@ function loadConfig(pConfigFile) {
 }
 
 function saveConfig (pConfigFile) {
-  var vConfigFile = pConfigFile || "default.cfg";
+  var vConfigFile = pConfigFile || getDefaultConfig();
   // simnply write the innerHTML of DIV node 'divconfig' into file
   write2innerHTML("selectInputFORMAT",getValueDOM("inputFORMAT"));
   write2innerHTML("selectOutputFORMAT",getValueDOM("outputFORMAT"));
   var vContent=document.getElementById("divconfig").innerHTML;
-  fs.writeFile("." + '/node_modules/'+vConfigFile, vContent, (err) => {
+  fs.writeFile(vConfigFile, vContent, (err) => {
   //fs.writeFile(vConfigFile, vContent, (err) => {
    if (err) throw err;
-   console.log('Config File \''+pConfigFile+'\' saved!');
+   console.log('Config File \''+vConfigFile+'\' saved!');
  });
 }
 
