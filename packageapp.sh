@@ -1,14 +1,15 @@
 #!/bin/sh
 AppName="PanDocElectron"
 
+vReleasDir="releases/"
 echo "Delete previous Release of ${AppName} "
-sudo rm -R releases/*
-
+sudo rm -R "${vReleasDir}*"
+mkdir "${vReleasDir}"
 electron-packager-interactive
 
-vReleasDir="releases/"
+# vVersion="_0_9_2"
 vVersion=""
-d "${vReleasDir}"
+cd  "${vReleasDir}"
 
 rm -R "${AppName}-mas-x64"
 

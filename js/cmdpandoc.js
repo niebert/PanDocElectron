@@ -34,15 +34,18 @@ function initShellScript(pHash) {
   };
   pHash["executeable"] = "";
   pHash["paramarray"] = [];
+  pHash['commands'] += "\ncd "+vPath;
 };
 
 function saveShellScript(pShellHash) {
   //get ProjectPath if the path is defined
+  var vPath = getPath4Filename(pShellHash["inputFILE"]);
+  //vFileName is the filename of the shell script "cmdpandoc.sh" that will
+  // be created in addition to executing the pandoc and image magick commands.
   var vFileName = pShellHash["filename"];
   //save script to filename in pShellHash
   //alert("COMMANDS:\n"+pShellHash["commands"]);
   if (typeof vFilename === 'undefined' || !vFilename) {
-    var vPath = getPath4Filename(pShellHash["inputFILE"]);
     pShellHash['filename'] = vPath + "/callpandoc.sh";
     pShellHash["savefile"] = "Y";
     if (getOperatingSystem() == "Windows") {
@@ -55,7 +58,8 @@ function saveShellScript(pShellHash) {
     pShellHash['commands'] = "#!/bin/sh";
     if (getOperatingSystem() == "Windows") {
       pShellHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
-    }
+    };
+    pShellHash['commands'] += "\ncd "+vPath;
   };
   if (pShellHash["savefile"] != "N") {
     saveFile(vFileName,pShellHash["commands"]);
@@ -64,7 +68,17 @@ function saveShellScript(pShellHash) {
 };
 
 function executePanDocCMD(pHash) {
+  var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
+  process.chdir(vProjectDir);
   initShellScript(pHash);
+  var vInputFilter = "";
+  var vAdditionParams = "";
+  if (document.getElementById("inputFILTERUSE").checked) {
+    vInputFilter = getValueDOM("inputFILTER");
+  };
+  if (document.getElementById("inputPARAMSUSE").checked) {
+    vAdditionParams = " "+getValueDOM("inputPARAMS")+" " || " ";
+  };
   var vShellHash = pHash;
   var vPandoc_CMD = getValueDOM("pandocCMD");
   vPandoc_CMD = replaceString(vPandoc_CMD,"\n","");
@@ -77,14 +91,6 @@ function executePanDocCMD(pHash) {
     pushArgsCMD(pHash,vInFORMAT+vInputFilter);
     pushArgsCMD(pHash,"-t");
     pushArgsCMD(pHash,vPanOutFORMAT);
-  };
-  var vInputFilter = "";
-  var vAdditionParams = "";
-  if (document.getElementById("inputFILTERUSE").checked) {
-    vInputFilter = document.getElementById("inputFILTER").value;
-  };
-  if (document.getElementById("inputPARAMSUSE").checked) {
-    vAdditionParams = " "+document.getElementById("inputPARAMS").value+" ";
   };
   var vCMD_pre = vPandoc_CMD+" -f "+vInFORMAT+vInputFilter;
   var vCMD = vPandoc_CMD+" -f "+vInFORMAT+vInputFilter+" -t "+vPanOutFORMAT;
@@ -118,7 +124,6 @@ function executePanDocCMD(pHash) {
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
     case "html":
-      var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
       var vSep = getPathSeparator();
       copyFile(pHash["reference"],vProjectDir+vSep+"pandoc.css");
       pushArgsCMD(pHash,"-s");
@@ -206,6 +211,7 @@ function executePanDocCMD(pHash) {
       //alert("Perform PanDoc Default")
       //alert("pandoc -f "+vInFORMAT+" -t "+vPanOutFORMAT);
   };
+  process.chdir(getInnerHTML('currentworkingDIR'));
   saveShellScript(vShellHash);
 };
 

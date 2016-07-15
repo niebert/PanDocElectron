@@ -1,6 +1,7 @@
 AppName="PanDocElectron"
 vReleasDir="releases/"
 vVersion=""
+mkdir "${vReleasDir}"
 cd "${vReleasDir}"
 
 rm -R "${AppName}-mas-x64"
