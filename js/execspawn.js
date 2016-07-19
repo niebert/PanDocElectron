@@ -35,7 +35,40 @@ function whichPath(pCommand,pDOM,pDefaultCommand) {
   };
 }
 
-function X_runShellCommand (pCommand,pShellHash) {
+function callPandoc (pShellHash) {
+};
+
+function X_callPandoc (pShellHash) {
+  const exec = require('child_process').exec;
+  var vShellCMD = "/bin/sh ";
+  //vShellCMD = "";
+  if (getOperatingSystem() == "Windows") {
+    vShellCMD = "";
+  };
+  exec(pShellHash['filename'], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    };
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+  });
+
+}
+
+function execCommand (pCommand) {
+  const exec = require('child_process').exec;
+  exec(pCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    };
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+  });
+}
+
+function runShellCommand (pCommand,pShellHash) {
   //pCommand="ls -a";
   if (pShellHash) {
     pShellHash["savefile"] += "Y";
@@ -56,7 +89,7 @@ function X_runShellCommand (pCommand,pShellHash) {
  });
 }
 
-function runShellCommand(pCommand,pShellHash) {
+function X_runShellCommand(pCommand,pShellHash) {
   if (pShellHash) {
     pShellHash["savefile"] = "Y";
     pShellHash["commands"] +="\n"+pCommand;
@@ -66,11 +99,14 @@ function runShellCommand(pCommand,pShellHash) {
   };
   if (pShellHash["executeable"]) {
     if (pShellHash["paramarray"]) {
+      console.log("Execute with Parameters "+pShellHash["executeable"]);
       execFileCommand(pShellHash["executeable"],pShellHash["paramarray"]);
     } else {
+      console.log("Execute with Parameters "+pShellHash["executeable"]);
       execFileCommand(pShellHash["executeable"],[]);
     }
   } else {
+    console.log("Execute SPLIT Parameters "+pShellHash["executeable"]);
     var vExecutable = pCommand.substr(0,pCommand.indexOf(" "));
     var vParameters = pCommand.substr(pCommand.indexOf(" "),pCommand.length);
     //alert("vExecutable="+vExecutable+"\nParameters="+vParameters);

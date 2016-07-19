@@ -100,6 +100,7 @@
                   <option value="textile">Textile</option>
                   <option value="t2t">Txt2Tags</option>
                 </select>
+                <!-- <input type="checkbox" id="checkOPENCONVERTED" /> Open Converted File -->
                 <button class="bluebutton" id="convertFILE"  onclick="convertFile();" >Convert File</button>
                 <button class="bluebutton" id="openOUTFILE"  onclick="openOutputFile();" hidden="hidden">Open Output File</button>
                 <div id="selectInputFORMAT" style="display: none">markdown</div>
@@ -236,6 +237,13 @@
             <button onclick="saveEditorContent()"> Save </button>
           </h3>
           <textarea id="inputEDITOR" rows="15" ></textarea>
+          <hr>
+          <h3>
+            Output Editor:
+            <input type="checkbox" name="checkEditorOut" id="checkEditorOut" onclick="toggleCheck('outputEDITOR',this.checked)" hidden="hidden"> --
+            <button onclick="saveEditorOutContent()"> Save </button>
+          </h3>
+          <textarea id="outputEDITOR" rows="15" ></textarea>
           <textarea id="inputLOOP" rows="15" hidden="hidden"></textarea>
           <textarea id="outputEDITOR" rows="15" hidden="hidden"></textarea>
           <textarea id="tplTPL" rows="15" hidden="hidden">
@@ -512,6 +520,17 @@
                   <tt id="projectmainDIR"></tt>
               </td>
             </tr>
+            <tr>
+              <td>
+                <b>Current Working Directory:</b>
+              </td>
+              <td>
+                  &nbsp;
+              </td>
+              <td>
+                  <tt id="currentworkingDIR"></tt>
+              </td>
+            </tr>
           </table>
           <hr/>
         </div>
@@ -618,6 +637,7 @@ function setDefaultValues(pHashTPL) {
   };
   var vPathMain = app.getPath('documents')+vPathSeparator+"PanDoc";
   write2innerHTML("projectmainDIR",vPathMain);
+  write2innerHTML("currentworkingDIR",process.cwd());
   //setInput4WebDownload();
   setInput4Project('inputNEWPROJECT','inputNEWFILE');
   setInput4Project('inputWEBPROJECT','downloadWebFILE',"md");

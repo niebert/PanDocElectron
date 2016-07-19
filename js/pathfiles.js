@@ -1,3 +1,7 @@
+function getMainDir() {
+  // i.e. /home/user/Documente/Pandoc
+  return getValueDOM("projectmainDIR");
+}
 
 function getScriptPath() {
   // __dirname is not available in the generated packages of

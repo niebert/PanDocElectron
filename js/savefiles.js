@@ -17,16 +17,22 @@ function copyFile(pSource,pDestination) {
     console.log("execFile: "+vCommand+" "+vParams.join(" "));
   };
 };
-function saveEditorContent(pFilename) {
-  var vInputFile = getValueDOM("inputFILE");
+
+function saveEditorOutContent() {
+  saveEditorContent(getValueDOM("outputFILE"),"outputEDITOR");
+};
+
+function saveEditorContent(pFilename,pID) {
+  var vInputFile = pFilename || getValueDOM("inputFILE");
+  var vID = pID || "inputEDITOR";
   var vInputFormat = getValueDOM("inputFORMAT");
   if (vInputFile=="") {
     alert("Error: Input Filename is not defined!");
   } else if (vInputFormat == "pdf") {
     alert("Error: Input File is PDF. Saving file is not supported!");
   } else {
-    saveFile(getInnerHTML("inputFILE"),getValueDOM("inputEDITOR"));
-    alert("Input File saved!\n"+vInputFile);
+    saveFile(vInputFile,getValueDOM(vID));
+    alert("Editor File saved!\n"+vInputFile);
   }
 }
 
@@ -41,6 +47,7 @@ function saveFile2AppDir (pFilename,pContent) {
 }
 
 function saveFile(pFilename,pContent) {
+ //alert(typeof(pFilename));
  fs.writeFile(pFilename, pContent, (err) => {
    if (err) throw err;
    console.log('Filename \''+pFilename+'\' saved!');

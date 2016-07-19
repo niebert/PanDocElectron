@@ -20,6 +20,21 @@ function openBrowserURL(pURL) {
   shell.openExternal(pURL);
 }
 
+function openFileInBrowser(pFilename) {
+  const {shell} = require('electron');
+  shell.openExternal(pFilename);
+}
+
+function X_openFileInBrowser(pFilename) {
+  const {shell} = require('electron');
+  if (getOperatingSystem() == "Windows") {
+    pFilename = "file://localhost/"+replaceString(pFilename,"\\","/");
+  } else {
+    pFilename = "file://"+pFilename;
+  };
+  shell.openExternal(pFilename);
+}
+
 function openInputFile (pPath) {
   pPath = getProjectDir(pPath);
   openFile("inputFILE","inputEDITOR",pPath);

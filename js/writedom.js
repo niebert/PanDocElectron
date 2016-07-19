@@ -72,5 +72,18 @@ function getValueDOM(pID) {
   return vReturn;
 };
 function getInnerHTML(pID) {
-  return document.getElementById(pID).innerHTML;
+  var vNode = document.getElementById(pID);
+  var vReturn = "";
+  if (!vNode) {
+    console.log("DOM Node ["+pID+"] does not exist!");
+  } else {
+    vReturn = vNode.innerHTML;
+    if (!vReturn) {
+      vReturn = "";
+      //alert("["+pID+"] Node is undefined");
+    } else {
+      //alert("["+pID+"] Node defined");
+    };
+  }
+  return vReturn;
 };

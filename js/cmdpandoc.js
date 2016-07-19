@@ -67,16 +67,27 @@ function saveShellScript(pShellHash) {
   }
 };
 
+function isChecked(pID) {
+  var vCheckBox = document.getElementById(pID);
+  var vReturn = false;
+  if (vCheckBox) {
+    vReturn = vCheckBox.checked
+  } else {
+      console.log("ERROR: Checkbox ["+pID+"] is undefined");
+  };
+  return vReturn;
+}
+
 function executePanDocCMD(pHash) {
   var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
   process.chdir(vProjectDir);
   initShellScript(pHash);
   var vInputFilter = "";
   var vAdditionParams = "";
-  if (document.getElementById("inputFILTERUSE").checked) {
+  if (isChecked("inputFILTERUSE")) {
     vInputFilter = getValueDOM("inputFILTER");
   };
-  if (document.getElementById("inputPARAMSUSE").checked) {
+  if (isChecked("inputPARAMSUSE")) {
     vAdditionParams = " "+getValueDOM("inputPARAMS")+" " || " ";
   };
   var vShellHash = pHash;
@@ -182,15 +193,59 @@ function executePanDocCMD(pHash) {
       console.log(vCMD);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
     break;
+    case "dzslides_mathml":
+      vCMD += " -s -i --mathml ";
+      pushArgsCMD(pHash,"-s");
+      pushArgsCMD(pHash,"-i");
+      pushArgsCMD(pHash,"--mathml");
+      //vCMD += " --template=\""+pHash["template"]+"\"";
+      runShellCommand(vCMD,vShellHash);
+      console.log(vCMD);
+      alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
+    break;
+    case "dzslides":
+      pHash["template"] = getInnerHTML("dzslidesTPL");
+      //alert("DZSlides TPL:\n"+pHash["template"]);
+      //vCMD += " --template="+pHash["template"];
+      // pushArgsCMD(pHash,"--template="+pHash["template"]);
+      //pushArgsCMD(pHash,"--section-divs");
+      // No Quotes around Template allowed
+      vCMD += getRevealCMD(pHash);
+      // vCMD += " -s ";
+      //pushArgsCMD(pHash,"-s");
+      vCMD += "-i --mathml ";
+      pushArgsCMD(pHash,"-i");
+      pushArgsCMD(pHash,"--mathml");
+      //vCMD += " --template=\""+pHash["template"]+"\"";
+      runShellCommand(vCMD,vShellHash);
+      //createDZSlides(pHash["outputFILE"],pHash["template"]);
+      setTimeout("createDZSlides('"+pHash["outputFILE"]+"','"+pHash["template"]+"')",2000);
+      console.log(vCMD);
+      //alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
+      //openBrowserURL(pHash["outputFILE"]);
+    break;
+    case "slidy":
+      vCMD += " -s -i --webtex ";
+      pushArgsCMD(pHash,"-s");
+      pushArgsCMD(pHash,"-i");
+      pushArgsCMD(pHash,"--webtex");
+      //vCMD += " --template=\""+pHash["template"]+"\"";
+      runShellCommand(vCMD,vShellHash);
+      console.log(vCMD);
+      alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
+    break;
     case "reveal":
         //variable revealjs-url="../../reveal" mathjax-url="../../mathjax"
       vCMD += getRevealCMD(pHash);
+      vCMD += getMathJaxCMD(pHash);
       console.log("getRevealCMD() finished");
       vCMD += " --standalone --section-divs";
-      vCMD += " --template=\""+pHash["template"]+"\"";
+      // No Quotes around Template allowed
+      vCMD += " --template="+pHash["template"];
       pushArgsCMD(pHash,"--standalone");
       pushArgsCMD(pHash,"--section-divs");
-      pushArgsCMD(pHash,"--template=\""+pHash["template"]+"\"");
+      // No Quotes around Template allowed
+      pushArgsCMD(pHash,"--template="+pHash["template"]);
       //saveFile()
       console.log("Start PanDoc REVEAL");
       runShellCommand(vCMD,vShellHash);
@@ -202,7 +257,7 @@ function executePanDocCMD(pHash) {
       //copyFile2Editor("outputEDITOR",pHash["outputFILE"]);
       //write2value("outputEDITOR",vOutContent);
       alert("PanDoc Processing for Format '"+vOutFORMAT+"' done!");
-        break;
+    break;
     default:
       // perform default task
       runShellCommand(vCMD,vShellHash);
@@ -211,9 +266,25 @@ function executePanDocCMD(pHash) {
       //alert("Perform PanDoc Default")
       //alert("pandoc -f "+vInFORMAT+" -t "+vPanOutFORMAT);
   };
-  process.chdir(getInnerHTML('currentworkingDIR'));
+  process.chdir(getWorkingDir());
+  openConvertedFile();
   saveShellScript(vShellHash);
+  callPandoc(vShellHash);
 };
+
+function openConvertedFile() {
+  if (isChecked("checkOPENCONVERTED")) {
+    //open External does not work on Linux;
+  };
+}
+function getWorkingDir() {
+  var vCWD = getInnerHTML('currentworkingDIR');
+  if (vCWD) {
+    vCWD = replaceString(vCWD,"\n","");
+  }
+  //alert("CWD: "+vCWD);
+  return vCWD;
+}
 
 function getTitleAuthorCMD(pHash) {
   var vReturn = "";
@@ -266,7 +337,7 @@ function getMathJaxCMD(pHash) {
 };
 
 function getRevealCMD(pHash) {
-  var vReturn = getMathJaxCMD(pHash);
+  var vReturn = "";
   var revealDIR = pHash["revealDIR"];
   var vInputDir = pHash["inputDIR"];
   if (revealDIR != "") {
@@ -275,7 +346,7 @@ function getRevealCMD(pHash) {
     revealDIR = "http://lab.hakim.se/reveal-js";
   };
   pHash["revealCMD"] = revealDIR;
-  pushVariableCMD(pHash,"mathjaxpath=\""+revealDIR+"\"");
+  pushVariableCMD(pHash,"revealpath=\""+revealDIR+"\"");
   pushVariableCMD(pHash,"theme="+getValueDOM("themeREVEAL"));
   vReturn += "  --variable revealpath=\""+revealDIR+"\"";
   vReturn += "  --variable theme="+getValueDOM("themeREVEAL");
@@ -338,7 +409,7 @@ function convertChecker(pHash,pHashTPL) {
       pHash["template"] = pHashTPL[vOutFormat+"TPL"]
     } else  {
       var vSep = getPathSeparator();
-      pHash["template"] = "." + vSep+ "tpl"+vSep+"pandoctemplates"+vSep+"default."+vOutFormat;
+      pHash["template"] = getMainDir() + vSep+ "tpl"+vSep+"pandoctemplates"+vSep+"default."+vOutFormat;
     };
     console.log("Template: "+pHash["template"]);
     setPandocOutFormat(pHash,pHashTPL);
@@ -391,10 +462,11 @@ function createImageSlide(pOutFile,pCount,pTemplate) {
   alert("Create "+pCount+" AudioSlides for "+pOutFile);
   var i = 0;
   var vSep = getPathSeparator();
-  var vPathPrefix = "." + vSep + "images" + vSep + "img";
+  //var vPathPrefix = "." + vSep + "images" + vSep + "img";
   var vOutSlides = "";
   var vPresentation = getFileContent (pTemplate);
-  var vSlideTPL     = getFileContent ('./tpl/audioslides/defslide.html');
+  //var vSlideTPL     = getFileContent ('tpl/audioslides/defslide.html');
+  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'dzslides'+vSep+'defslide.html');
   //alert("after TPL and LOOP with getFileContent()");
   write2value("inputEDITOR",vPresentation);
   write2value("inputLOOP",vSlideTPL);
@@ -409,8 +481,44 @@ function createImageSlide(pOutFile,pCount,pTemplate) {
   };
   //write2value("inputLOOP",vOutSlides);
   vPresentation =  replaceString(vPresentation,"___DZ_SLIDES___",vOutSlides);
-  write2value("inputEDITOR",vPresentation);
+  write2value("outputEDITOR",vPresentation);
   saveFile(getInnerHTML("outputFILE"),vPresentation);
+  alert("Convert Finished:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,..." );
+};
+
+function createDZSlides(pOutFile,pTemplate) {
+  console.log("Create DZSlides for "+pOutFile);
+  //alert("pOutFile='"+pOutFile+"'");
+  alert("Create DZSlides with Audio Comments for "+pOutFile);
+  var i = 0;
+  var vSep = getPathSeparator();
+  var vPresentation = getFileContent (pTemplate);
+  //alert(vPresentation.substr(0,300));
+  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'dzslides'+vSep+'defslide.html');
+  var vOutSlides    = getFileContent (pOutFile);
+  //alert("vOutSlides:\n"+vOutSlides.substr(0,400));
+  //alert("vSlideTPL:\n"+vSlideTPL);
+  var vSlideArray = vOutSlides.split("</section>");
+  //alert("after TPL and LOOP with getFileContent()");
+  //write2value("inputEDITOR",vPresentation);
+  write2value("inputLOOP",vSlideTPL);
+  //alert("write2value finished");
+  vOutSlides = vSlideArray[0];
+  i = 1;
+  while ((i<vSlideArray.length) && (i < 200)) {
+    vSlide = vSlideTPL;
+    vSlide = replaceString(vSlide,"___NR___",i);
+    //alert("vSlide="+vSlide);
+    vOutSlides +=vSlide + vSlideArray[i];
+    i++;
+  };
+  //write2value("inputLOOP",vOutSlides);
+  //write2value("inputLOOP",vOutSlides);
+  vPresentation =  replaceString(vPresentation,"___DZ_SLIDES___",vOutSlides);
+  write2value("inputEDITOR",vPresentation);
+  saveFile(pOutFile,vPresentation);
+  //saveFile("pOutFile.html",vPresentation);
+  //saveTestFile();
   alert("Convert Finished:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,..." );
 };
 
