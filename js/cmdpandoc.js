@@ -466,7 +466,7 @@ function createImageSlide(pOutFile,pCount,pTemplate) {
   var vOutSlides = "";
   var vPresentation = getFileContent (pTemplate);
   //var vSlideTPL     = getFileContent ('tpl/audioslides/defslide.html');
-  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'dzslides'+vSep+'defslide.html');
+  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+'defslide.html');
   //alert("after TPL and LOOP with getFileContent()");
   write2value("inputEDITOR",vPresentation);
   write2value("inputLOOP",vSlideTPL);
