@@ -15,7 +15,23 @@ function getScriptPath() {
     vPath = replaceString(vPath,"/","\\");
   };
   return vPath;
-}
+};
+
+function getInputFilePath() {
+  var vInputFile = getInnerHTML("inputFILE");
+  var vReturn = "";
+  if (!vInputFile) {
+    vReturn = false;
+    alert("ERROR: PanDoc Input File was not defined!\n    convertChecker():656");
+  } else if (vInputFile == "") {
+    vReturn = false;
+    alert("Error: Input File was not defined!\nCall: convertChecker():659");
+  } else {
+    var vFilename = vInputFile;
+    vReturn = getPath4Filename(vInputFile);
+  };
+  return vReturn;
+};
 
 function makedirpath(pPathDir) {
   var mkdirp = require('mkdirp');

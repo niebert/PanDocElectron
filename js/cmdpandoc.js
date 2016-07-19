@@ -321,13 +321,8 @@ function pushVariableCMD(pHash,pVarContent) {
 
 function getMathJaxCMD(pHash) {
   //var vReturn = "";
-  var mathjaxDIR = pHash["mathjaxDIR"];
   var vInputDir = pHash["inputDIR"];
-  if (mathjaxDIR != "") {
-    mathjaxDIR = getRelativePath(vInputDir,mathjaxDIR);
-  } else {
-    mathjaxDIR = "http://cdn.mathjax.org/mathjax/latest";
-  };
+  var mathjaxDIR = getMathJaxRelativeDIR();
   pHash["mathjaxCMD"] = mathjaxDIR;
   //vReturn += "  --variable mathjax-url= "+mathjaxDIR;
   pushArgsCMD(pHash,"--mathjax");
@@ -336,15 +331,32 @@ function getMathJaxCMD(pHash) {
   //return "  --mathjax";
 };
 
-function getRevealCMD(pHash) {
-  var vReturn = "";
-  var revealDIR = pHash["revealDIR"];
-  var vInputDir = pHash["inputDIR"];
+function getMathJaxRelativeDIR() {
+  var vInputDir = getInputFilePath();
+  var mathjaxDIR = getInnerHTML("mathjaxDIR");
+  if (mathjaxDIR != "") {
+    mathjaxDIR = getRelativePath(vInputDir,mathjaxDIR);
+  } else {
+    mathjaxDIR = "http://cdn.mathjax.org/mathjax/latest";
+  };
+  return mathjaxDIR;
+};
+
+function getRevealRelativeDIR() {
+  var vInputDir = getInputFilePath();
+  var revealDIR = getInnerHTML("revealDIR");
   if (revealDIR != "") {
     revealDIR = getRelativePath(vInputDir,revealDIR);
   } else {
     revealDIR = "http://lab.hakim.se/reveal-js";
   };
+  return revealDIR;
+}
+
+function getRevealCMD(pHash) {
+  var vReturn = "";
+  var revealDIR = getRevealRelativeDIR();
+  var vInputDir = pHash["inputDIR"];
   pHash["revealCMD"] = revealDIR;
   pushVariableCMD(pHash,"revealpath=\""+revealDIR+"\"");
   pushVariableCMD(pHash,"theme="+getValueDOM("themeREVEAL"));
@@ -480,11 +492,26 @@ function createImageSlide(pOutFile,pCount,pTemplate) {
     i++;
   };
   //write2value("inputLOOP",vOutSlides);
-  vPresentation =  replaceString(vPresentation,"___DZ_SLIDES___",vOutSlides);
+  vPresentation = replaceSlides(vPresentation,vOutSlides);
+  //vPresentation =  replaceString(vPresentation,"___DZ_SLIDES___",vOutSlides);
   write2value("outputEDITOR",vPresentation);
   saveFile(getInnerHTML("outputFILE"),vPresentation);
   alert("Convert Finished:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,..." );
 };
+
+function replaceSlides(pPresentation,pOutSlides) {
+  var vOutSlides = pOutSlides || "Undefined Slides for DZ-Slides";
+  var vPresentation =  pPresentation || "Undefined Main Template ___DZ_SLIDES___";
+  var revealDIR = getRevealRelativeDIR();
+  console.log("Reveal-Dir for  DZSlides for "+revealDIR);
+  var mathjaxDIR = getMathJaxRelativeDIR();
+  console.log("MathJax-Dir for  DZSlides for "+mathjaxDIR);
+  vPresentation =  replaceString(vPresentation,"___DZ_SLIDES___",vOutSlides);
+  vPresentation =  replaceString(vPresentation,"___REVEAL___",revealDIR);
+  vPresentation =  replaceString(vPresentation,"___MATHJAX___",mathjaxDIR);
+  vPresentation =  replaceString(vPresentation,"___THEME___",getValueDOM("themeREVEAL"));
+  return vPresentation;
+}
 
 function createDZSlides(pOutFile,pTemplate) {
   console.log("Create DZSlides for "+pOutFile);
@@ -514,8 +541,8 @@ function createDZSlides(pOutFile,pTemplate) {
   };
   //write2value("inputLOOP",vOutSlides);
   //write2value("inputLOOP",vOutSlides);
-  vPresentation =  replaceString(vPresentation,"___DZ_SLIDES___",vOutSlides);
-  write2value("inputEDITOR",vPresentation);
+  vPresentation = replaceSlides(vPresentation,vOutSlides);
+  write2value("outputEDITOR",vPresentation);
   saveFile(pOutFile,vPresentation);
   //saveFile("pOutFile.html",vPresentation);
   //saveTestFile();

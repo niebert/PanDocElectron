@@ -41,7 +41,7 @@ function visibleOutFormatSelectors(pOutputFORMAT) {
   } else {
     hideElement("divSlideCount");
   };
-  if (pOutputFORMAT == "reveal") {
+  if ((pOutputFORMAT == "reveal") || (pOutputFORMAT == "dzslides")) {
     showElement("themeREVEAL");
   } else {
     hideElement("themeREVEAL");
