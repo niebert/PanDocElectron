@@ -567,7 +567,6 @@ function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
     var vCount = parseInt(pCount);
     while ((i<vCount) && (i < 200)) {
       vOutPNG = vPath +i+".png";
-      i++;
       //vNode.value += ">";
       //setTimeout("document.getElementById('pandocprogress').value += 'o'",100);
       //alert("Create Image "+i+" from PDF");
@@ -577,6 +576,7 @@ function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
       pShellHash["paramarray"] = ["-density","300", "-depth","8", "-quality","85", pInputPDF+"["+i+"]", vOutPNG];
       //alert(vCMD);
       runShellCommand(vCMD,pShellHash);
+      i++;      
     };
     alert("Generating "+pCount+" PNG Files from PDF done!");
   }
