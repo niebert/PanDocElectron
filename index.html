@@ -137,7 +137,7 @@
               </td>
             </tr>
             <tr><!-- outputFILE -->
-              <td align="right">
+              <td align="right" valign="top">
                 <b>Output Format:</b>
               </td>
               <td>
@@ -150,12 +150,14 @@
                   <option value="latex">LaTeX</option>
                   <option value="markdown">Markdown (pandoc)</option>
                   <option value="mediawiki">MediaWiki</option>
-                  <option value="beamer">LaTeX Beamer</option>
+                  <option value="audioslides">AudioSlides from PDF</option>
+                  <option value="beamer">LaTeX Beamer (Slides)</option>
                   <option value="reveal" selected="selected">RevealJS</option>
-                  <option value="audioslides">AudioSlides for PDF Input</option>
-                  <option value="dzslides">DZSlides</option>
-                  <option value="odt">ODT-File</option>
-                  <option value="odt2col">ODT-File - 2 Cols</option>
+                  <option value="dzslides">DZSlides (Slides)</option>
+                  <option value="slideous">Slideous (Slides)</option>
+                  <option value="slidy">Slidy (Slides)</option>
+                  <option value="odt">ODT-File (LibreOffice)</option>
+                  <option value="odt2col">ODT-File - 2 Cols (LibreOffice)</option>
                   <option value="docx">DOCX-File</option>
                   <option value="docx2col">DOCX-File - 2 Cols</option>
                   <option value="asciidoc">AsciiDoc</option>
@@ -176,11 +178,8 @@
                   <option value="opml">OPML</option>
                   <option value="rtf">RTF</option>
                   <option value="S5">S5</option>
-                  <option value="slideous">Slideous</option>
-                  <option value="slidy">Slidy</option>
                   <option value="texinfo">Texinfo</option>
                 </select>
-                <div id="divSlideCount" hidden="hidden">AudioSlide Count <input type="text" id="slidecount" value="16" size="3"></div>
                 <select id="themeREVEAL">
                   <option value="beige" selected="selected">Beige Background</option>
                   <option value="simple">Simple White Background</option>
@@ -190,7 +189,12 @@
                   <option value="moon">Moon Reveal Theme</option>
                   <option value="solarized">Solarized Reveal Theme</option>
                   <option value="black">Black Background"</option>
-                </select>
+                </select><br>
+                <div id="divSlideCount" hidden="hidden">
+                  AudioSlide Count <input type="text" id="slidecount"   value="16" size="3">
+                  PDF Startpage    <input type="text" id="PDFstartpage" value="0"  size="3">
+                </div>
+
                 <div id="selectOutputFORMAT"  style="display: none">reveal</div>
               </td>
             </tr>

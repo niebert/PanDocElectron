@@ -546,7 +546,7 @@ function createDZSlides(pOutFile,pTemplate) {
   saveFile(pOutFile,vPresentation);
   //saveFile("pOutFile.html",vPresentation);
   //saveTestFile();
-  alert("Convert Finished:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,..." );
+  alert("Convert Finished:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,... (Software: e.g. Audacity)" );
 };
 
 function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
@@ -560,23 +560,25 @@ function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
     vPath += vSep + "images" + vSep + "img";
     var i = 0;
     var vOutPNG = vPath +i+".png";
-    alert("Remark: Converting all slides could take up to "+pCount+" minutes!");
-    console.log("convertPDF2PNG(pInputPDF,"+pCount+")");
+    var vCount = parseInt(pCount);
+    var vPDFstartpage = parseInt(getValueDOM("PDFstartpage")) || 0;
+    alert("Remark: Converting PDF slide "+vPDFstartpage+" to slide "+(vPDFstartpage+vCount-1)+" could take up to "+pCount+" minutes!");
+    console.log("convertPDF2PNG(pInputPDF,"+pCount+") with PDF startpage "+vPDFstartpage);
     var vIM_CMD = getValueDOM("imagemagickCMD");
     vIM_CMD = replaceString(vIM_CMD,"\n","");
-    var vCount = parseInt(pCount);
     while ((i<vCount) && (i < 200)) {
       vOutPNG = vPath +i+".png";
+      vPDFpage = i + vPDFstartpage;
       //vNode.value += ">";
       //setTimeout("document.getElementById('pandocprogress').value += 'o'",100);
       //alert("Create Image "+i+" from PDF");
       // convert -density 300 -depth 8 -quality 85 ${FilePDF}[${COUNTER}] outtmp.png
-      var vCMD = vIM_CMD+" -density 300 -depth 8 -quality 85 "+pInputPDF+"["+i+"] " + vOutPNG;
+      var vCMD = vIM_CMD+" -density 300 -depth 8 -quality 85 "+pInputPDF+"["+vPDFpage+"] " + vOutPNG;
       pShellHash["executeable"] = vIM_CMD;
       pShellHash["paramarray"] = ["-density","300", "-depth","8", "-quality","85", pInputPDF+"["+i+"]", vOutPNG];
       //alert(vCMD);
       runShellCommand(vCMD,pShellHash);
-      i++;      
+      i++;
     };
     alert("Generating "+pCount+" PNG Files from PDF done!");
   }
