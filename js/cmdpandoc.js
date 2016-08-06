@@ -267,14 +267,18 @@ function executePanDocCMD(pHash) {
       //alert("pandoc -f "+vInFORMAT+" -t "+vPanOutFORMAT);
   };
   process.chdir(getWorkingDir());
-  openConvertedFile();
+  openConvertedFile(vShellHash);
   saveShellScript(vShellHash);
   callPandoc(vShellHash);
 };
 
-function openConvertedFile() {
+function openConvertedFile(pShellHash) {
   if (isChecked("checkOPENCONVERTED")) {
     //open External does not work on Linux;
+    console.log("Open External File: "+pShellHash["outputFILE"]);
+    shell.openExternal(pShellHash["outputFILE"]);
+  } else {
+    console.log("Output File "+pShellHash["outputFILE"]+" must be opened manually!");
   };
 }
 function getWorkingDir() {
@@ -478,7 +482,11 @@ function createImageSlide(pOutFile,pCount,pTemplate) {
   var vOutSlides = "";
   var vPresentation = getFileContent (pTemplate);
   //var vSlideTPL     = getFileContent ('tpl/audioslides/defslide.html');
-  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+'defslide.html');
+  var vDefSlide = 'defslide.html';
+  if (isChecked("checkAudioPlayer")) {
+    vDefSlide = "defslideplayer.html";
+  };
+  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+vDefSlide);
   //alert("after TPL and LOOP with getFileContent()");
   write2value("inputEDITOR",vPresentation);
   write2value("inputLOOP",vSlideTPL);
@@ -521,7 +529,14 @@ function createDZSlides(pOutFile,pTemplate) {
   var vSep = getPathSeparator();
   var vPresentation = getFileContent (pTemplate);
   //alert(vPresentation.substr(0,300));
-  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'dzslides'+vSep+'defslide.html');
+  var vDefSlide = "defslide.html";
+  if (isChecked("checkAudioPlayer")) {
+    vDefSlide = "defslideplayer.html";
+    console.log("Use Template '"+vDefSlide+"' with Audio Player in Slides");
+  } else {
+    console.log("Audio Player is not visible");
+  };
+  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'dzslides'+vSep+vDefSlide);
   var vOutSlides    = getFileContent (pOutFile);
   //alert("vOutSlides:\n"+vOutSlides.substr(0,400));
   //alert("vSlideTPL:\n"+vSlideTPL);
@@ -558,22 +573,36 @@ function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
     var vPath = getPathFromFilename(pInputPDF);
     var vSep = getPathSeparator();
     vPath += vSep + "images" + vSep + "img";
+    deleteAllImages(vPath,pCount);
+    var vPathPlayer = vPath + "player";
     var i = 0;
     var vOutPNG = vPath +i+".png";
+    var vOutPlayerPNG = vPathPlayer +i+".png";
     var vCount = parseInt(pCount);
+    var vShowPlayer = false;
+    if (isChecked("checkAudioPlayer")) {
+      vShowPlayer = true;
+      console.log("convertPDF2PNG() - Create Margins of PNG Slides for Audio Player");
+    } else {
+      console.log("convertPDF2PNG() - AudioPlayer hidden no margins necessary");
+    };
     var vPDFstartpage = parseInt(getValueDOM("PDFstartpage")) || 0;
-    alert("Remark: Converting PDF slide "+vPDFstartpage+" to slide "+(vPDFstartpage+vCount-1)+" could take up to "+pCount+" minutes!");
+    alert("Remark: Converting PDF slide for file '"+getNameExt4Filename(pInputPDF)+"' from page " +vPDFstartpage + " to page "+(vPDFstartpage+vCount-1)+" could take up to "+pCount+" minutes!");
     console.log("convertPDF2PNG(pInputPDF,"+pCount+") with PDF startpage "+vPDFstartpage);
     var vIM_CMD = getValueDOM("imagemagickCMD");
     vIM_CMD = replaceString(vIM_CMD,"\n","");
+    var vCMD = "";
     while ((i<vCount) && (i < 200)) {
       vOutPNG = vPath +i+".png";
+      vOutPlayerPNG = vPathPlayer +i+".png";
       vPDFpage = i + vPDFstartpage;
       //vNode.value += ">";
       //setTimeout("document.getElementById('pandocprogress').value += 'o'",100);
       //alert("Create Image "+i+" from PDF");
       // convert -density 300 -depth 8 -quality 85 ${FilePDF}[${COUNTER}] outtmp.png
-      var vCMD = vIM_CMD+" -density 300 -depth 8 -quality 85 "+pInputPDF+"["+vPDFpage+"] " + vOutPNG;
+      //  "convert -size 3750x2812 xc:white input.png -gravity north -composite output.png".
+      //deleteFile(vOutPNG);
+      vCMD = vIM_CMD+" -density 300 -depth 8 -quality 85 "+pInputPDF+"["+vPDFpage+"] " + vOutPNG;
       pShellHash["executeable"] = vIM_CMD;
       pShellHash["paramarray"] = ["-density","300", "-depth","8", "-quality","85", pInputPDF+"["+i+"]", vOutPNG];
       //alert(vCMD);

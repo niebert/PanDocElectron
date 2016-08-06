@@ -16,6 +16,7 @@
     <link href="css/main.css" rel="stylesheet" />
     <script src="js/showhide.js"></script>
     <script src="js/pathfiles.js"></script>
+    <script src="js/deletefiles.js"></script>
     <script src="js/writedom.js"></script>
     <script src="js/ioformat.js"></script>
     <script src="js/opsysdetect.js"></script>
@@ -102,6 +103,7 @@
                 </select>
                 <!-- <input type="checkbox" id="checkOPENCONVERTED" /> Open Converted File -->
                 <button class="bluebutton" id="convertFILE"  onclick="convertFile();" >Convert File</button>
+                &nbsp;  <input type="checkbox" id="checkOPENCONVERTED" > Open Converted
                 <button class="bluebutton" id="openOUTFILE"  onclick="openOutputFile();" hidden="hidden">Open Output File</button>
                 <div id="selectInputFORMAT" style="display: none">markdown</div>
               </td>
@@ -192,9 +194,11 @@
                 </select><br>
                 <div id="divSlideCount" hidden="hidden">
                   AudioSlide Count <input type="text" id="slidecount"   value="16" size="3">
+                  &nbsp; &nbsp;
                   PDF Startpage    <input type="text" id="PDFstartpage" value="0"  size="3">
+                  &nbsp; &nbsp;
+                  <input type="checkbox" name="checkAudioPlayer" id="checkAudioPlayer" checked="checked"> show Audio Player
                 </div>
-
                 <div id="selectOutputFORMAT"  style="display: none">reveal</div>
               </td>
             </tr>
