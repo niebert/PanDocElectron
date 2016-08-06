@@ -52,7 +52,7 @@
 
 <h3 id="SECQuickStart">1.1 Software Download - Quickstart</h3>
 
-The following software packages are needed to use PanDoc and PanDocElectron. A full installation guide is given in section XX.
+Please install for your Operating System the following 4 Packages (1.1.2 PanDoc is an absolute Requirements for PanDocElectron to work).
 <ul>
   <li><b>1.1.1 PanDocElectron</b> (the Graphical User Interface for PanDoc)<br>
     Packages for Linux, Windows can be downloaded from <a href="https://sourceforge.net/projects/pandocelectron/files" target="_blank">Sourceforge PanDocElectron</a>.
@@ -81,14 +81,7 @@ The following software packages are needed to use PanDoc and PanDocElectron. A f
     </ul>
   </li>
   <li><b>1.1.5 Templates</b> Download <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">Support Files and Templates</a>
-  for all Operating Systems and unzip the folder into your folder <tt>Documents/PanDoc</tt><br><br>
-  <li>
-  <b>1.1.6 git</b> to download and update the sources of Electron Applications (see <a href="http://git-scm.com/">http://git-scm.com/</a> for installing the software git)</li><br>
-  <li>
-  <b>1.1.7 npm</b> to install pre-build packages of Electron as a runtime environment. (npm is installed as part of <a href="https://nodejs.org/en/" target="_blank">NodeJS</a>)</li><br>
-  <li>
-  <b>1.1.8 nodejs</b> allow with Javscript reading and writing files to the filesystem in Electron (installer <a href="https://nodejs.org/en/" target="_blank">NodeJS and NPM</a>).
-  For running and testing the <code>Electron</code> applications in general (like PanDocElectron) it is necessary to install the Electron environment on your Desktop Computer. With electron you download the application that is designed as cross-plattform application and install the Electron Framework for your operating system (OS).</li><br>
+  for all Operating Systems and unzip the folder into your folder <tt>Documents/PanDoc</tt>
 </ul>
 Start PanDocElectron and adjust path to convert and pandoc according to your installation and save your config by pressing the
 save config button. The config loads all previous settings including the last filename that was converted by PanDoc.
@@ -112,6 +105,18 @@ you PanDocElectron project.
 
 Record your audio comments with <a href="http://www.audacityteam.org/download/" target="_blank">Audacity</a> and <a href="https://www.google.de/search?q=audacity+mp3+encoder&ie=utf-8&oe=utf-8&client=firefox-b&gfe_rd=cr&ei=No18V_L2F66N8Qebi76wCA">MP3 Encoder Audacity</a>.
 
+<h3>1.4 General Requirements for Electron Applications</h3>
+<p>If you want to use Electron Applications in general (including PanDocElectron) it is necessary to install the following software packages:</p>
+
+<ul>
+<li>
+<code>git</code> to download and update the sources of Electron Applications (see <a href="http://git-scm.com/">http://git-scm.com/</a> for installing the software git)</li>
+<li>
+<code>npm</code> to install pre-build packages of Electron as a runtime environment. (npm is installed as part of <a href="https://nodejs.org/en/" target="_blank">NodeJS</a>)</li>
+<li>
+<code>nodejs</code> allow with Javscript reading and writing files to the filesystem in Electron (installer <a href="https://nodejs.org/en/" target="_blank">NodeJS and NPM</a>).
+For running and testing the <code>Electron</code> applications in general (like PanDocElectron) it is necessary to install the Electron environment on your Desktop Computer. With electron you download the application that is designed as cross-plattform application and install the Electron Framework for your operating system (OS).</li>
+</ul>
 
 <h2  id="SEC2">
 <a id="2-requirements-for-pandocelectron" class="anchor" href="#2-requirements-for-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2 Requirements for PandocElectron</h2>
@@ -203,8 +208,9 @@ To avoid overwriting the files with the same file extensions (e.g. `html`), defa
 </ul>
 
 <h2 id="SEC5">
-<a id="5-linux---electron-framework" class="anchor" href="#5-linux---electron-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5 Installation Guide Linux - Electron Framework</h2>
+<a id="5-linux---electron-framework" class="anchor" href="#5-linux---electron-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5 Linux - Electron Framework</h2>
 This section describes the installation of the electron developing environment for PanDocElectron.
+If you just want to use the software, follow the <a href="#SECQuickStart">Guide</a>.
 <h3>
 <a id="51-install-git" class="anchor" href="#51-install-git" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.1 Install GIT</h3>
 
@@ -739,8 +745,7 @@ npm install electron-packager-interactive
           </a>
           <hr>
           <b>Download MacOSX</b>
-         <!-- a href="https://sourceforge.net/projects/pandocelectron/files/PanDocElectron/PanDocElectron-MacOSX-64Bit.zip/download" class="button" -->
-         <a href="install/install_mac.sh" class="button" -->
+          <a href="https://sourceforge.net/projects/pandocelectron/files/PanDocElectron/PanDocElectron-MacOSX-64Bit.zip/download" class="button">
             <small>PanDocElectron MacOSX</small>
             MacOSX.zip
           </a>
