@@ -267,16 +267,28 @@ function executePanDocCMD(pHash) {
       //alert("pandoc -f "+vInFORMAT+" -t "+vPanOutFORMAT);
   };
   process.chdir(getWorkingDir());
-  openConvertedFile(vShellHash);
+  //openConvertedFile(vShellHash);
   saveShellScript(vShellHash);
   callPandoc(vShellHash);
 };
+function openConvertedFile() {
+  var vOutputFile =  getInnerHTML("outputFILE");
+  fs.exists(vOutputFile, function(pExists) {
+      if(pExists) {
+          // if File exists,  Open It
+          shell.openItem(vOutputFile);
+          console.log("Open External File: "+vOutputFile);
+      } else {
+          alert("Open File failed! File does not exist!\nFile: "+vOutputFile);
+      }
+  });
+}
 
-function openConvertedFile(pShellHash) {
+function X_openConvertedFile(pShellHash) {
   if (isChecked("checkOPENCONVERTED")) {
     //open External does not work on Linux;
     console.log("Open External File: "+pShellHash["outputFILE"]);
-    shell.openExternal(pShellHash["outputFILE"]);
+    shell.openItem(pShellHash["outputFILE"]);
   } else {
     console.log("Output File "+pShellHash["outputFILE"]+" must be opened manually!");
   };
