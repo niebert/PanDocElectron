@@ -144,7 +144,7 @@ This section describes the installation of the electron developing environment f
 <h3>2.1 Install Script</h3>
 Installation Scripts <b style="color:red">install PanDocElectron with all necessary packages</b> for PanDocElectron (i.e. ImageMagick, PanDoc, NPM, ...). You can run PanDocElectron
 and you can change the layout and options of the application according to your requirements.
-  Installation scripts are available for following operating systems: 
+  Installation scripts are available for following operating systems:
   <ul>
   <li><b>Linux:</b> Install Script  <a href="install/install_linux.sh" target="_blank">Linux - Debian/Ubuntu/Mint</a>
   </li>
@@ -152,7 +152,11 @@ and you can change the layout and options of the application according to your r
   </li>
   </ul>
   Run script in your Documents folders (open Terminal). Scripts will download PanDoc templates and PanDocElectron.
-
+  <b>Legacy Mode:</b> If installation fails with message <tt>WARN This failure might be due to the use of legacy binary "node"</tt>
+  please install the NodeJS-Legacy package
+  <blockquote>
+  <p><code>sudo apt-get install nodejs-legacy</code></p>
+  </blockquote>
   <b>Remark:</b> The install scripts assume that <tt>PanDoc</tt> and <tt>PanDocElectron</tt> is not installed on your Linux System.
   Rename <tt>PanDoc</tt> and <tt>PanDocElectron</tt> to <tt>PanDoc_bak</tt> and <tt>PanDocElectron_bak</tt> before starting the install scripts with
   <blockquote>
