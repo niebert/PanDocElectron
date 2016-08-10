@@ -44,11 +44,13 @@
 
 <p>Electron is more or less a brower, that has full access to your filesystem. So Electron/Atom allows to write multiplattform application just with HTML and Javascript, than runs on:</p>
 
+<h3>
 <ul>
-<li>Linux (see <a href="#SEC5">section 5</a>) </li>
-<li>MacOSX (see <a href="#SEC6">section 6</a>) </li>
-<li>Windows (see <a href="#SEC7">section 7</a>)</li>
+<li>Linux (see <a href="#SEC5">section 2.2.1</a>) </li>
+<li>MacOSX (see <a href="#SEC6">section 2.2.2</a>) </li>
+<li>Windows (see <a href="#SEC7">section 2.2.3</a>)</li>
 </ul>
+</h3>
 
 <h3 id="SECQuickStart">1.1 Software Requirements</h3>
 
@@ -137,20 +139,36 @@ To avoid overwriting the files with the same file extensions (e.g. `html`), defa
 <li>Install Atom (<a href="https://atom.io/">https://atom.io/</a>) as Editor for Software Development in</li>
 </ul>
 
-<h2>2 Installation guides</h2>
+<h2>2 Installation</h2>
 This section describes the installation of the electron developing environment for PanDocElectron.
 <h3>2.1 Install Script</h3>
-<b>Installation Scripts install PanDocElectron with all packages for developing PanDocElectron. You can run PanDocElectron
-  and you can change the layout and options of the application according to your requirements.
-  Installation scripts are available for following operating systems</b>
-<ul>
-<li><b>Linux:</b> Install Script  <a href="install/install_linux.sh" target="_blank">Linux - Debian/Ubuntu/Mint</a></li>
-<li><b>MacOSX:</b> Install Script <a href="install/install_mac.sh" target="_blank">MacOSX - Apple Mac</a></li>
-</ul>
-Run script in your Documents folders (open Terminal). Scripts will download PanDoc templates and PanDocElectron.
+Installation Scripts <b style="color:red">install PanDocElectron with all necessary packages</b> for PanDocElectron (i.e. ImageMagick, PanDoc, NPM, ...). You can run PanDocElectron
+and you can change the layout and options of the application according to your requirements.
+  Installation scripts are available for following operating systems: 
+  <ul>
+  <li><b>Linux:</b> Install Script  <a href="install/install_linux.sh" target="_blank">Linux - Debian/Ubuntu/Mint</a>
+  </li>
+  <li><b>MacOSX:</b> Install Script <a href="install/install_mac.sh" target="_blank">MacOSX - Apple Mac</a>
+  </li>
+  </ul>
+  Run script in your Documents folders (open Terminal). Scripts will download PanDoc templates and PanDocElectron.
+
+  <b>Remark:</b> The install scripts assume that <tt>PanDoc</tt> and <tt>PanDocElectron</tt> is not installed on your Linux System.
+  Rename <tt>PanDoc</tt> and <tt>PanDocElectron</tt> to <tt>PanDoc_bak</tt> and <tt>PanDocElectron_bak</tt> before starting the install scripts with
+  <blockquote>
+  <p><code>sh install_linux.sh</code></p>
+  </blockquote>
+  on a Linux System (Debian based like Ubuntu, Mint, ...) or with
+  <blockquote>
+  <p><code>sh install_mac.sh</code></p>
+  </blockquote>
+  on MacOSX with installed <a href="http://brew.sh">HomeBrew</a>.
+
 
 <h3>2.2 Manual installation</h3>
-<h3><a id="5-linux---electron-framework" class="anchor" href="#5-linux---electron-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.1 Installation Guide Linux - Electron Framework</h3>
+<h3 id="SEC5">
+<a id="5-linux---electron-framework" class="anchor" href="#5-linux---electron-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.1 Linux - Electron Framework</h3>
+
 
 <h4>
 <a id="51-install-git" class="anchor" href="#51-install-git" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.1.1 Install GIT</h4>
@@ -699,10 +717,14 @@ npm install electron-packager-interactive
           </a>
           <hr>
           <b>Download MacOSX</b>
-         <!-- a href="https://sourceforge.net/projects/pandocelectron/files/PanDocElectron/PanDocElectron-MacOSX-64Bit.zip/download" class="button" -->
-         <a href="install/install_mac.sh" class="button" -->
+         <!-- a href="https://sourceforge.net/projects/pandocelectron/files/PanDocElectron/PanDocElectron-MacOSX-64Bit.zip/download" class="button">
             <small>PanDocElectron MacOSX</small>
             MacOSX.zip
+          </a>
+          -->
+          <a href="install/install_mac.sh" class="button">
+            <small>Install Script for HowBrew</small>
+            MacOSX
           </a>
           <hr>
           <b>Download Linux</b>
@@ -713,6 +735,10 @@ npm install electron-packager-interactive
           <a href="https://sourceforge.net/projects/pandocelectron/files/PanDocElectron/PanDocElectron-Linux-64Bit.zip/download" class="button">
             <small>PanDocElectron Linux 64Bit</small>
             Lin64Bit.zip
+          </a>
+          <a href="install/install_linux.sh" class="button">
+            <small>Install Script - Debian/Ubuntu/Mint</small>
+            Linux
           </a>
           <hr>
           <b>Download Sources</b>
