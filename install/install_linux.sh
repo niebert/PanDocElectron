@@ -18,7 +18,10 @@ sudo apt-get install pandoc pandoc-citeproc imagemagick imagemagick-doc texlive-
 # cd ~
 git clone https://github.com/niebert/PanDocElectron.git
 cd PanDocElectron
-rm -R node_modules/*
+# rm -R node_modules/*
+WORKING_DIR="node_modules"
+if [ -d "$WORKING_DIR" ]; then rm -Rf $WORKING_DIR; fi
+sudo apt-get install npm
 npm install electron-prebuilt --save-dev
 cd ..
 cd $DOCUMENTS
