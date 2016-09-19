@@ -49,6 +49,7 @@
 <li>Linux (see <a href="#SEC5">section 2.2.1</a>) </li>
 <li>MacOSX (see <a href="#SEC6">section 2.2.2</a>) </li>
 <li>Windows (see <a href="#SEC7">section 2.2.3</a>)</li>
+<li>Tutorial PDF to Audioslides (by J&ouml;rg Rapp <a href="tutorials/TutorialPPTtoHTML_final.pdf" target="_blank">PPT to HTML with Audio</a>)</li>
 </ul>
 </h3>
 
@@ -410,12 +411,18 @@ The following command assumes, that <a href="http://brew.sh" target="_blank">Hom
 <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> use MacOSX-Installer</li>
 </ul>
 
-<p>Opening Windows (xquartz) create in your Electron Application needs the following installation on your MacOSX:</p>
+<p>Opening Windows in your Electron Application needs XQuartz. Please install <a href="https://www.xquartz.org/" target="_blank">XQuartz DMG</a> on your MacOSX:</p>
 
 <blockquote>
-<p><code>brew install Caskroom/cask/xquartz wine mono</code></p>
+<p><code>brew install wine mono</code></p>
 </blockquote>
 
+Furthermore install Ghostscript with
+
+<blockquote>
+<p><code>brew install ghostscript</code></p>
+</blockquote>
+<!-- brew install Caskroom/cask/xquartz wine mono  -->
 <h4>
 <a id="64-installation-of-pandocelectron" class="anchor" href="#64-installation-of-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.2.4 Installation of PanDocElectron</h4>
 

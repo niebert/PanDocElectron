@@ -2,17 +2,21 @@
 echo "Install Electron Framework"
 echo "--------------------------"
 echo "OS: MacOSX-Installer"
+echo "Install BREW"
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+echo "Brew is now installed"
 DOCUMENTS="Documents"
 cd ~
 cd $DOCUMENTS
 brew install git npm curl
-brew install Caskroom/cask/xquartz wine mono
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-sudo apt-get install -y nodejs
+# brew install Caskroom/cask/xquartz wine mono
+brew install wine mono
+brew install ghostscript
 echo "Install PanDocElectron Requirements"
 echo "-----------------------------------"
 echo "OS: MacOSX-Installer"
-sudo apt-get install pandoc pandoc-citeproc imagemagick imagemagick-doc texlive-full
+brew install imagemagick
+brew install pandoc pandoc-citeproc
 WORKING_DIR="PanDocElectron_bak_bak"
 if [ -d "$WORKING_DIR" ]; then rm -r ${WORKING_DIR}; fi
 WORKING_DIR="PanDocElectron_bak"
@@ -41,3 +45,7 @@ npm install
 cd ..
 cd $DOCUMENTS
 git clone https://github.com/niebert/PanDoc.git
+
+echo "(1) Please install XQuartz from https://www.xquartz.org/ "
+echo "(2) Please install NodeJS LTS from https://nodejs.org/en/ "
+echo "(3) Please install MacTex Installation from "
