@@ -11,9 +11,9 @@ PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Docume
 
 ## 1 General Requirements for Electron
 Electron is more or less a brower, that has full access to your filesystem. So Electron/Atom allows to write multiplattform application just with HTML and Javascript, than runs on:
-* Linux (see [section 5](http://niebert.github.io/PanDocElectron/index.html#SEC5))
-* MacOSX (see [section 6](http://niebert.github.io/PanDocElectron/index.html#SEC6))
-* Windows (see [section 7](http://niebert.github.io/PanDocElectron/index.html#SEC7))
+* Linux (see [section 2.2.1](http://niebert.github.io/PanDocElectron/index.html#SEC5))
+* MacOSX (see [section 2.2.2](http://niebert.github.io/PanDocElectron/index.html#SEC6))
+* Windows (see [section 2.2.3](http://niebert.github.io/PanDocElectron/index.html#SEC7))
 
 ### 1.1 Quickstart for Installation ###
 Packages for Linux, Windows can be downloaded from [Sourceforge PanDocElectron](https://sourceforge.net/projects/pandocelectron/files)
@@ -233,6 +233,8 @@ Download and install from  the following website:
 ## 6 MacOSX - Electron Framework
 The following command assumes, that [HomeBrew](http://brew.sh) to be installed on your MacOSX.
 
+* Install
+
 ### 6.1 Install GIT on MacOSX
 GIT as version control system is used to update PanDocElectron
 
@@ -250,7 +252,7 @@ As a next step it necessary to install NodeJS on your system.
 
 Opening Windows (xquartz) create in your Electron Application needs the following installation on your MacOSX:
 
-> `brew install Caskroom/cask/xquartz wine mono`
+> `brew install wine mono`
 
 
 ### 6.4 Installation of PanDocElectron
@@ -270,6 +272,8 @@ Change directory to PanDocElectron and install prebuilt Electron binaries for yo
 
 > `cd  PanDocElectron` resp. `cd /path/to/application/PanDocElectron`
 
+Remove `node_modules` if the directory exists in `PanDocElectron`
+
 > `rm -R node_modules/*`
 
 > `npm install electron-prebuilt --save-dev`
@@ -283,7 +287,11 @@ Now install the dependencies and test the first run of PanDocElectron:
 ### 6.6 Install ImageMagick on MacOSX
 ImageMagick is needed to convert the PDF documents into PNG files as slides.
 
-> `brew install imagemagick imagemagick-doc`
+> `brew install imagemagick`
+
+For image conversion from PDF to PNG (audioslides you need GhostScript)
+
+> `brew install ghostscript`
 
 
 ### 6.7 Install LaTeX on MacOSX
@@ -293,7 +301,7 @@ LaTeX is needed to convert the Documents.
 ### 6.8 Install PanDoc on Linux
 The main package used by PanDocElectron is PanDoc itself
 
-> `brew install pandoc`
+> `brew install pandoc pandoc-citeproc`
 
 ### 6.9 Optional: Install Atom Editor to Modify the PanDocElectron
 PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
