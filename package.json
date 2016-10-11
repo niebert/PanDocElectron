@@ -23,10 +23,10 @@
   },
   "homepage": "https://github.com/niebert/PanDocElectron",
   "devDependencies": {
-    "electron-prebuilt": "^1.2.7"
+    "electron-prebuilt": "1.2.7"
   },
   "dependencies": {
-    "electron-open-link-in-browser": "^1.0.2",
-    "mkdirp": "^0.5.1"
+    "electron-open-link-in-browser": "1.0.2",
+    "mkdirp": "0.5.1"
   }
 }

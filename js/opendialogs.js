@@ -1,15 +1,26 @@
-
 function checkPathExists(pPath) {
+  const pathExists = require('path-exists');
+  var vRet = false;
+  var vMsg = 'Path not found \''+pPath+'\' - please check path!';
+  pathExists(pPath).then(exists => {
+    vMsg = 'Path \''+pPath+'\' found!';
+    vRet = true;
+  });
+  console.log(vMsg);
+  return false;
+}
+function X_checkPathExists(pPath) {
   var path = require('path');
-  if (path.existsSync(pPath)) {
-    console.log('Found \''+pPath+'\' Path');
-    // do something
+  if (path.existsSync(pPath)) { //Depricated function
+    console.log('checkPathExists(): Found \''+pPath+'\' Path');
+    return true;
+  } else {
+    return false;
   };
 }
 function checkFileExists(pFile) {
   if (fs.existsSync(pFile)) {
-    console.log('Found \''+pFile+'\' File');
-    // do something
+    console.log('checkFileExists(): Found \''+pFile+'\' File');
     return true;
   } else {
     return false;
