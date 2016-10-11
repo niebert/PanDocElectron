@@ -16,12 +16,12 @@ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get update
 sudo apt-get install -y nodejs
 sudo apt-get install -y npm
-echo "--------------------------"
+echo "---------------------------------------"
 echo "(3) Install PanDocElectron Requirements"
 echo "---------------------------------------"
 echo "OS: Debian, Ubuntu, Mint"
 npm install mkdirp
-sudo apt-get install pandoc pandoc-citeproc imagemagick imagemagick-doc texlive-full
+sudo apt-get install -y pandoc pandoc-citeproc imagemagick imagemagick-doc texlive-full
 # cd ~
 WORKING_DIR="PanDocElectron_bak_bak"
 if [ -d "$WORKING_DIR" ]; then rm -r ${WORKING_DIR}; fi
