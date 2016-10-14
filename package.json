@@ -1,6 +1,6 @@
 {
   "name": "PanDocElectron",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "A Graphical User Interface for PanDoc as Electron application",
   "main": "main.js",
   "scripts": {
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "electron-open-link-in-browser": "1.0.2",
-    "mkdirp": "0.5.1"
+    "mkdirp": "0.5.1",
+    "nodemw": "^0.10.1"
   }
 }

@@ -92,6 +92,7 @@ function executePanDocCMD(pHash) {
   };
   var vShellHash = pHash;
   var vPandoc_CMD = getValueDOM("pandocCMD");
+  pHash["executeable"] = vPandoc_CMD;
   vPandoc_CMD = replaceString(vPandoc_CMD,"\n","");
   var vInFORMAT  = pHash["inputFORMAT"];
   var vOutFORMAT = pHash["outputFORMAT"];

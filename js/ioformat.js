@@ -1,10 +1,11 @@
 function setInput4Project(pInputID,pOutputID,pExt) {
   var vPathSep = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
   var vInFormat = getValueDOM("inputFORMAT");
-  var vExt = vExtHash[vInFormat];
+  var vExt = pExt || vExtHash[vInFormat];
   //var vExt = pExt || vExtHash[vInFormat];
   var vDefaultFilename = "input";
-  var vFilename = document.getElementById(pInputID).value || vDefaultFilename;
+  var vSubDir = document.getElementById(pInputID).value || vDefaultFilename;
+  var vFilename = vSubDir;
   if (vFilename == "") {
     alert("Error ["+pInputID+"]: Input File was undefined!\n  setInput4Project():565:index.html");
   } else {
@@ -13,11 +14,15 @@ function setInput4Project(pInputID,pOutputID,pExt) {
     //vFilename = removeExtension(vFilename)+".md";
     //alert("Extension is not 'md'. Use filename '"+vFilename+"' instead!");
   };
+  if (pOutputID == "downloadWikiFILE") {
+    vFilename = getValueDOM("wikiARTICLE");
+    //write2innerHTML("linkWebFILE")
+  };
   //write2value(pOutputID,vFilename);
   //alert("setInput4Project() vFilename:\n"+vFilename);
   var vProjectDir = getProjectDir();
   //alert("vProjectDir="+vProjectDir);
-  vFilename = vProjectDir+vPathSep+vFilename+vPathSep+vFilename+"."+vExt;
+  vFilename = vProjectDir+vPathSep+vSubDir+vPathSep+vFilename+"."+vExt;
   console.log('Set Input File: \''+vFilename+'\' to DOM-Node['+pOutputID+']!');
   write2innerHTML(pOutputID,vFilename);
 }

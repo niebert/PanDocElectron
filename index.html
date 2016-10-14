@@ -365,7 +365,7 @@
         </div>
         <div class="apptab" id="bWebInputPage" hidden="hidden">
           <h3>
-            Web-Input:
+            Web-Download:
             <input type="checkbox" name="checkWebInput" id="checkWebInput" onclick="toggleCheck('tableweb',this.checked)"  hidden="hidden">
           </h3>
           <table border="0"  cellspacing="30" id="tableweb" class="buttonsweb" >
@@ -377,7 +377,7 @@
                 &nbsp;
               </td>
               <td>
-                <input type="text" size="35" id="inputWEBPROJECT" value="mywebfile" onchange="setInput4Project(this.id,'downloadWebFILE')">
+                <input type="text" size="35" id="inputWEBPROJECT" value="mywebfile" onchange="setInput4Project(this.id,'downloadWikiFILE')">
               </td>
             </tr>
             <tr>
@@ -388,7 +388,18 @@
                 &nbsp;
               </td>
               <td>
-                <tt id="downloadWebFILE"></tt>
+                <tt id="linkWebFILE"></tt>: <tt id="downloadWikiFILE"></tt><tt id="downloadWebFILE"></tt>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <b>Wiki Article:</b>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                <input type="text" size="45" id="wikiARTICLE" value="Linear_algebra" >
               </td>
             </tr>
             <tr>
@@ -399,8 +410,9 @@
                   &nbsp;
               </td>
               <td>
-                  <input type="text" size="55" id="inputURL" value="http://www.gnu.org/software/make/" >
-              </td>
+                <input type="text" size="55" id="inputURL" value="http://www.gnu.org/software/make/" style="display:none">
+                <input type="text" size="35" id="inputSERVER" value="en.wikipedia.org" > Path-API: <input type="text" size="15" id="pathAPI" value="/w" >
+            </td>
             </tr>
           </table>
           <hr/>
@@ -648,7 +660,8 @@ function setDefaultValues(pHashTPL) {
   write2innerHTML("currentworkingDIR",process.cwd());
   //setInput4WebDownload();
   setInput4Project('inputNEWPROJECT','inputNEWFILE');
-  setInput4Project('inputWEBPROJECT','downloadWebFILE',"md");
+  //setInput4Project('inputWEBPROJECT','downloadWebFILE',"md");
+  setInput4Project('inputWEBPROJECT','downloadWikiFILE',"wiki");
   // set vPath to Template Path and init the templates to default filenames
   //var vPath = app.getPath('documents')+vPathSeparator+"PanDoc";
   //require('path');
