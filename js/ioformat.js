@@ -112,9 +112,10 @@ function changedOutFormat (pOutputFORMAT) {
   visibleOutFormatSelectors(pOutputFORMAT);
 };
 function setOutputFormat(pOutputFORMAT) {
-  write2value("outputFORMAT",pOutputFORMAT);
+  var vOutputFORMAT = pOutputFORMAT || getValueDOM("outputFORMAT");
+  write2value("outputFORMAT",vOutputFORMAT);
   var vInputFile = getValueDOM("inputFILE");
-  var vOutFile   = createOutputFile(vInputFile,pOutputFORMAT);
+  var vOutFile   = createOutputFile(vInputFile,vOutputFORMAT);
   write2innerHTML("outputFILE",vOutFile);
-  visibleAudioSlideCount(pOutputFORMAT);
+  visibleAudioSlideCount(vOutputFORMAT);
 };

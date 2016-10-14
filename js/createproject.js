@@ -12,8 +12,8 @@ function downloadWikiInput() {
   var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
   makedirpath(vPath);
   makeProjectDirs(vPath); //audio, video, config, images
-  write2innerHTML("inputFILE",getValueDOM("downloadWebFILE"));
   setInputFormat("mediawiki");
+  setOutputFormat();
   var bot = require('nodemw');
 
   // pass configuration object
@@ -31,6 +31,9 @@ function downloadWikiInput() {
       var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
       var vFilename = getValueDOM('wikiARTICLE')+".wiki";
       var vInputFile = vPath + vSep + vFilename;
+      write2innerHTML("inputFILE",vInputFile);
+      var vOutFile = createOutputFile(vInputFile,getValueDOM("outputFORMAT"));
+      write2innerHTML("outputFILE",vOutFile);
       console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
       write2value("inputEDITOR",data);
       saveFile(vInputFile,data);
@@ -42,10 +45,13 @@ function downloadWebInput() {
   //alert("Download Input File and Convert Source File to MarkDown");
   var vPandoc_CMD = getValueDOM("pandocCMD");
   var vShellHash = {};
-  vShellHash["inputFILE"] = getValueDOM("downloadWebFILE");
+  var vInputFile = getValueDOM("downloadWebFILE");
+  vShellHash["inputFILE"] = vInputFile;
   write2innerHTML("inputFILE",vShellHash["inputFILE"]);
   console.log("downloadWebInput('markdown'):41");
   setInputFormat("markdown");
+  var vOutFile = createOutputFile(vInputFile,pOutputFORMAT);
+  write2innerHTML("outputFILE",vOutFile);
   initShellScript(vShellHash);
   vShellHash["executeable"] = vPandoc_CMD;
   console.log("downloadWebInput():41");
