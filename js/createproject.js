@@ -12,6 +12,8 @@ function downloadWikiInput() {
   var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
   makedirpath(vPath);
   makeProjectDirs(vPath); //audio, video, config, images
+  write2innerHTML("inputFILE",getValueDOM("downloadWebFILE"));
+  setInputFormat("mediawiki");
   var bot = require('nodemw');
 
   // pass configuration object
@@ -41,7 +43,9 @@ function downloadWebInput() {
   var vPandoc_CMD = getValueDOM("pandocCMD");
   var vShellHash = {};
   vShellHash["inputFILE"] = getValueDOM("downloadWebFILE");
-  console.log("downloadWebInput():41");
+  write2innerHTML("inputFILE",vShellHash["inputFILE"]);
+  console.log("downloadWebInput('markdown'):41");
+  setInputFormat("markdown");
   initShellScript(vShellHash);
   vShellHash["executeable"] = vPandoc_CMD;
   console.log("downloadWebInput():41");
