@@ -1,3 +1,10 @@
+function getCMD(pID) {
+  var vCMD = getValueDOM(pID);
+  //vCMD = vCMD.replace(/[\n\s]/g,"");
+  vCMD = replaceString(vCMD,"\n","");
+  return vCMD;
+};
+
 function convertFile() {
   var vHash = {};
   if (vHashTPL) {
@@ -91,9 +98,8 @@ function executePanDocCMD(pHash) {
     vAdditionParams = " "+getValueDOM("inputPARAMS")+" " || " ";
   };
   var vShellHash = pHash;
-  var vPandoc_CMD = getValueDOM("pandocCMD");
+  var vPandoc_CMD = getCMD("pandocCMD");
   pHash["executeable"] = vPandoc_CMD;
-  vPandoc_CMD = replaceString(vPandoc_CMD,"\n","");
   var vInFORMAT  = pHash["inputFORMAT"];
   var vOutFORMAT = pHash["outputFORMAT"];
   var vPanOutFORMAT = pHash["pandocOUTFORMAT"];
@@ -277,6 +283,7 @@ function openConvertedFile() {
   fs.exists(vOutputFile, function(pExists) {
       if(pExists) {
           // if File exists,  Open It
+          alert("Try to open Output File!\n"+vOutputFile);
           shell.openItem(vOutputFile);
           console.log("Open External File: "+vOutputFile);
       } else {
@@ -285,15 +292,6 @@ function openConvertedFile() {
   });
 }
 
-function X_openConvertedFile(pShellHash) {
-  if (isChecked("checkOPENCONVERTED")) {
-    //open External does not work on Linux;
-    console.log("Open External File: "+pShellHash["outputFILE"]);
-    shell.openItem(pShellHash["outputFILE"]);
-  } else {
-    console.log("Output File "+pShellHash["outputFILE"]+" must be opened manually!");
-  };
-}
 function getWorkingDir() {
   var vCWD = getInnerHTML('currentworkingDIR');
   if (vCWD) {
@@ -602,8 +600,7 @@ function convertPDF2PNG(pInputPDF,pCount,pShellHash) {
     var vPDFstartpage = parseInt(getValueDOM("PDFstartpage")) || 0;
     alert("Remark: Converting PDF slide for file '"+getNameExt4Filename(pInputPDF)+"' from page " +vPDFstartpage + " to page "+(vPDFstartpage+vCount-1)+" could take up to "+pCount+" minutes!");
     console.log("convertPDF2PNG(pInputPDF,"+pCount+") with PDF startpage "+vPDFstartpage);
-    var vIM_CMD = getValueDOM("imagemagickCMD");
-    vIM_CMD = replaceString(vIM_CMD,"\n","");
+    var vIM_CMD = getCMD("imagemagickCMD");
     var vCMD = "";
     while ((i<vCount) && (i < 200)) {
       vOutPNG = vPath +i+".png";

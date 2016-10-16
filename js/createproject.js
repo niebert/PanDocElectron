@@ -5,7 +5,7 @@ function downloadInputFile(pDownloadType) {
   } else {
     downloadWebInput();
   }
-}
+};
 
 function downloadWikiInput() {
   var vSep = getPathSeparator();
@@ -14,6 +14,7 @@ function downloadWikiInput() {
   makeProjectDirs(vPath); //audio, video, config, images
   setInputFormat("mediawiki");
   setOutputFormat();
+  var vMediaArray;
   var bot = require('nodemw');
 
   // pass configuration object
@@ -34,11 +35,228 @@ function downloadWikiInput() {
       write2innerHTML("inputFILE",vInputFile);
       var vOutFile = createOutputFile(vInputFile,getValueDOM("outputFORMAT"));
       write2innerHTML("outputFILE",vOutFile);
-      console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
+      vMediaArray = parseWiki4Media(data);
+      downloadWikiMedia(vMediaArray);
+      data = convertMediaLink4Wiki(data,vMediaArray);
       write2value("inputEDITOR",data);
+      console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
       saveFile(vInputFile,data);
       alert("Wiki Article from '"+getValueDOM('wikiARTICLE')+"' downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'))
     });
+};
+
+
+function convertMediaLink4Wiki(pWikiText,pMediaArray) {
+  var vReplaceLink;
+  var vMediaFile;
+  var vSubDir;
+
+  pWikiText = pWikiText.replace(/\[(File|Image|Datei):/gi,"[File:");
+
+  for (var i = 0; i < pMediaArray.length; i++) {
+    vSubDir = getMediaSubDir(pMediaArray[i]);
+    vMediaFile = convertWikiMedia2File(pMediaArray[i]);
+    vReplaceLink = vSubDir + "/" + vMediaFile;
+    pWikiText = replaceString(pWikiText,"File:"+pMediaArray[i],"File:"+vReplaceLink);
+  };
+  return pWikiText;
+};
+
+function downloadWikiMedia (pMediaArray) {
+    var vURL="https://"+getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
+    var vDownloaded = "<b>Download Media Files for URL: <a href='"+vURL+"' target='_blank'>"+vURL+"</a></b>";
+    var vMediaURL = getValueDOM("inputMEDIA");
+    vDownloaded +="\n<ul>";
+    // https://en.wikipedia.org/wiki/My_article#/media/File:My_image.jpg
+    var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
+    for (var i = 0; i < pMediaArray.length; i++) {
+      //vDownloaded +="\n("+(i+1)+") "+pMediaArray[i];
+      vDownloaded +="\n  <li>";
+      vDownloaded += "("+(i+1)+") <a href='"+vMediaURL+pMediaArray[i]+"' target='_blank'>"+pMediaArray[i]+"</a>";
+      vDownloaded +="\n  </li>";
+      checkMediaFile(vProjectDir,vMediaURL+pMediaArray[i],pMediaArray[i]);
+    };
+    vDownloaded +="\n</ul>";
+    vDownloaded = wrapperHTML(vDownloaded);
+    saveLogWiki(vProjectDir,vDownloaded);
+};
+
+function splitURL(pURL) {
+  var vHash = {};
+  var vArrURL = pURL.split('://');
+  vHash["url"] = pURL;
+  vHash["protocol"] = vArrURL[0];
+  var vSlashPos = vArrURL[1].indexOf("/");
+  if (vSlashPos >0) {
+    vHash["server"] =  vArrURL[1].substr(0,vSlashPos-1);
+    vHash["path"] = vArrURL[1].substr(vSlashPos,vArrURL[1].length);
+  } else {
+    vHash["server"] =  vArrURL[1];
+    vHash["path"] = "";
+  };
+  return vHash;
+};
+
+function wrapperHTML(pContent) {
+  var vOut = "<html><head><title>Download Wiki Media</title></head><body>";
+  vOut += pContent;
+  vOut += "</body></html>";
+  return vOut;
+};
+
+function checkMediaFile(pProjectDir,pMediaFullURL,pMediaLink) {
+};
+
+function X_checkMediaFile(pProjectDir,pMediaFullURL,pMediaLink) {
+  //var vWebpageMedia = getContentHTTPS(pMediaFullURL);
+  var vSep = getPathSeparator();
+  var vHashURL = splitURL(pMediaFullURL);
+  var vDownloadPage = "";
+  if (vHashURL["protocol"] == "https") {
+    vDownloadPage = getContentHTTPS(vHashURL);
+  } else {
+    vDownloadPage = getContentHTTP(vHashURL);
+  };
+  //saveFile(pProjectDir+vSep+pMediaLink,vDownloadPage);
+  var vURL = extractDownloadURL(vDownloadPage);
+  if (vURL != "") {
+    downloadMedia(pProjectDir,vURL,pMediaLink)
+  }
+};
+
+function extractDownloadURL(pDownloadPage) {
+  var vURL = "";
+  var vSearch = /(?:<div class="fullMedia"><a href=")([^"]+)/g;
+  // \[            # "["
+  // (?:            # non-capturing group
+  //  <div class="fullMedia"><a href="       #   prefix link
+  // )              # end non-capturing group
+  //(              # group 1
+  //  [^"]+      #   any character except """ at least once
+  // )              # end group 1 - this will be the image's name
+  var vResult = vSearch.exec(pDownloadPage);
+  if (vResult && vResult.length > 0) {
+    vURL = vResult[1];
+  };
+  console.log("extractDownloadURL()='"+vURL+"'");
+  return vURL;
+}
+
+function getContentHTTP(pHashURL) {
+  var http = require('http');
+  var vOut = "";
+  http.get(pHashURL['url'], function(res) {
+    console.log("Got HTTP response: " + res.statusCode);
+    var bodyarr = [];
+
+    res.on('data', function(chunk){
+      bodyarr.push(chunk);
+    });
+    res.on('end', function(){
+      vOut += bodyarr.join('').toString();
+    });
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
+  return vOut;
+};
+
+function getContentHTTPS(pHashURL) {
+  var https = require('https');
+  var vOut = "";
+  https.get(pHashURL['url'], function(res) {
+    console.log("Got HTTPS response: " + res.statusCode);
+    var bodyarr = [];
+
+    res.on('data', function(chunk){
+      bodyarr.push(chunk);
+    });
+    res.on('end', function(){
+      vOut += bodyarr.join('').toString();
+    });
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
+  console.log(vOut);
+  return vOut;
+}
+
+function downloadMedia(pProjectDir,pURL,pMediaLink) {
+  var vMediaLink = convertWikiMedia2URL(pMediaLink);
+  var vMediaFile = convertWikiMedia2File(pMediaLink);
+  var vSep = getPathSeparator();
+  var vWGET_File  = pURL + "/" +vMediaLink;
+  var vSubDir = getMediaSubDir(vMediaLink);
+  var vWGET_CMD = getCMD("wgetCMD");
+  runShellCommand(vWGET_CMD + " -O " + pProjectDir + vSep + vSubDir + vSep + vMediaFile+" "+vWGET_File);
+}
+
+function getMediaSubDir(pMediaLink) {
+  var vExt = getExtensionOfFilename(pMediaLink);
+  var vSubDir ="images"
+  switch (vExt) {
+    case "mp3":
+        vSubDir = "audio"
+    break;
+    case "mid":
+        vSubDir = "audio"
+    break;
+    case "ogg":
+        vSubDir = "video"
+    break;
+    case "webm":
+        vSubDir = "video"
+    break;
+    default:
+        vSubDir = "images"
+  };
+  return vSubDir;
+}
+
+function saveLogWiki(pProjectDir, pDownloaded) {
+  var vSep = getPathSeparator();
+  var vLogFile = pProjectDir + vSep + getLogFilename();
+  saveFile(vLogFile,pDownloaded);
+};
+
+function getLogFilename() {
+  return "download_"+getValueDOM('wikiARTICLE')+".html";
+};
+
+function convertWikiMedia2File(pMediaLink) {
+  pMediaLink = convertWikiMedia2URL(pMediaLink);
+  pMediaLink = pMediaLink.replace(/[^A-Za-z_\-0-9\.]/g,"_");
+  //console.log("Media File: '"+pMediaLink+"'");
+  return pMediaLink;
+};
+
+function convertWikiMedia2URL(pMediaLink) {
+  pMediaLink = pMediaLink.replace(/[ \t]+$/,"");
+  pMediaLink = pMediaLink.replace(/ /g,"_");
+  //console.log("MediaLink: '"+pMediaLink+"'");
+  return pMediaLink;
+};
+
+function parseWiki4Media(pWikiText) {
+  var vMediaArray = [];
+  //var vSearch = /\[(File|Datei|Image):([^\|]*)/;
+  var vSearch = /\[(?:File|Image|Datei):([^\|]+)/g;
+  // \[            # "["
+  // (?:            # non-capturing group
+  //  File|Image|Datei        #   "File" or "Image" or "Datei"
+  // )              # end non-capturing group
+  //:             # ":"
+  //(              # group 1
+  //  [^\|]+      #   any character except "|" at least once
+  // )              # end group 1 - this will be the image's name
+  var vResult;
+  var vCount =0;
+  while (vResult = vSearch.exec(pWikiText)) {
+    vCount++;
+    vMediaArray.push(vResult[1]);
+    console.log("Media "+vCount+": '" + vResult[1] + "' found");
+  };
+  return vMediaArray;
 }
 
 function downloadWebInput() {

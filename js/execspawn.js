@@ -74,7 +74,7 @@ function runShellCommand (pCommand,pShellHash) {
     pShellHash["savefile"] += "Y";
     pShellHash["commands"] +="\n"+pCommand;
   } else {
-    alert("pShellHash undefined for ''"+ pCommand+"'");
+    console.log("pShellHash['command'] not appended for ''"+ pCommand+"'");
   };
   console.log("runShellCommand: "+ pCommand);
   const child = exec(pCommand,
@@ -89,32 +89,6 @@ function runShellCommand (pCommand,pShellHash) {
  });
 }
 
-function X_runShellCommand(pCommand,pShellHash) {
-  if (pShellHash) {
-    pShellHash["savefile"] = "Y";
-    pShellHash["commands"] +="\n"+pCommand;
-    //alert("SHELL COMMANDS:\n"+pShellHash["commands"]);
-  } else {
-    alert("pShellHash undefined for ''"+ pCommand+"'");
-  };
-  if (pShellHash["executeable"]) {
-    if (pShellHash["paramarray"]) {
-      console.log("Execute with Parameters "+pShellHash["executeable"]);
-      execFileCommand(pShellHash["executeable"],pShellHash["paramarray"]);
-    } else {
-      console.log("Execute with Parameters "+pShellHash["executeable"]);
-      execFileCommand(pShellHash["executeable"],[]);
-    }
-  } else {
-    console.log("Execute SPLIT Parameters "+pShellHash["executeable"]);
-    var vExecutable = pCommand.substr(0,pCommand.indexOf(" "));
-    var vParameters = pCommand.substr(pCommand.indexOf(" "),pCommand.length);
-    //alert("vExecutable="+vExecutable+"\nParameters="+vParameters);
-    execFileCommand(vExecutable,vParameters.split(/[ ]+/));
-    //execFileCommand("sh","rename_release.sh");
-  }
-
-};
 
 function execFileCommand(pExecutable,pParamArray) {
   //var child = require('child_process').execFile;

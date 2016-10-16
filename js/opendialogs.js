@@ -8,7 +8,8 @@ function checkPathExists(pPath) {
   });
   console.log(vMsg);
   return false;
-}
+};
+
 function X_checkPathExists(pPath) {
   var path = require('path');
   if (path.existsSync(pPath)) { //Depricated function
@@ -17,7 +18,8 @@ function X_checkPathExists(pPath) {
   } else {
     return false;
   };
-}
+};
+
 function checkFileExists(pFile) {
   if (fs.existsSync(pFile)) {
     console.log('checkFileExists(): Found \''+pFile+'\' File');
@@ -25,16 +27,38 @@ function checkFileExists(pFile) {
   } else {
     return false;
   }
-}
+};
+
+function openWikiInBrowser() {
+  var vServer = getValueDOM("inputSERVER");
+  var vWikiArticle = getValueDOM("wikiARTICLE");
+  var vURL = "https://"+vServer+"/wiki/"+vWikiArticle;
+  openBrowserURL(vURL);
+};
+
+function openMediaInWindow() {
+  var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  var vSep = getPathSeparator();
+  var vFilename = vPath + vSep + "download_"+getValueDOM('wikiARTICLE')+".html";
+  openFileInWindow(vFilename);
+};
+
 function openBrowserURL(pURL) {
   const {shell} = require('electron');
   shell.openExternal(pURL);
-}
+};
 
 function openFileInBrowser(pFilename) {
   const {shell} = require('electron');
+  console.log("openFileInBrowser('"+pFilename+"')");
   shell.openExternal(pFilename);
-}
+};
+
+function openFileInWindow(pFilename) {
+  const {shell} = require('electron');
+  console.log("openFileInBrowser('"+pFilename+"')");
+  window.open(pFilename);
+};
 
 function X_openFileInBrowser(pFilename) {
   const {shell} = require('electron');
@@ -44,28 +68,32 @@ function X_openFileInBrowser(pFilename) {
     pFilename = "file://"+pFilename;
   };
   shell.openExternal(pFilename);
-}
+};
 
 function openInputFile (pPath) {
   pPath = getProjectDir(pPath);
   openFile("inputFILE","inputEDITOR",pPath);
-}
+};
+
 function openBIBFile (pPath) {
   //pPath = getProjectDir(pPath);
   var vSep = getPathSeparator();
   pPath = getSoftwareDir("bib"+vSep+pPath);
   openFile("bibFILE","",pPath)
-}
+};
+
 function openCSLFile (pPath) {
   var vSep = getPathSeparator();
   pPath = getSoftwareDir("bib"+vSep+pPath);
   openFile("cslFILE","",pPath)
-}
+};
+
 function getFileContent (pFilename) {
   var vReturn =  fs.readFileSync(pFilename,'utf8');
   console.log('get Content of \''+pFilename+'\'');
   return vReturn;
 };
+
 function pathLinux2Win(pPath) {
   var vOS = getOperatingSystem();
   if (vOS == "Windows") {
@@ -74,15 +102,15 @@ function pathLinux2Win(pPath) {
     pPath = replaceString(pPath,"\\","/");
   };
   return pPath;
-}
+};
 
 function openCMDFile (pFolderID,pPath,pHashTPL) {
   openTPLFile (pFolderID,pPath,pHashTPL);
-}
+};
 
 function openREFFile (pFolderID,pPath,pHashTPL) {
   openTPLFile(pFolderID,pPath,pHashTPL);
-}
+};
 
 function openTPLFile (pFolderID,pPath,pHashTPL) {
   //makedirpath(pPath);
@@ -97,7 +125,8 @@ function openTPLFile (pFolderID,pPath,pHashTPL) {
       vHashTPL[pFolderID] = fileName;
     };
  });
-}
+};
+
 function openDirectory(pFolderID,pDefaultPath) {
   //dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]})
   var vFolder =dialog.showOpenDialog({ defaultPath: pDefaultPath , properties: [ 'openDirectory' ]});
@@ -105,10 +134,12 @@ function openDirectory(pFolderID,pDefaultPath) {
     write2innerHTML(pFolderID,vFolder);
     vHashTPL[pFolderID] = vFolder;
   }
-}
+};
+
 function openFile (pFilenameID,pTextAreaID,pPath) {
   openFileWriteDOM(pFilenameID,pTextAreaID,pPath);
 };
+
 function openFileWriteDOM (pFilenameID,pTextAreaID,pDefaultPath) {
   //alert("pPath="+pPath);
   //var vDefaultPath=app.getPath('downloads')}
@@ -130,11 +161,11 @@ function openFileWriteDOM (pFilenameID,pTextAreaID,pDefaultPath) {
       autoSelectInputFormat();
     }
  });
-}
+};
 
 function copyFile2Editor (pID,pFilename) {
   fs.readFile(pFilename, 'utf-8', function (err, data) {
     write2value(pID, data);
     console.log('\''+pFilename+'\' opened!');
   });
-}
+};

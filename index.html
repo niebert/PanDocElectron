@@ -58,6 +58,7 @@
         <div align="center">
           <button class="bluebutton" id="loadConfig"  onclick="loadConfig('default.cfg');">Load Config</button>
           <button class="bluebutton" id="saveConfig"  onclick="saveConfig('default.cfg');">Save Config</button>
+          <!-- button class="bluebutton" id="resetConfig"  onclick="deleteFile('default.cfg');alert('Reset will have next start of PanDocElectron')">Reset Config</button -->
           <hr/>
         </div>
         <div align="center">
@@ -388,7 +389,7 @@
                 &nbsp;
               </td>
               <td>
-                <tt id="linkWebFILE"></tt>: <tt id="downloadWikiFILE"></tt><tt id="downloadWebFILE"></tt>
+                <tt id="linkWebFILE"></tt> <tt id="downloadWikiFILE"></tt><tt id="downloadWebFILE"></tt>
               </td>
             </tr>
             <tr>
@@ -399,19 +400,23 @@
                 &nbsp;
               </td>
               <td>
-                <input type="text" size="45" id="wikiARTICLE" value="Linear_algebra" >
+                <input type="text" size="45" id="wikiARTICLE" value="Hurricane_Matthew" >Linear_algebra
+                <button  class="btn btn-primary btn-xs"  id="bOpenWikiInBrowser"  onclick="openWikiInBrowser();">Open Wiki</button>
               </td>
             </tr>
             <tr>
               <td align="right">
-                <button class="btn btn-primary btn-xs"  id="downloadFile"  onclick="downloadInputFile('projects');">Download File</button>
+                <button  class="bluebutton"  id="downloadFile"  onclick="downloadInputFile('projects');">Download File</button>
               </td>
               <td>
                   &nbsp;
               </td>
               <td>
                 <input type="text" size="55" id="inputURL" value="http://www.gnu.org/software/make/" style="display:none">
-                <input type="text" size="35" id="inputSERVER" value="en.wikipedia.org" > Path-API: <input type="text" size="15" id="pathAPI" value="/w" >
+                <input type="text" size="35" id="inputSERVER" value="en.wikipedia.org" > Path-API: <input type="text" size="15" id="pathAPI" value="/w" ><br>
+                <input type="text" size="55" id="inputMEDIA" value="https://commons.wikimedia.org/wiki/File%3A">
+                <!-- button  class="btn btn-primary btn-xs"  id="bOpenMediaInBrowser"  onclick="openMediaInWindow();">Media URL</button -->
+
             </td>
             </tr>
           </table>
@@ -510,14 +515,13 @@
               </td>
             </tr>
             <tr>
-              <tr>
-                <td>
+              <td>
                   <button class="btn btn-primary btn-xs"  id="openIMConvert"  onclick="openCMDFile('imagemagickCMD','/',vHashTPL);">Convert ImageMagick</button>
-                </td>
-                <td>
+              </td>
+              <td>
                   &nbsp;
-                </td>
-                <td> <!-- /opt/local/bin/ -->
+              </td>
+              <td> <!-- /opt/local/bin/ -->
                   <marker id="PimagemagickCMD" >
                     <tt id="imagemagickCMD">convert</tt>
                     <input type="button" value="Edit" onclick="showEditPath('imagemagick')">
@@ -527,18 +531,37 @@
                     <input type="button" value="OK" onclick="hideEditPath('imagemagick')"><br/>
                     (enter path for ImageMagick Command 'convert')
                   </marker>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                <button class="btn btn-default"  id="defDIRmainDIR"  onclick="openDirectory('projectmainDIR',document.getElementById('projectmainDIR').innerHTML);">Main Folder</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <button class="btn btn-primary btn-xs"  id="openWGetCMD"  onclick="openCMDFile('wgetCMD','/',vHashTPL);">wget Downloader</button>
               </td>
               <td>
                   &nbsp;
               </td>
-              <td>
-                  <tt id="projectmainDIR"></tt>
+              <td> <!-- /opt/local/bin/ -->
+                  <marker id="PwgetCMD" >
+                    <tt id="wgetCMD">wget</tt>
+                    <input type="button" value="Edit" onclick="showEditPath('wget')">
+                  </marker>
+                  <marker id="PEDITwgetCMD"  hidden="hidden" >
+                    <input type="text" id="EDITwgetCMD" size="50" >
+                    <input type="button" value="OK" onclick="hideEditPath('wget')"><br/>
+                    (enter path for Download Command 'wget')
+                  </marker>
               </td>
+            </tr>
+            <tr>
+                <td>
+                 <button class="btn btn-default"  id="defDIRmainDIR"  onclick="openDirectory('projectmainDIR',document.getElementById('projectmainDIR').innerHTML);">Main Folder</button>
+               </td>
+               <td>
+                  &nbsp;
+               </td>
+               <td>
+                  <tt id="projectmainDIR"></tt>
+               </td>
             </tr>
             <tr>
               <td>
@@ -631,7 +654,7 @@ function appendTemplateHash(pID,pTemplate,pReplaceHash,pTPL) {
       };
       //alert("REPLACED ["+pID+"]: \n"+vContent);
       append2innerHTML(pID,vContent);
-      console.log('Template File \''+pTemplate+'\' loaded!');
+      //console.log('['+pID+'] Template File \''+pTemplate+'\' loaded!');
   };
 };
 
@@ -707,16 +730,19 @@ function setDefaultValues(pHashTPL) {
       var vWinOS = vPathMain + vSep+ "WinOS"  + vSep;
       write2innerHTML("pandocCMD",vWinOS + "PanDoc_Win" + vSep + "pandoc.exe");
       write2innerHTML("imagemagickCMD",vWinOS + "ImageMagick_Win" + vSep + "convert.exe");
+      write2innerHTML("wgetCMD",vWinOS + "wget_Win" + vSep + "bin"+ vSep + "wget.exe");
       break;
     case "MacOSX":
       //alert("MacOSX");
       whichPath("pandoc","pandocCMD","/usr/local/bin/pandoc");
       whichPath("convert","imagemagickCMD","/usr/local/bin/convert");
+      whichPath("wget","wgetCMD","/usr/local/bin/wget")
       break;
     case "Linux":
       //alert("Linux");
       whichPath("pandoc","pandocCMD");
       whichPath("convert","imagemagickCMD");
+      whichPath("wget","wgetCMD");
       break;
     default:
 
@@ -786,6 +812,7 @@ setDefaultValues(vHashTPL);
 
   <script>
     // You can also require other files to run in this process
+    //loadConfig('default.cfg');
     require('./renderer.js');
     //shell.openItem("/opt/local/bin/geany");
     //shell.openItem("/Users/niehausbert/firefoxsecure.sh");
