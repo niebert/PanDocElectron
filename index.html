@@ -65,7 +65,8 @@
           <button  id="bConvert"  onclick="setPage(this.id);">Convert</button>
           <button  id="bEditor"  onclick="setPage(this.id);">Editor</button>
           <button  id="bNew"  onclick="setPage(this.id);">New</button>
-          <button  id="bWebInput"  onclick="setPage(this.id);">Web-Input</button>
+          <button  id="bWebInput"  onclick="setPage(this.id);">Wiki-Download</button>
+          <button  id="bMediaDownload"  onclick="setPage(this.id);">Media-Download</button>
           <button  id="bBibliography"  onclick="setPage(this.id);">Bibliography</button>
           <button  id="bSettings"  onclick="setPage(this.id);">Settings</button>
           <button  id="bTemplates"  onclick="setPage(this.id);">Templates</button> &nbsp;
@@ -154,6 +155,7 @@
                   <option value="markdown">Markdown (pandoc)</option>
                   <option value="mediawiki">MediaWiki</option>
                   <option value="audioslides">AudioSlides from PDF</option>
+                  <option value="audioplayer">Add AudioPlayer (Slides)</option>
                   <option value="beamer">LaTeX Beamer (Slides)</option>
                   <option value="reveal" selected="selected">RevealJS</option>
                   <option value="dzslides">DZSlides (Slides)</option>
@@ -238,6 +240,14 @@
             </tr>
           </table>
           <hr/>
+        </div>
+        <div class="apptab" id="bWikiMediaPage"  hidden="hidden">
+          <h3>
+            Input Editor:
+          </h3>
+          <div id="divWikiMediaDownload">
+            Please download Wiki content first (Web-Input) ....
+          </div>
         </div>
         <div class="apptab" id="bEditorPage"  hidden="hidden">
           <h3>
@@ -364,9 +374,17 @@
           </table>
           <hr/>
         </div>
+        <div class="apptab" id="bMediaDownloadPage" hidden="hidden">
+          <h3>
+            Media-Download (Wiki):
+          </h3>
+          <div id="divMediaWikiDOWNLOAD">
+            please download Wiki content first, ...
+          </div>
+        </div>
         <div class="apptab" id="bWebInputPage" hidden="hidden">
           <h3>
-            Web-Download:
+            Web-Download (Wiki):
             <input type="checkbox" name="checkWebInput" id="checkWebInput" onclick="toggleCheck('tableweb',this.checked)"  hidden="hidden">
           </h3>
           <table border="0"  cellspacing="30" id="tableweb" class="buttonsweb" >
@@ -414,7 +432,7 @@
               <td>
                 <input type="text" size="55" id="inputURL" value="http://www.gnu.org/software/make/" style="display:none">
                 <input type="text" size="35" id="inputSERVER" value="en.wikipedia.org" > Path-API: <input type="text" size="15" id="pathAPI" value="/w" ><br>
-                Media Download: <input type="text" size="35" id="inputMEDIA" value="https://commons.wikimedia.org/wiki/File%3A">
+                <b>Media Download:</b> <input type="text" size="42" id="inputMEDIA" value="https://commons.wikimedia.org/wiki/File%3A">
                 <!-- button  class="btn btn-primary btn-xs"  id="bOpenMediaInBrowser"  onclick="openMediaInWindow();">Media URL</button -->
 
             </td>

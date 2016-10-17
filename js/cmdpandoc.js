@@ -119,6 +119,23 @@ function executePanDocCMD(pHash) {
   vCMD += vCMD_post;
   pHash["executeable"] = vPandoc_CMD;
   switch (vOutFORMAT) {
+    case "audioplayer":
+      //-----CONVERT AUDIOSLIDES-------
+      var vInputPDF = getInnerHTML("inputFILE");
+      if (vInFORMAT == "html") {
+        //alert("Input Format is PDF ");
+        pHash["savefile"] = "Y";
+        convertPDF2PNG(vInputPDF,vCount,pHash);
+      } else {
+        var vMSG = "No HTML-Input:\n Please select an HTML file as input file!";
+        vMSG += "\nFile should be a presentation (reveal or DZslides) that contains a <section> tags.";
+        vMSG += "\nIf you select 16 Slides, copy audio comments per slide 'audio0.mp3', ... 'audio15.png'";
+        vMSG += "\nto the subdirectory '/audio' in your PanDoc-project. Use e.g. Audacity to create MP3 audio comments for slide.";
+        alert(vMSG);
+      };
+      insertAudioTags(pHash);
+      copyDemoAudio(pSHash);
+    break;
     case "audioslides":
       //-----CONVERT AUDIOSLIDES-------
       var vCount = getValueDOM("slidecount")
@@ -135,6 +152,7 @@ function executePanDocCMD(pHash) {
         alert(vMSG);
       };
       createImageSlide(pHash["outputFILE"],vCount,pHash["template"]);
+      copyDemoAudio(pHash);
     break;
     case "latex":
       runShellCommand(vCMD,vShellHash);
@@ -278,6 +296,54 @@ function executePanDocCMD(pHash) {
   saveShellScript(vShellHash);
   callPandoc(vShellHash);
 };
+
+function insertAudioTags(pHash) {
+  var vInFORMAT  = pHash["inputFORMAT"];
+  var vOutFILE = pHash["outputFILE"];
+  if (vInFORMAT == "html") {
+    console.log("Insert Audio-Tag - inputFORMAT='html'");
+    //copyFile2Editor ("inputEDITOR",pHash["inputFILE"]);
+    //copyFile2Editor ("outputEDITOR",pHash["inputFILE"]);
+    fs.readFile(pFilename, 'utf-8', function (err, data) {
+      write2value("inputEDITOR", data);
+      data = replaceAudioTag(data);
+      write2value("outputEDITOR", data);
+      console.log('Audio Tags in \''+pFilename+'\' inserted!');
+    });
+  } else {
+    alert("ERROR: Insert Audio-Tags not possible for ["+vInFORMAT+"]");
+  };
+};
+
+function replaceAudioTag(pData) {
+  var vSearch = /(<section[^>]+)/gi;
+  var vResult;
+  var vCount = 0;
+  var vSlideTPL  = getFileContent (getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+"defaudiotag.html");
+  var vAudioTag = getFileContent (vSlideTPL);
+  //alert(vPresentation.substr(0,300));
+  var vDefSlide = "defslide.html";
+  var vTagInsert = "";
+  while (vResult = vSearch.exec(pData)) {
+        vTagInsert = replaceString(vAudioTag,"___NR___",vCount);
+        vCount++;
+        pData = replaceString(pData,vResult[1],vResult[1]+vTagInsert);
+  };
+  return pData;
+}
+function copyDemoAudio(pSHash) {
+  var vAudioDemo = getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+"audiodefault.mp3";
+  var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
+  var vSep = getPathSeparator();
+  var vAudioDir = vProjectDir + vSep +"audio" + vSep;
+  if (checkFileExists(vAudioDir+"audio0.mp3")) {
+    copyFile(vAudioDemo,vAudioDir+"audio0.mp3");
+  };
+  if (checkFileExists(vAudioDir+"audio1.mp3")) {
+    copyFile(vAudioDemo,vAudioDir+"audio1.mp3");
+  };
+};
+
 function openConvertedFile() {
   var vOutputFile =  getInnerHTML("outputFILE");
   fs.exists(vOutputFile, function(pExists) {

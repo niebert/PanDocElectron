@@ -1,5 +1,5 @@
 function setPage(pButtonID) {
-	var vPages = ["bConvert","bNew","bWebInput","bBibliography","bSettings","bEditor","bTemplates"];
+	var vPages = ["bConvert","bNew","bWebInput","bMediaDownload","bBibliography","bSettings","bEditor","bTemplates"];
 	//alert("setPage for ID="+pButtonID+" vPages.length="+vPages.length);
 	var i=0;
 	for (i=0;i<vPages.length;i++) {

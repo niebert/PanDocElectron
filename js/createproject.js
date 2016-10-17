@@ -63,22 +63,47 @@ function convertMediaLink4Wiki(pWikiText,pMediaArray) {
 };
 
 function downloadWikiMedia (pMediaArray) {
-    var vURL="https://"+getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
-    var vDownloaded = "<b>Download Media Files for URL: <a href='"+vURL+"' target='_blank'>"+vURL+"</a></b>";
-    var vMediaURL = getValueDOM("inputMEDIA");
-    vDownloaded +="\n<ul>";
-    // https://en.wikipedia.org/wiki/My_article#/media/File:My_image.jpg
-    var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
-    for (var i = 0; i < pMediaArray.length; i++) {
-      //vDownloaded +="\n("+(i+1)+") "+pMediaArray[i];
-      vDownloaded +="\n  <li>";
-      vDownloaded += "("+(i+1)+") <a href='"+vMediaURL+pMediaArray[i]+"' target='_blank'>"+pMediaArray[i]+"</a>";
-      vDownloaded +="\n  </li>";
-      checkMediaFile(vProjectDir,vMediaURL+pMediaArray[i],pMediaArray[i]);
-    };
-    vDownloaded +="\n</ul>";
-    vDownloaded = wrapperHTML(vDownloaded);
-    saveLogWiki(vProjectDir,vDownloaded);
+  var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  var vMediaURL = getValueDOM("inputMEDIA");
+  for (var i = 0; i < pMediaArray.length; i++) {
+    checkMediaFile(vProjectDir,vMediaURL+pMediaArray[i],pMediaArray[i]);
+  };
+  createdDownloadMediaDIV(pMediaArray,vMediaURL);
+  createdDownloadMediaFile(pMediaArray,vMediaURL,vProjectDir);
+};
+
+function createdDownloadMediaDIV(pMediaArray,pMediaURL) {
+  var vURL="https://"+getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
+  var vDownloaded = "<hr><b>Download Media Files for URL: <a href='#' onclick=\"openFileInBrowser('"+vURL+"')\">"+vURL+"</a></b>";
+  vDownloaded +="\n<ul>";
+  // https://en.wikipedia.org/wiki/My_article#/media/File:My_image.jpg
+  for (var i = 0; i < pMediaArray.length; i++) {
+    //vDownloaded +="\n("+(i+1)+") "+pMediaArray[i];
+    vDownloaded +="\n  <li>";
+    vDownloaded += "("+(i+1)+") <a href='#' onclick=\"openFileInBrowser('"+pMediaURL+pMediaArray[i]+"')\">"+pMediaArray[i]+"</a>";
+    vDownloaded +="\n  </li>";
+  };
+  vDownloaded +="\n</ul><hr>";
+  write2innerHTML("divMediaWikiDOWNLOAD",vDownloaded);
+};
+
+function createdDownloadMediaFile(pMediaArray,pMediaURL) {
+  var vURL="https://"+getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
+  var vDownloaded = "<b>Download Media Files for URL: <a href='"+vURL+"' target='_blank'>"+vURL+"</a></b>";
+  var pMediaURL = getValueDOM("inputMEDIA");
+  vDownloaded +="\n<ul>";
+  // https://en.wikipedia.org/wiki/My_article#/media/File:My_image.jpg
+  var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  for (var i = 0; i < pMediaArray.length; i++) {
+    //vDownloaded +="\n("+(i+1)+") "+pMediaArray[i];
+    vDownloaded +="\n  <li>";
+    vDownloaded += "("+(i+1)+") <a href='"+pMediaURL+pMediaArray[i]+"' target='_blank'>"+pMediaArray[i]+"</a>";
+    vDownloaded +="\n  </li>";
+  };
+  vDownloaded +="\n</ul>";
+  vDownloaded = wrapperHTML(vDownloaded);
+  var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  saveLogWiki(vProjectDir,vDownloaded);
 };
 
 function splitURL(pURL) {
