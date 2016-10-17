@@ -1,13 +1,29 @@
 function setPage(pButtonID) {
-	var vPages = ["bConvert","bNew","bWebInput","bBibliography","bSettings","bEditor","bTemplates"];
+	var vPages = ["bGeneral","bScript","bWindows","bMacOSX","bLinux","bDeveloper"];
 	//alert("setPage for ID="+pButtonID+" vPages.length="+vPages.length);
 	var i=0;
 	for (i=0;i<vPages.length;i++) {
 		setColorDefault(vPages[i]);
 		hide(vPages[i]+"Page");
 	};
+	switch (pButtonID) {
+		case "bGeneral":
+			for (i=1;i<vPages.length;i++) {
+				setColorDefault(vPages[i]);
+				show(vPages[i]+"Download");
+			};
+			break;
+		default:
+			for (i=1;i<vPages.length;i++) {
+				setColorDefault(vPages[i]);
+				hide(vPages[i]+"Download");
+			};
+
+	};
 	show(pButtonID+"Page");
+	show(pButtonID+"Download");
 	setColorSelected(pButtonID);
+
 }
 
 function showEditPath(pID) {
@@ -64,7 +80,7 @@ function hideElement(pID) {
 };
 function showElement(pID) {
     show(pID,"inline");
-}
+};
 function showNode(pNode,pDisplay) {
 	var vDisplay = pDisplay || "inline";
 	if (pNode) {
