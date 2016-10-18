@@ -331,7 +331,7 @@ function replaceAudioTag(pData) {
   };
   return pData;
 }
-function copyDemoAudio(pSHash) {
+function copyDemoAudio(pHash) {
   var vAudioDemo = getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+"audiodefault.mp3";
   var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
   var vSep = getPathSeparator();
