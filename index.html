@@ -17,12 +17,12 @@
     <title>PanDocElectron by niebert</title>
   </head>
 
-  <body>
+  <body id="pagebody">
     <header>
       <div class="inner">
         <h1>PanDocElectron</h1>
         <h2>Atom/Electron Application for calling PanDoc Converter with Shell Commands on Linux, Windows, Mac</h2>
-        <a href="https://github.com/niebert/PanDocElectron" class="button"><small>View project on</small> GitHub</a>
+        <a href="https://github.com/niebert/PanDocElectron" id="githubDownload" class="button"><small>View project on</small> GitHub</a>
       </div>
     </header>
 
@@ -37,6 +37,7 @@
   <button  id="bWindows"  onclick="setPage(this.id);">Windows</button>
   <button  id="bLinux"  onclick="setPage(this.id);">Linux</button>
   <button  id="bMacOSX"  onclick="setPage(this.id);">MacOSX</button>
+  <button  id="bTutorial"  onclick="setPage(this.id);">Tutorial</button>
   <button  id="bDeveloper"  onclick="setPage(this.id);">Developer</button>
   <hr/>
 </div>
@@ -193,7 +194,7 @@
     <blockquote>
     <p><code>sudo apt-get install nodejs-legacy</code></p>
     </blockquote>
-    
+
   </div>
 
 <h2 id="SEC5">
@@ -698,16 +699,37 @@
   </ul>
 
 </div>
+<h1 id="SEC9TUT">
+<a id="Atutorial" class="anchor" href="Atutorial" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+<button onclick="setPage('bTutorial')">+</button>
+3 Tutorials
+</h1>
+<div class="apptab" id="bTutorialPage" style="display:none">
+  <h2>
+  <a id="tutAudioSlides" class="anchor" href="#tutAudioSlides" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bTutorial')">+</button>
+  3.1 Audio Slides</h2>
+  Audio Slides are HTML presentations that have recorded audio comments for each slide. The following tutorial by J. Rapp guides you in creating
+  Audio slides with PanDocElectron.
+  <ul>
+    <li>
+      <a href="tutorial/TutorialPPTtoHTML_final.pdf" >
+        Audio-Slides Tutorial by J. Rapp
+      </a>
+    </li>
+  </ul>
+</div>
 
 <h1 id="SEC8">
 <a id="8-developer-for-electron-tutorials-on-linux-and-macosx" class="anchor" href="#8-developer-for-electron-tutorials-on-linux-and-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
 <button onclick="setPage('bDeveloper')">+</button>
-3 Developer Information
+4 Developer Information
 </h1>
 <div class="apptab" id="bDeveloperPage" style="display:none">
   <h2>
-  <a id="81-developer-quickstart" class="anchor" href="#81-developer-quickstart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.1 Developer Quickstart</h2>
+  <a id="81-developer-quickstart" class="anchor" href="#81-developer-quickstart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
   <button onclick="setPage('bDeveloper')">+</button>
+  4.1 Developer Quickstart</h2>
   <ul>
   <li><a href="https://www.youtube.com/watch?v=ojX5yz35v4M" target="_blank">Create the first App in Electron</a></li>
   <li>Install a <a href="http://electron.atom.io/" target="_blank">Quick Start Electron</a> Application. Use the install support for this:</li>
@@ -738,7 +760,9 @@
   </blockquote>
 
   <h2>
-  <a id="82-electron-builder-packager" class="anchor" href="#82-electron-builder-packager" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2 Electron Builder Packager</h2>
+  <a id="82-electron-builder-packager" class="anchor" href="#82-electron-builder-packager" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bDeveloper')">+</button>
+  4.2 Electron Builder Packager</h2>
 
   <p> Now you can run the Electron application by using the command <code>npm start</code> in the directory of your application.
     If you want to start your Electron application from anywhere in the directory tree, if you installed your application globally
@@ -809,9 +833,17 @@
             </a>
             <hr>
           </div>
-          <div id="bDeveloperDownload">
+          <div id="bTutorialDownload">
+            <b>Download Tutorials</b>
+            <a href="tutorial/TutorialPPTtoHTML_final.pdf" class="button">
+              <small>Tutorial by J. Rapp</small>
+              Audio-Slides
+            </a>
+            <hr>
+          </div>
+          <<div id="bDeveloperDownload">
             <b>Download Sources</b>
-            <a href="https://github.com/niebert/PanDocElectron/zipball/master" class="button">
+            <a href="https://github.com/niebert/PanDocElectron/zipball/master" id="githubSource" class="button">
               <small>PanDocElectron Sources</small>
               Sources.zip
             </a>
@@ -825,4 +857,5 @@
 
 
   </body>
+  <script type="text/javascript" src="javascripts/config.js"></script>
 </html>
