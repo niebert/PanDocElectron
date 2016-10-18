@@ -39,6 +39,13 @@
         vPathSeparator = "\\";
       };
       var vPandocDocs = app.getPath('documents')+vPathSeparator+"PanDoc";
+      //----IPC Electron triggered from main.js
+      require('electron').ipcRenderer.on('menucall', function(event, pMenuCall) {
+           console.log("MENU CALL:" + pMenuCall);  // Prints "whoooooooh!"
+           //alert("CALL: "+pMenuCall);
+           eval(pMenuCall);
+         });
+
     </script>
   </head>
   <body>
@@ -70,7 +77,7 @@
           <button  id="bBibliography"  onclick="setPage(this.id);">Bibliography</button>
           <button  id="bSettings"  onclick="setPage(this.id);">Settings</button>
           <button  id="bTemplates"  onclick="setPage(this.id);">Templates</button> &nbsp;
-          <button  id="bHelp"  onclick="openBrowserURL('http://niebert.github.com/PanDocElectron');">Help</button>
+          <button  id="bHelp"  onclick="openBrowserURL('http://niebert.github.io/PanDocElectron');">Help</button>
           <hr/>
         </div>
       </div>
