@@ -36,6 +36,7 @@ function whichPath(pCommand,pDOM,pDefaultCommand) {
 }
 
 function callPandoc (pShellHash) {
+  console.log("callPandoc() dummy call with no operation yet");
 };
 
 function X_callPandoc (pShellHash) {
@@ -51,7 +52,6 @@ function X_callPandoc (pShellHash) {
       return;
     };
     console.log(`stdout: ${stdout}`);
-    console.log(`stderr: ${stderr}`);
   });
 
 }
@@ -60,11 +60,10 @@ function execCommand (pCommand) {
   const exec = require('child_process').exec;
   exec(pCommand, (error, stdout, stderr) => {
     if (error) {
-      console.error(`exec error: ${error}`);
+      console.error(`execCommand() Error: ${error}`);
       return;
     };
-    console.log(`stdout: ${stdout}`);
-    console.log(`stderr: ${stderr}`);
+    console.log(`execCommand()-Call: ${stdout}`);
   });
 }
 

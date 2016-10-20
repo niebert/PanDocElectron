@@ -1,22 +1,25 @@
-function saveTestFile () {
-  console.log("Call: saveTestFile() l.368 index.html");
-  saveFile('./message.txt', 'Hello Node.js this is the File Content');
-}
+
 function copyFile(pSource,pDestination) {
   if (checkFileExists(pDestination)) {
     alert("Create Error: File exists \n"+pDestination);
   } else {
     //var fs = require('fs');
     //fs.createReadStream(pSource).pipe(fs.createWriteStream(pDestination));
-    var vCommand = "cp";
+    var vCommand = "cp \""+pSource+"\" \""+pDestination+"\"";
     if (getOperatingSystem() == "Windows") {
-      var vCommand = "copy "+pSource+" "+pDestination;
+      vCommand = "copy \""+pSource+"\" \""+pDestination+"\"";
     };
     var vParams=[pSource,pDestination];
     execFileCommand(vCommand,vParams);
     console.log("execFile: "+vCommand+" "+vParams.join(" "));
   };
 };
+function loadEditorInContent(pFilename) {
+  var vFilename = pFilename || getValueDOM("inputFILE");
+  var vContent = getFileContent(vFilename);
+  write2value("inputEDITOR",vContent);
+};
+
 
 function saveEditorOutContent() {
   saveEditorContent(getValueDOM("outputFILE"),"outputEDITOR");

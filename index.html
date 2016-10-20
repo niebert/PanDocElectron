@@ -578,6 +578,25 @@
               </td>
             </tr>
             <tr>
+              <td>
+                  <button class="btn btn-primary btn-xs"  id="openGitCMD"  onclick="openCMDFile('gitCMD','/',vHashTPL);">GIT Versioning</button>
+              </td>
+              <td>
+                  &nbsp;
+              </td>
+              <td> <!-- /opt/local/bin/ -->
+                  <marker id="PgitCMD" >
+                    <tt id="gitCMD">git</tt>
+                    <input type="button" value="Edit" onclick="showEditPath('git')">
+                  </marker>
+                  <marker id="PEDITgitCMD"  hidden="hidden" >
+                    <input type="text" id="EDITgitCMD" size="50" >
+                    <input type="button" value="OK" onclick="hideEditPath('git')"><br/>
+                    (enter path for Download Command 'git')
+                  </marker>
+              </td>
+            </tr>
+            <tr>
                 <td>
                  <button class="btn btn-default"  id="defDIRmainDIR"  onclick="openDirectory('projectmainDIR',document.getElementById('projectmainDIR').innerHTML);">Main Folder</button>
                </td>
@@ -629,6 +648,10 @@
     </footer>
     <!-- All of the Node.js APIs are available in this renderer process. -->
 <br />
+<script src="js/configfile.js"></script>
+<script src="js/createproject.js"></script>
+<script src="js/opendialogs.js"></script>
+<script src="js/savefiles.js"></script>
 <script>
 //var app    = remote.app;
 //var dialog = remote.dialog;
@@ -699,11 +722,25 @@ function X_appendTemplateHash(pID,pTemplate,pReplaceHash) {
 };
 
 function setDefaultValues(pHashTPL) {
-  var vPathSeparator = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
-  if (vPathSeparator == "\\") {
+  var vSep = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
+  if (vSep == "\\") {
     // alert("Windows setDefaultValues()");
   };
-  var vPathMain = app.getPath('documents')+vPathSeparator+"PanDoc";
+  var vPathMain = app.getPath('documents')+vSep+"PanDoc";
+  // Clone PanDoc repository if necessary
+  var vMathJax = vPathMain + vSep + "mathjax" + vSep + "MathJax.js";
+  if (checkFileExists(vMathJax)) {
+    console.log("PanDoc Folder cloned");
+  } else {
+    var vAns = confirm("PanDoc Folder is missing!\nDo you want to download the PanDoc Folder?");
+    if (vAns == true) {
+      var vGIT_CMD  = getValueDOM("EDITgitCMD");
+      execCommand(vGIT_CMD + " clone https://github.com/niebert/PanDoc.git " + app.getPath('documents'));
+    } else {
+      console.log("PanDoc folder not downloaded!");
+    };
+  };
+  //----Set all Directory s
   write2innerHTML("projectmainDIR",vPathMain);
   write2innerHTML("currentworkingDIR",process.cwd());
   //setInput4WebDownload();
@@ -711,12 +748,12 @@ function setDefaultValues(pHashTPL) {
   //setInput4Project('inputWEBPROJECT','downloadWebFILE',"md");
   setInput4Project('inputWEBPROJECT','downloadWikiFILE',"wiki");
   // set vPath to Template Path and init the templates to default filenames
-  //var vPath = app.getPath('documents')+vPathSeparator+"PanDoc";
+  //var vPath = app.getPath('documents')+vSep+"PanDoc";
   //require('path');
   //var vPath = fs.realpathSync('.'); // __dirname not working
   var vPath = vPandocDocs;
   //alert("vPath="+vPath);
-  //var vPath = app.getPath('home')+vPathSeparator+"ownCloudLD"+vPathSeparator+"PanDoc";
+  //var vPath = app.getPath('home')+vSep+"ownCloudLD"+vSep+"PanDoc";
 
   // Reading from App-Dir is not supported in packager
   //var vTPL_HTML = fs.readFileSync('./html/template.html', 'utf8');
@@ -726,7 +763,7 @@ function setDefaultValues(pHashTPL) {
   var vREF_HTML = document.getElementById("tplREF").value;
   var vDIR_HTML = document.getElementById("tplDIR").value;
 
-  var vhtml ="html"+vPathSeparator;
+  var vhtml ="html"+vSep;
   appendTemplateInput("tabletemplates","DEFAULT",vhtml+'template.html',vPath,"md",pHashTPL,vTPL_HTML);
   appendTemplateInput("tabletemplates","reveal",vhtml+'template.html',vPath,"html",pHashTPL,vTPL_HTML);
   appendTemplateInput("tabletemplates","audioslides",vhtml+'template.html',vPath,"html",pHashTPL,vTPL_HTML);
@@ -739,8 +776,8 @@ function setDefaultValues(pHashTPL) {
   appendTemplateInput("tabletemplates","docx2col",vhtml+'referencefile.html',vPath,"docx",pHashTPL,vREF_HTML);
   appendTemplateInput("tabletemplates","html",vhtml+'referencefile.html',vPath,"css",pHashTPL,vREF_HTML);
   //alert(app.getPath('documents'))
-  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vPathSeparator+"reveal","Reveal Folder ",vDIR_HTML);
-  appendDirectoryInput("tablefolders","MathJax",vhtml+"defaultfolder.html","mathjaxDIR",vPathMain+vPathSeparator+"mathjax","MathJax Folder ",vDIR_HTML);
+  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vSep+"reveal","Reveal Folder ",vDIR_HTML);
+  appendDirectoryInput("tablefolders","MathJax",vhtml+"defaultfolder.html","mathjaxDIR",vPathMain+vSep+"mathjax","MathJax Folder ",vDIR_HTML);
   //copyFile2Editor ("audioslideMAIN",getInnerHTML("tplFILEaudioslides"));
   //copyFile2Editor ("inputLOOP",__dirname+'/tpl/imgslides/audiosection.txt');
   document.getElementById("inputNEWFORMAT").innerHTML = document.getElementById("inputFORMAT").innerHTML;
@@ -751,23 +788,26 @@ function setDefaultValues(pHashTPL) {
     //case "MacOSX":
     case "Windows":
       //alert("Windows");
-      var vSep = vPathSeparator;
+      var vSep = vSep;
       var vWinOS = vPathMain + vSep+ "WinOS"  + vSep;
       write2innerHTML("pandocCMD",vWinOS + "PanDoc_Win" + vSep + "pandoc.exe");
       write2innerHTML("imagemagickCMD",vWinOS + "ImageMagick_Win" + vSep + "convert.exe");
       write2innerHTML("wgetCMD",vWinOS + "wget_Win" + vSep + "bin"+ vSep + "wget.exe");
+      write2innerHTML("gitCMD","git.exe");
       break;
     case "MacOSX":
       //alert("MacOSX");
       whichPath("pandoc","pandocCMD","/usr/local/bin/pandoc");
       whichPath("convert","imagemagickCMD","/usr/local/bin/convert");
       whichPath("wget","wgetCMD","/usr/local/bin/wget")
+      whichPath("git","gitCMD","/usr/local/bin/git")
       break;
     case "Linux":
       //alert("Linux");
       whichPath("pandoc","pandocCMD");
       whichPath("convert","imagemagickCMD");
       whichPath("wget","wgetCMD");
+      whichPath("git","gitCMD");
       break;
     default:
 
@@ -782,6 +822,7 @@ vExtHash["html5"]="html";
 vExtHash["reveal"]="html";
 vExtHash["dzslides"]="html";
 vExtHash["audioslides"]="html";
+vExtHash["audioplayer"]="html";
 vExtHash["mediawiki"]="wiki";
 vExtHash["latex"] = "tex";
 vExtHash["markdown"] = "md";
@@ -828,10 +869,6 @@ vHashTPL["mainDIR"] = vPandocDocs;
 
 setDefaultValues(vHashTPL);
 </script>
-<script src="js/configfile.js"></script>
-<script src="js/createproject.js"></script>
-<script src="js/opendialogs.js"></script>
-<script src="js/savefiles.js"></script>
 
   </body>
 

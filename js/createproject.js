@@ -8,6 +8,8 @@ function downloadInputFile(pDownloadType) {
 };
 
 function downloadWikiInput() {
+  // This is the main function called, when user presses
+  // the download Button "Wiki-Download"
   var vSep = getPathSeparator();
   var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
   makedirpath(vPath);
@@ -38,6 +40,7 @@ function downloadWikiInput() {
       vMediaArray = parseWiki4Media(data);
       downloadWikiMedia(vMediaArray);
       data = convertMediaLink4Wiki(data,vMediaArray);
+      data = replaceWikiLinks(data);
       write2value("inputEDITOR",data);
       console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
       saveFile(vInputFile,data);
@@ -45,6 +48,67 @@ function downloadWikiInput() {
     });
 };
 
+function parseWiki4Media(pWikiText) {
+  var vMediaArray = [];
+  //var vSearch = /\[(File|Datei|Image):([^\|]*)/;
+  var vSearch = /\[(?:File|Image|Datei):([^\|]+)/g;
+  // \[            # "["
+  // (?:            # non-capturing group
+  //  File|Image|Datei        #   "File" or "Image" or "Datei"
+  // )              # end non-capturing group
+  //:             # ":"
+  //(              # group 1
+  //  [^\|]+      #   any character except "|" at least once
+  // )              # end group 1 - this will be the image's name
+  var vResult;
+  var vCount =0;
+  while (vResult = vSearch.exec(pWikiText)) {
+    vCount++;
+    vMediaArray.push(vResult[1]);
+    console.log("Media "+vCount+": '" + vResult[1] + "' found");
+  };
+  return vMediaArray;
+};
+
+function replaceWikiLinks(pWikiText) {
+  var vLinkArray = getWikiLinks(pWikiText);
+  var vURL,Title,vLink;
+  var vPipePos = 0;
+  for (var i = 0; i < vLinkArray.length; i++) {
+    vLink = vLinkArray[i];
+    vPipePos = vLink.indexOf("|");
+    if (vPipePos>0) {
+      vURL = vLink.substr(0,vPipePos-1);
+      vTitle = vLink.substr(vPipePos+1,vLink.length);
+    } else {
+      vURL = vLink;
+      vTitle = vLink;
+    };
+    vURL = getWikiDisplayURL(vURL);
+    pWikiText = replaceString(pWikiText,"[["+vLink+"]]","["+vURL+" "+vTitle+"]");
+  };
+  return pWikiText
+};
+
+function getWikiLinks(pWikiText) {
+  // Wiki Links are open with ""
+  var vLinkArray = [];
+  //var vSearch = /\[(File|Datei|Image):([^\|]*)/;
+  var vSearch = /\[\[([^\[\]\:]+)\]\]/g;
+  // \[\[         # "[["
+  //(             # group 1
+  //  [^\[\]]+    #   any character except "[" and "]" ":" at least once
+  // )            # end group 1 - this will be the image's name
+  // \]\]         # "]]"
+  var vResult;
+  var vCount =0;
+  while (vResult = vSearch.exec(pWikiText)) {
+    vCount++;
+    vLinkArray.push(vResult[1]);
+    console.log("Wiki-Link "+vCount+": '" + vResult[1] + "' found");
+  };
+  return vLinkArray;
+}
 
 function convertMediaLink4Wiki(pWikiText,pMediaArray) {
   var vReplaceLink;
@@ -72,8 +136,14 @@ function downloadWikiMedia (pMediaArray) {
   createdDownloadMediaFile(pMediaArray,vMediaURL,vProjectDir);
 };
 
+function getWikiDisplayURL(pArticle) {
+  var vArticle = pArticle || getValueDOM('wikiARTICLE')
+  vArticle = replaceString(vArticle," ","_");
+  return "https://"+getValueDOM('inputSERVER')+"/wiki/"+vArticle;
+}
+
 function createdDownloadMediaDIV(pMediaArray,pMediaURL) {
-  var vURL="https://"+getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
+  var vURL=getWikiDisplayURL();
   var vDownloaded = "<hr><b>Download Media Files for URL: <a href='#' onclick=\"openFileInBrowser('"+vURL+"')\">"+vURL+"</a></b>";
   vDownloaded +="\n<ul>";
   // https://en.wikipedia.org/wiki/My_article#/media/File:My_image.jpg
@@ -88,7 +158,7 @@ function createdDownloadMediaDIV(pMediaArray,pMediaURL) {
 };
 
 function createdDownloadMediaFile(pMediaArray,pMediaURL) {
-  var vURL="https://"+getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
+  var vURL=getWikiDisplayURL();
   var vDownloaded = "<b>Download Media Files for URL: <a href='"+vURL+"' target='_blank'>"+vURL+"</a></b>";
   var pMediaURL = getValueDOM("inputMEDIA");
   vDownloaded +="\n<ul>";
@@ -262,28 +332,7 @@ function convertWikiMedia2URL(pMediaLink) {
   return pMediaLink;
 };
 
-function parseWiki4Media(pWikiText) {
-  var vMediaArray = [];
-  //var vSearch = /\[(File|Datei|Image):([^\|]*)/;
-  var vSearch = /\[(?:File|Image|Datei):([^\|]+)/g;
-  // \[            # "["
-  // (?:            # non-capturing group
-  //  File|Image|Datei        #   "File" or "Image" or "Datei"
-  // )              # end non-capturing group
-  //:             # ":"
-  //(              # group 1
-  //  [^\|]+      #   any character except "|" at least once
-  // )              # end group 1 - this will be the image's name
-  var vResult;
-  var vCount =0;
-  while (vResult = vSearch.exec(pWikiText)) {
-    vCount++;
-    vMediaArray.push(vResult[1]);
-    console.log("Media "+vCount+": '" + vResult[1] + "' found");
-  };
-  return vMediaArray;
-}
-
+// Depricated Download via pandoc Download
 function downloadWebInput() {
   //alert("Download Input File and Convert Source File to MarkDown");
   var vPandoc_CMD = getValueDOM("pandocCMD");
@@ -341,6 +390,7 @@ function createProject() {
   // vFilename is the new Input Filename for the new project
   var vFilename = vPath+vSep+vName+"."+vExt;
   var vShellHash = {};
+  var vContent = "";
   vShellHash["inputFILE"] = vFilename;
   vShellHash['savefile'] = "N";
   initShellScript(vShellHash);
@@ -362,12 +412,16 @@ function createProject() {
         vDefaultFile = vDir + "md" + vSep +"input.md";
         //copyFile2Editor("inputEDITOR",vDefaultFile);
         copyFile(vDefaultFile,vFilename);
+        vContent = getFileContent(vDefaultFile);
+        write2value("inputEDITOR",vContent);
         break;
       case "mediawiki":
         //alert("WIKI Create Project createProject():441:index.html");
         vDefaultFile = vDir + "wiki" + vSep +"input.wiki";
         //copyFile2Editor("inputEDITOR",vFilename);
         copyFile(vDefaultFile,vFilename);
+        vContent = getFileContent(vDefaultFile);
+        write2value("inputEDITOR",vContent);
         break;
       case "pdf":
           //alert("MD Create Project createProject():436:index.html");
@@ -379,6 +433,7 @@ function createProject() {
         vDefaultFile = getInnerHTML("DEFAULTTPL");
         //alert(vDefaultFile);
         runShellCommand(vPandoc_CMD+" -f markdown -t "+vInFormat+" "+vDefaultFile+" -o "+vFilename,vShellHash);
+        setTimeout("loadEditorInContent('"+vFilename+"')",5000);
     };
     makeProjectDirs(vPath); //audio, video, config, images
     //setInput4Project('inputNEWPROJECT','inputNEWFILE');
