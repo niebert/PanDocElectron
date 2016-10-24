@@ -250,7 +250,7 @@
         </div>
         <div class="apptab" id="bWikiMediaPage"  hidden="hidden">
           <h3>
-            Input Editor:
+            Media Files:
           </h3>
           <div id="divWikiMediaDownload">
             Please download Wiki content first (Web-Input) ....
@@ -414,7 +414,7 @@
                 &nbsp;
               </td>
               <td>
-                <tt id="linkWebFILE"></tt> <tt id="downloadWikiFILE"></tt><tt id="downloadWebFILE"></tt>
+                  <tt id="linkWebFILE"></tt> <tt id="downloadWikiFILE"></tt><tt id="downloadWebFILE"></tt>
               </td>
             </tr>
             <tr>
@@ -437,7 +437,58 @@
                   &nbsp;
               </td>
               <td>
-                <input type="text" size="55" id="inputURL" value="http://www.gnu.org/software/make/" style="display:none">
+                <select id="sWikiDomain" onchange="setWikiDomain(this.value)">
+                  <option value=".wikipedia.org">Wikipedia</option>
+                  <option value=".wikiversity.org">Wikiversity</option>
+                </select>
+
+                <select id="sWikiLanguage" onchange="setWikiLanguage(this.value)">
+                  <option value="en" selected="selected">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="de">Deutsch</option>
+                  <option value="fr">French</option>
+                  <option value="it">Italian</option>
+                  <option value="nl">Dutch</option>
+                  <option value="ja">Japanese</option>
+                  <option value="pl">Polish</option>
+                  <option value="ru">Russian/span></a></li>
+                  <option value="sv">Swedish</option>
+                  <option value="vi">Vietnamese</option>
+                  <option value="ar">Arabic</option>
+                  <option value="id">Indonesian</option>
+                  <option value="ms">Malay/span></a></li>
+                  <option value="ca">Catalan</option>
+                  <option value="cs">Czech</option>
+                  <option value="eu">Basque</option>
+                  <option value="fa">Persian</option>
+                  <option value="ko">Korean</option>
+                  <option value="hu">Hungarian</option>
+                  <option value="no">Norwegian</option>
+                  <option value="pt">Portuguese</option>
+                  <option value="ro">Romanian</option>
+                  <option value="sr">Serbian</option>
+                  <option value="sh">Serbo-Croatian</option>
+                  <option value="fi">Finnish</option>
+                  <option value="tr">Turkish</option>
+                  <option value="uk">Ukrainian</option>
+                  <option value="zh">Chinese</option>
+                  <option value="bs">Bosnian</option>
+                  <option value="bg">Bulgarian</option>
+                  <option value="da">Danish</option>
+                  <option value="et">Estonian</option>
+                  <option value="el">Greek</option>
+                  <option value="eo">Esperanto</option>
+                  <option value="gl">Galician</option>
+                  <option value="he">Hebrew</option>
+                  <option value="hr">Croatian</option>
+                  <option value="lv">Latvian</option>
+                  <option value="lt">Lithuanian</option>
+                  <option value="nn">Norwegian Nynorsk</option>
+                  <option value="sk">Slovak</option>
+                  <option value="sl">Slovenian</option>
+                  <option value="th">Thai</option>
+                </select><br>
+              <input type="text" size="55" id="inputURL" value="http://www.gnu.org/software/make/" style="display:none">
                 <input type="text" size="35" id="inputSERVER" value="en.wikipedia.org" > Path-API: <input type="text" size="15" id="pathAPI" value="/w" ><br>
                 <b>Media Download:</b> <input type="text" size="42" id="inputMEDIA" value="https://commons.wikimedia.org/wiki/File%3A">
                 <!-- button  class="btn btn-primary btn-xs"  id="bOpenMediaInBrowser"  onclick="openMediaInWindow();">Media URL</button -->

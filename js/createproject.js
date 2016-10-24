@@ -7,6 +7,22 @@ function downloadInputFile(pDownloadType) {
   }
 };
 
+function setWikiDomain(pDomain) {
+  //vLanguage="en" pDomain=".wikipedia.org"
+  var vLanguage = getValueDOM("sWikiLanguage");
+  setWikiURL(vLanguage,pDomain);
+};
+
+function setWikiLanguage(pLanguage) {
+  //pLanguage="en" vDomain=".wikipedia.org"
+  var vDomain = getValueDOM("sWikiDomain");
+  setWikiURL(pLanguage,vDomain);
+};
+
+function setWikiURL(pLanguage,pDomain) {
+  write2value("inputSERVER",pLanguage+pDomain)
+};
+
 function downloadWikiInput() {
   // This is the main function called, when user presses
   // the download Button "Wiki-Download"
