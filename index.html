@@ -65,10 +65,12 @@
         <b>Office Documents</b> like <a href="https://en.wikipedia.org/wiki/LibreOffice" target="_blank">LibreOffice</a> that is able to load  Open Document Formats and Microsoft Office Word Documents as well
       </li>
       <li>
-        <b>Presentation</b> with e.g. <a href="http://lab.hakim.se/reveal-js/" target="_blank">RevealJS</a> (Press "F" in Reveal for Fullscreen Presentation) or DZSlides that alternative for Microsoft PowerPoint or LibreOffice Impress MediaWiki</a></b> Text Documents
+        <b>Presentation</b> with e.g. <a href="http://lab.hakim.se/reveal-js/" target="_blank">RevealJS</a> (Press <tt>"F"</tt> in Reveal for Fullscreen Presentation) or DZSlides that alternative for Microsoft PowerPoint or LibreOffice Impress Documents.
       </li>
+      <li> <b>Presentations with Audio Comments:</b>
+        Audio  comments can added to all slides of RevealJS and DZSlides Presentations (Output Format: <tt>audioplayer</tt>) or with a PDF-document as input format with Outputformat <tt>audioslides</tt>.
+        <a href="tutorial/TutorialPPTtoHTML_final.pdf" target="_blank">Tutorial PDF to Audioslides</a> by J&ouml;rg Rapp</li>
     </ol>
-
     PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Document Converter on the Command Shell on Linux, Mac or Windows. Or in simple words:
   </p>
 
@@ -86,7 +88,6 @@
   <li>Linux (see <a href="#SEC5">section 2.2</a>) </li>
   <li>MacOSX (see <a href="#SEC6">section 2.3</a>) </li>
   <li>Windows (see <a href="#SEC7">section 2.4</a>)</li>
-  <li><a href="tutorial/TutorialPPTtoHTML_final.pdf" target="_blank">Tutorial PDF to Audioslides</a> by J&ouml;rg Rapp</li>
   </ul>
   </h3>
 
@@ -780,26 +781,38 @@
   <blockquote>
   <p><code>npm install mkdirp</code></p>
   </blockquote>
+  Now you can run the Electron application by using the command
+  <blockquote>
+  <p><code>npm start</code></p>
+  </blockquote>
+  in the directory of your application. The following shell script can be used on Linux and MacOSX:
+  <blockquote>
+  <p><code>#!/bin/sh
+    cd /home/usershome/Documents/PanDocElectron
+    npm start</code></p>
+  </blockquote>
+  Replace <tt>/home/usershome/Documents/PanDocElectron</tt> by the path to your PanDocElectron Application.
+
+  If you want to start your Electron application from anywhere in the directory tree, if you installed your application globally
+  (e.g. <tt>npm install -g pandocelectron</tt> then PanDocElectron can be started with <tt>pandocelectron</tt> from anywhere in the directory tree.
 
   <h2>
   <a id="82-electron-builder-packager" class="anchor" href="#82-electron-builder-packager" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
   <button onclick="setPage('bDeveloper')">+</button>
   4.2 Electron Builder Packager</h2>
-
-  <p> Now you can run the Electron application by using the command <code>npm start</code> in the directory of your application.
-    If you want to start your Electron application from anywhere in the directory tree, if you installed your application globally
-    (e.g. <tt>npm install -g pandocelectron</tt> or <tt>npm install -g electron-quick-start</tt>).
-    <div class="highlight highlight-source-shell"><pre>npm install -g pandocelectron
-    npm install -g electron-quick-start
+Packages can helpful for users to avoid installations of the Electron Framework and Installation Procedure.
+The binaries are created with <tt>electron-packager-interactive</tt> with Electron 1.2.2.
+  <p> <div class="highlight highlight-source-shell"><pre>sudo npm install -g electron-packager-interactive
     </pre></div>
+Please develop your application with Electron version 1.2.2 to 1.2.7 (defined in package.json)
+    <!-- Then users can type simply with the command: <tt>pandocelectron</tt> . You should just add that line into your package.json to let npm know about it:
 
-    Then users can type simply with the command: <tt>pandoc-electron</tt> . You should just add that line into your package.json to let npm know about it:
+    Builder and Packager is used to create Desktop Application-->
+  </p>
 
-    Builder and Packager is used to create Desktop Application</p>
-
-  <div class="highlight highlight-source-shell"><pre>npm install electron-builder
-  npm install electron-packager
-  npm install electron-packager-interactive
+  <div class="highlight highlight-source-shell"><pre>"devDependencies": {
+    "electron-prebuilt": "1.2.7"
+  },
   </pre></div>
 
   <p>See <a href="https://www.npmjs.com/package/electron-packager-interactive" target="_blank">electron-packager-interactive</a> or <a href="https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build" target="_blank">Multiplattform Build with Electron</a> for further details.
