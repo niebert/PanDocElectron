@@ -46,6 +46,12 @@ function visibleOutFormatSelectors(pOutputFORMAT) {
   } else {
     hideElement("divSlideCount");
   };
+  if (pOutputFORMAT == "audioplayer") {
+    console.log("add AudioPlayer");
+    //showElement("themeAUDIOSLIDE");
+  } else {
+    //hideElement("themeAUDIOSLIDE");
+  };
   if ((pOutputFORMAT == "reveal") || (pOutputFORMAT == "dzslides")) {
     showElement("themeREVEAL");
   } else {

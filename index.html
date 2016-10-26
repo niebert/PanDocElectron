@@ -23,6 +23,7 @@
     <script src="js/execspawn.js"></script>
     <script src="js/cmdpandoc.js"></script>
     <script src="js/marked.js"></script>
+    <script src="js/audioslide.js"></script>
     <script>
       const fs    = require('fs');
       const exec = require('child_process').exec;
@@ -202,6 +203,9 @@
                   <option value="solarized">Solarized Reveal Theme</option>
                   <option value="black">Black Background"</option>
                 </select><br>
+                <div id="themeAUDIOSLIDE" hidden="hidden">
+                  <input type="checkbox" name="checkAudioRecorder" id="checkAudioRecorer" checked="checked"> Audio Recorder
+                </div>
                 <div id="divSlideCount" hidden="hidden">
                   AudioSlide Count <input type="text" id="slidecount"   value="16" size="3">
                   &nbsp; &nbsp;
@@ -271,7 +275,6 @@
           </h3>
           <textarea id="outputEDITOR" rows="15" ></textarea>
           <textarea id="inputLOOP" rows="15" hidden="hidden"></textarea>
-          <textarea id="outputEDITOR" rows="15" hidden="hidden"></textarea>
           <textarea id="tplTPL" rows="15" hidden="hidden">
             <tr>
               <td>
