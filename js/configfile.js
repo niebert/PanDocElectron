@@ -34,7 +34,11 @@ function saveConfig (pConfigFile) {
 function saveTitleAuthor() {
   console.log("Save Title and Author");
   var vConfigFile = getFilename4TitleAuthor();
-  saveFile(vConfigFile, getValueDOM("outputTITLE")+"\n"+getValueDOM("outputAUTHOR"));
+  var vOut = getValueDOM("outputTITLE");
+  vOut += "\n"+getValueDOM("outputAUTHOR");
+  vOut += "\n"+getValueDOM("inputSERVER");
+  vOut += "\n"+getValueDOM("wikiARTICLE");
+  saveFile(vConfigFile, );
 };
 
 function loadTitleAuthor() {
@@ -47,13 +51,20 @@ function loadTitleAuthor() {
         var vLines = data.split("\n");
         write2value("outputTITLE",vLines[0]);
         write2value("outputAUTHOR",vLines[1]);
+        if (vLines[2]) {
+          write2value("inputSERVER",vLines[2]);
+        };
+        if (vLines[3]) {
+          write2value("wikiARTICLE",vLines[3]);
+        };
         console.log('Config File \''+vConfigFile +' opened!');
       }
     });
   } else {
     console.log('Config File \''+vConfigFile +' does not exist!');
   }
-}
+};
+
 function getFilename4TitleAuthor() {
   var vFilename = getInnerHTML("inputFILE");
   //alert("vFilename="+vFilename+"\n getFilename4TitleAuthor()");
@@ -63,4 +74,4 @@ function getFilename4TitleAuthor() {
   var vConfigFile = vPath+vSep+"config"+vSep+vName+".cfg";
   console.log("getFilename4TitleAuthor() vConfigFile="+vConfigFile);
   return vConfigFile;
-}
+};
