@@ -428,7 +428,7 @@
                 &nbsp;
               </td>
               <td>
-                <input type="text" size="45" id="wikiARTICLE" value="Lineare_Abbildung" > <!-- Hurricane_Matthew -->
+                <input type="text" size="45" id="wikiARTICLE" value="Lineare_Abbildung"  onchange="setInput4Project('inputWEBPROJECT','downloadWikiFILE')"> <!-- Hurricane_Matthew -->
                 <button  class="btn btn-primary btn-xs"  id="bOpenWikiInBrowser"  onclick="openWikiInBrowser();">Open Wiki</button>
               </td>
             </tr>
@@ -446,9 +446,9 @@
                 </select>
 
                 <select id="sWikiLanguage" onchange="setWikiLanguage(this.value)">
-                  <option value="en" selected="selected">English</option>
+                  <option value="en">English</option>
                   <option value="es">Spanish</option>
-                  <option value="de">Deutsch</option>
+                  <option value="de"  selected="selected">Deutsch</option>
                   <option value="fr">French</option>
                   <option value="it">Italian</option>
                   <option value="nl">Dutch</option>

@@ -38,7 +38,8 @@ function saveTitleAuthor() {
   vOut += "\n"+getValueDOM("outputAUTHOR");
   vOut += "\n"+getValueDOM("inputSERVER");
   vOut += "\n"+getValueDOM("wikiARTICLE");
-  saveFile(vConfigFile, );
+  vOut += "\n"+getValueDOM("inputWEBPROJECT");
+  saveFile(vConfigFile, vOut);
 };
 
 function loadTitleAuthor() {
@@ -57,6 +58,10 @@ function loadTitleAuthor() {
         if (vLines[3]) {
           write2value("wikiARTICLE",vLines[3]);
         };
+        if (vLines[4]) {
+          write2value("inputWEBPROJECT",vLines[4]);
+        };
+        setInput4Project("inputWEBPROJECT",'downloadWikiFILE');
         console.log('Config File \''+vConfigFile +' opened!');
       }
     });
