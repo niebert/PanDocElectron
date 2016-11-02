@@ -1,3 +1,16 @@
+function setWizzard(pButtonID) {
+	console.log(pButtonID);
+	var vPages = ["EDITLIST","DISPLAY","PAPERDATA","SELECTOR","EDITOR"];
+	//alert("setPage for ID="+pButtonID+" vPages.length="+vPages.length);
+	var i=0;
+	for (i=0;i<vPages.length;i++) {
+		setColorDefault("b"+vPages[i]);
+		hide(vPages[i]+"Page");
+	};
+	show(pButtonID+"Page");
+	setColorSelected("b"+pButtonID);
+}
+
 function setPage(pButtonID) {
 	var vPages = ["bConvert","bNew","bWebInput","bMediaDownload","bBibliography","bSettings","bEditor","bTemplates"];
 	//alert("setPage for ID="+pButtonID+" vPages.length="+vPages.length);
@@ -32,9 +45,23 @@ function setButtonColor(pID,pColor) {
 	if (vNode) {
 		vNode.style.color = pColor;
 	} else {
-		alert("setButtonColor()-Call pID="+pID+" does not exist!");
+		console.log("setButtonColor()-Call pID="+pID+" does not exist!");
 	}
 }
+
+function toggle(pID) {
+	var vNode = document.getElementById(pID);
+	if (vNode) {
+		if (vNode.style.display == "none") {
+			show(pID);
+		} else {
+			hide(pID);
+		}
+	} else {
+		console.log("toggle('"+pID+"') Error - DOM Node ["+pID+"] does not exist");
+	}
+}
+
 function toggleCheck(pID,pChecked) {
 	if (pChecked) {
 		show(pID,"block");
@@ -48,7 +75,16 @@ function hide(pID) {
 		vNode.style.display = "none";
 		vNode.style.visibility = "hidden";
 	} else {
-		alert("hide()-Call pID="+pID+" does not exist!");
+		console.log("hide()-Call pID="+pID+" does not exist!");
+	}
+};
+
+function hideNode(pNode) {
+	if (pNode) {
+		pNode.style.display = "none";
+		pNode.style.visibility = "hidden";
+	} else {
+		console.log("hideNode()-Call pNode does not exist!");
 	}
 };
 function hideElementNode(pNode) {

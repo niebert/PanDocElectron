@@ -1,0 +1,180 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	</head>
+	<body>
+		<h2 id="TABLENAME" idprefix="AUTHORS">Authors</h2>
+	<!-- ====================================================== -->
+	<!-- ======== HTML Edit =================================== -->
+	<!-- ====================================================== -->
+		<div id="EDITLIST">
+			<h2>Authors</h2>
+			<table class="MAIN" id="AUTHORS" border="1" bgcolor="#DADADA">
+				<thead id="tabTABLEHEAD">
+					<tr>
+						<th>Last Name</th>
+						<th>First Name</th>
+						<th>e-Mail</th>
+						<th>Affiliation</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody id="tabTABLEBODY">
+					<tr id='___TABLEID______COUNT___R___ROWCOUNT___'>
+					  	<td>
+						   <input type="text" nonterm="LASTNAME" class="row___TABLEID______ROWCOUNT___" size="25" />
+						</td>
+					  	<td>
+						   <input type="text" nonterm="FIRSTNAME" class="row___TABLEID______ROWCOUNT___"  size="25" />
+						</td>
+					  	<td>
+						   <input type="text" nonterm="EMAIL" class="row___TABLEID______ROWCOUNT___"  size="20" />
+						</td>
+					  	<td>
+						   <input type="text" nonterm="AFFILIATION" class="row___TABLEID______ROWCOUNT___"  size="25" />
+						</td>
+					  	<td>
+						   <input type="text" id="bDelete__TABLEID______COUNT___"  onclick="deleteTableRow('___TABLEID______COUNT___','___ROWCOUNT___')" />
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+					  	<td>
+					  		<input type="button" name="bAdd___TABLEID______COUNT___" value="  Add  " onclick="addRow('___TABLEID______COUNT___')">
+						</td>
+						<td>
+					  		<input type="button" name="bClear___TABLEID______COUNT___" value="  Clear  " onclick="clearTable('___TABLEID______COUNT___')">
+					  	</td>
+						<td>
+					  		<input type="button" name="bUpdate___TABLEID______COUNT___" value="  Update  " onclick="updateTable('___TABLEID______COUNT___')">
+					  	</td>
+					</tr>
+				</tfoot>
+			</table>			
+		</div>
+	<hr>
+	
+	<!-- ====================================================== -->
+	<!-- ======== HTML Display ================================ -->
+	<!-- ====================================================== -->
+	
+		<h3>HTML Display</h3>
+	
+	<!-- ========TABLE========================================= -->
+		<textarea id="taOutTableHTML" rows="10" cols="80">
+			<table border=1>
+					<thead>
+					<tr>
+						<th>Last Name</th>
+						<th>First Name</th>
+						<th>e-Mail</th>
+						<th>Affiliation</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+___ALLROWS___
+				</tbody>
+			</table>
+		</textarea>
+		
+		
+	<!-- ========ROW========================================== -->	
+		<textarea id="taOutRowHTML" rows="10" cols="80">
+					<tr>
+					  	<td>
+						   ___LASTNAME___
+						</td>
+					  	<td>
+						   ___FIRSTNAME___
+						</td>
+					  	<td>
+						   <a href="mailto:___EMAIL___">___EMAIL___</a>
+						</td>
+					  	<td>
+						   ___AFFILIATION___
+						</td>
+					</tr>
+		</textarea>
+
+	<!-- ====================================================== -->
+ 		<hr>
+	
+	<!-- ====================================================== -->
+	<!-- ======== LATEX ======================================= -->
+	<!-- ====================================================== -->
+	
+		<h3>LaTeX Display</h3>
+	
+	<!-- ========LaTeX TABLE=================================== -->
+		<textarea id="taOutTableLATEX" rows="10" cols="80">
+\begin{itemize}
+___ALLROWS___
+\end{itemize}
+		</textarea>
+
+	<!-- ========LaTeX ROW====================================== -->
+		<textarea id="taOutRowLATEX" rows="10" cols="80">
+   \item	
+   ___LASTNAME___, ___FIRSTNAME___ - (e-Mail: ___EMAIL___) - ___AFFILIATION___
+		</textarea>
+
+ 		<hr>
+	
+	<!-- ====================================================== -->
+	<!-- ======== WIKI ======================================== -->
+	<!-- ====================================================== -->
+
+	<!-- ========Wiki TABLE==================================== -->
+		<textarea id="taOutTableWIKI" rows="10" cols="80">
+Authors:
+___ALLROWS___
+
+		</textarea>
+
+	<!-- ========Wiki ROW====================================== -->
+		<textarea id="taOutRowWIKI" rows="10" cols="80">
+* ___LASTNAME___, ___FIRSTNAME___ - (e-Mail: ___EMAIL___) - ___AFFILIATION___
+		</textarea>
+	
+	<!-- ====================================================== -->
+	
+
+		<script type="text/javascript">
+			var vNodeList = document.getElementsByClassName("row___TABLEID______ROWCOUNT___");
+			//alert(vNodeList.length);
+			var vColIDs = [];
+			for (var i=0; i<vNodeList.length;i++) {
+				//alert(vNodeList[i].getAttribute("nonterm"));
+				vColIDs.push(vNodeList[i].getAttribute("nonterm"));
+			};
+			var vTable = {};
+			var vTableName =  document.getElementById("TABLENAME");
+			vTable["ID"] = vTableName.getAttribute("idprefix")+top.nextCount("TABlES");
+			vTable["Name"] = vTableName.innerHTML;
+			vTable["ColIDs"] = vColIDs;
+			vTable["EditTableHTML"] = document.getElementById("EDITLIST").innerHTML;
+			vTable["EditRowHTML"] = document.getElementById("tabTABLEBODY").innerHTML;
+			vTable["DisplayTableHTML"] = document.getElementById("taOutTableHTML").value;
+			vTable["DisplayRowHTML"] = document.getElementById("taOutRowHTML").value;
+			vTable["OutTableLATEX"] = document.getElementById("taOutTableLATEX").value;
+			vTable["OutRowLATEX"] = document.getElementById("taOutRowLATEX").value;
+			vTable["OutTableWIKI"] = document.getElementById("taOutTableWIKI").value;
+			vTable["OutRowWIKI"] = document.getElementById("taOutRowWIKI").value;
+			//vTable["OutTable"] = pOutTable.replace(/___TABLEID___/g,"tab"+pTableID);
+			// pOutTable contains the insert Template:
+			//-----------------------------------
+			//   Now we list all authors:
+			//   <table>
+			//   ___ALLROWS___
+			//   </table>
+			//   This was the list of authors. 
+			//-----------------------------------
+			//vTable["OutRow"] = pOutRow.replace(/___TABLEID___/g,pTableID);
+			//vTable["pRowFile"] = pRowFile; // e.g. loader/AUTHOR.html
+			vTable["Out"] = "generated updated table content of "+vTable["ID"];
+
+		</script>
+	</body>
+</html>

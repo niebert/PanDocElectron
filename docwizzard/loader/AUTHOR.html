@@ -1,0 +1,59 @@
+<html>
+	<body>
+		<div class="ROWCELLS" id="lastname" >
+			<input type="text" id="___ID___" size="25" />
+		</div>
+		<div class="ROWCELLS" id="firstname">
+			<input type="text" id="___ID___" size="25" />
+		</div>
+		<div class="ROWCELLS" id="email">
+			<input type="text" id="___ID___"  size="20"/>
+		</div>
+		<div class="ROWCELLS" id="affiliation">
+			<input type="text" id="___ID___" size="25"/>
+		</div>
+		<div class="ROWCELLS" id="bDelete">
+			<center>
+				<input type="button"  class="deleteButton" id="rowAUTHOR___COUNT___" value=" X " onclick="alert('Delete Author');deleteRow('AUTHORS',this.id)">
+			</center>	
+		</div>
+		<div id="SELECTOR"></div>
+		<div id="EDITOR"></div>
+		<div id="DISPLAY"></div></div>
+		<script type="text/javascript">
+		    // alert("Message:" + top.document.getElementById("bTitle").innerHTML);
+		    // Find a <table> element with id="myTable":
+			var table = top.document.getElementById("AUTHORS");
+			// Create an empty <tr> element and add it to the 1st position of the table:
+			//var row = table.insertRow(0);
+			var vCount = top.nextCount("AUTHORS");
+		    var row = table.insertRow(-1);
+			row.id ="rowAUTHOR"+vCount;
+			var vNode = document.getElementById("SELECTOR");
+		    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+		    var vCells = document.getElementsByClassName("ROWCELLS");
+		    var cell = null;
+		    var vStr = "";
+		    for (var i=0;i<vCells.length;i++) {
+				cell = row.insertCell(i);
+				vStr = vCells[i].innerHTML;
+				vStr = vStr.replace(/___COUNT___/g,vCount);
+				vStr = vStr.replace(/___ID___/g,vCells[i].id+vCount);
+				cell.innerHTML = vStr;
+				//alert("i="+i+"\n"+vStr);
+			};
+		
+			// Add some text to the new cells:
+			//cell1.innerHTML = "NEW CELL1";
+			//cell2.innerHTML = "NEW CELL2";
+		    //alert(document.location.href);
+		    var vNode = document.getElementById("SELECTOR");
+		    top.write2InnerHTML("bodyAUTHORS",vNode.innerHTML,top.vCount);
+		    vNode = document.getElementById("EDITOR");
+		    top.append2InnerHTML("EDITOR",vNode.innerHTML,top.vCount);
+		    vNode = document.getElementById("DISPLAY");
+		    top.append2InnerHTML("DISPLAY",vNode.innerHTML,top.vCount);
+		    top.append2Value("taSOURCE",vNode.innerHTML,top.vCount);
+		</script>
+	</body>
+</html>

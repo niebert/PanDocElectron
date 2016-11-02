@@ -1,0 +1,15 @@
+Paper Select: ToDo
+-------------
+
+top.storeTableCreate(vColumnsIDs,TableColumTitles,vRowLoader)
+   appends a deleteButton
+   vRowLoader="tables/rowAUTHOR.html"
+
+top.loadTable("vAppendID","ROWAPPENDFILE.html")
+"tables/createTABLE.html
+Copy alter getChildByAttribute() getChildrenByAttribute
+
+
+CLick Load Code
+---------------
+onclick="window.frames['iLoadAuthor'].location = 'loader/AUTHOR.html'"

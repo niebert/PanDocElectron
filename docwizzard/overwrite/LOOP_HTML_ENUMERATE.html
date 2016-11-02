@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	</head>
+	<body>
+		<textarea id="LOOP_BEGIN"><OL><LI></textarea>
+		<textarea id="LOOP_AFTER_FIRST"></LI><LI></textarea>
+		<textarea id="LOOP__ITEM"></LI><LI></textarea>
+		<textarea id="LOOP_BEFORE_LAST"></LI><LI></textarea>
+		<textarea id="LOOP_END"></li></OL></textarea>
+		<script type="text/javascript">
+			var vTypes = new Array("HTML_ENUMERATE","HTML_ITEMIZE","LATEX_ENUMERATE","LATEX_ITEMIZE","COMMA","COMMA_AND");
+			var vIDs = new Array("LOOP_BEGIN","LOOP_AFTER_FIRST","LOOP__ITEM","LOOP_BEFORE_LAST","LOOP_END");
+			for (var k=0;k<vTypes.length;k++) {
+				for (var i=0;i<vIDs.length;i++) {
+					//alert(i+". "+top.vLoopID[vIDs[i]]);
+					var vInNode = document.getElementById(vTypes[k]+"_"+vIDs[i]);
+					if (vInNode) {
+						top.vLoopID[vIDs[i]] = vInNode.value;
+					};
+				};
+			};
+		</script>
+		</script>
+	</body>
+</html>

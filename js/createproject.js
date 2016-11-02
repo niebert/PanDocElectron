@@ -1,3 +1,15 @@
+function startWizzard() {
+  console.log("START: "+vWizzard);
+  // and load the docwizzard.html of the app.
+  var vSep = getPathSeparator(); // is on Linux/Mac "/" on Windows "Backslash"
+  //var vPathMain = app.getPath('documents')+vSep+"PanDoc"+vSep+"tpl"+vSep+"DOCwizzard"+vSep;
+  var vPathMain = `file://${__dirname}/docwizzard/`;
+  var vWizzard = vPathMain + "docwizzard.html";
+  vWizzard += "?inputFILE="+getInnerHTML("inputFILE");
+  vWizzard += "&bibFILE="+getInnerHTML("bibFILE");
+  vWizzard += "&cslFILE="+getInnerHTML("cslFILE");
+  window.open(vWizzard,"_blank","_blank", "width=1000,height=700"); //1048, height: 720
+};
 
 function downloadInputFile(pDownloadType) {
   if (pDownloadType == "projects") {
@@ -32,7 +44,6 @@ function downloadWikiInput() {
   makeProjectDirs(vPath); //audio, video, config, images
   setInputFormat("mediawiki");
   setOutputFormat();
-  var vMediaArray;
   var bot = require('nodemw');
 
   // pass configuration object
@@ -49,14 +60,17 @@ function downloadWikiInput() {
       };
       var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
       var vFilename = getValueDOM('wikiARTICLE')+".wiki";
+      var vFileSource = getValueDOM('wikiARTICLE')+"_source.wiki";
+      vFilename = filenameCorrection(vFilename);
+      vFileSource = filenameCorrection(vFileSource);
       var vInputFile = vPath + vSep + vFilename;
       write2innerHTML("inputFILE",vInputFile);
       var vOutFile = createOutputFile(vInputFile,getValueDOM("outputFORMAT"));
       write2innerHTML("outputFILE",vOutFile);
-      vMediaArray = parseWiki4Media(data);
-      downloadWikiMedia(vMediaArray);
-      data = convertMediaLink4Wiki(data,vMediaArray);
-      data = replaceWikiLinks(data);
+      //save Source File of Wiki
+      saveFile(vPath + vSep + vFileSource,data);
+      // convert the media links in the Wiki Source
+      data = convertWiki2Local(data);
       write2value("inputEDITOR",data);
       console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
       saveFile(vInputFile,data);
@@ -64,17 +78,41 @@ function downloadWikiInput() {
     });
 };
 
+function convertWiki2Local(pContent) {
+  var vMediaArray = parseWiki4Media(pContent);
+  downloadWikiMedia(vMediaArray);
+  pContent = convertMediaLink4Wiki(pContent,vMediaArray);
+  pContent = replaceWikiLinks(pContent);
+  return pContent;
+};
+
+function convertWiki2Online(pContent) {
+  var vMediaArray = parseWiki4Media(pContent);
+  downloadWikiMedia(vMediaArray);
+  pContent = convertMediaLink4WikiOnline(pContent,vMediaArray);
+  pContent = replaceWikiLinks(pContent);
+  return pContent;
+};
+
+function filenameCorrection(pFilename) {
+  pFilename = replaceString(pFilename,"-","_");
+  pFilename = pFilename.replace(/[^A-Za-z\/0-9_\.]/g,"_");
+  pFilename = pFilename.replace(/_[_]+/g,"_");
+  pFilename = pFilename.replace(/[_]+\./g,".");
+  return pFilename;
+};
+
 function parseWiki4Media(pWikiText) {
   var vMediaArray = [];
   //var vSearch = /\[(File|Datei|Image):([^\|]*)/;
-  var vSearch = /\[(?:File|Image|Datei):([^\|]+)/g;
+  var vSearch = /\[(?:File|Image|Datei):([^\|\]]+)/g;
   // \[            # "["
   // (?:            # non-capturing group
   //  File|Image|Datei        #   "File" or "Image" or "Datei"
   // )              # end non-capturing group
   //:             # ":"
   //(              # group 1
-  //  [^\|]+      #   any character except "|" at least once
+  //  [^\|]+      #   any character except "|" or "]" at least once
   // )              # end group 1 - this will be the image's name
   var vResult;
   var vCount =0;
@@ -142,6 +180,25 @@ function convertMediaLink4Wiki(pWikiText,pMediaArray) {
   return pWikiText;
 };
 
+function convertMediaLink4WikiOnline(pWikiText,pMediaArray) {
+  var vReplaceLink;
+  var vMediaFile;
+  var vPathArray;
+
+  pWikiText = pWikiText.replace(/\[(File|Image|Datei):/gi,"[File:");
+
+  for (var i = 0; i < pMediaArray.length; i++) {
+    vPathArray = (pMediaArray[i]).split("/");
+    vMediaFile = vPathArray[vPathArray.length-1];
+    var vFileSplit = vMediaFile.split("|");
+    vMediaFile = vFileSplit[0];
+    vReplaceLink = vMediaFile + "|mini|" + vMediaFile;
+    pWikiText = replaceString(pWikiText,"File:"+pMediaArray[i],"File:"+vReplaceLink);
+  };
+  return pWikiText;
+};
+
+
 function downloadWikiMedia (pMediaArray) {
   var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
   var vMediaURL = getValueDOM("inputMEDIA");
@@ -184,6 +241,7 @@ function createdDownloadMediaFile(pMediaArray,pMediaURL) {
     //vDownloaded +="\n("+(i+1)+") "+pMediaArray[i];
     vDownloaded +="\n  <li>";
     vDownloaded += "("+(i+1)+") <a href='"+pMediaURL+pMediaArray[i]+"' target='_blank'>"+pMediaArray[i]+"</a>";
+    vDownloaded += " Local File: "+getMediaSubDir(pMediaArray[i])+"/"+filenameCorrection(pMediaArray[i]);
     vDownloaded +="\n  </li>";
   };
   vDownloaded +="\n</ul>";
@@ -211,6 +269,7 @@ function splitURL(pURL) {
 function wrapperHTML(pContent) {
   var vOut = "<html><head><title>Download Wiki Media</title></head><body>";
   vOut += pContent;
+  vOut += "</hr>Download the media files for article. If list is empty, Wiki-Article contains no media files";
   vOut += "</body></html>";
   return vOut;
 };

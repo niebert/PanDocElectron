@@ -55,8 +55,7 @@ function openFileInBrowser(pFilename) {
 };
 
 function openFileInWindow(pFilename) {
-  const {shell} = require('electron');
-  console.log("openFileInBrowser('"+pFilename+"')");
+  console.log("openFileInWindow('"+pFilename+"')");
   window.open(pFilename);
 };
 

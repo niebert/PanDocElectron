@@ -1,6 +1,9 @@
 function getMainDir() {
   // i.e. /home/user/Documente/Pandoc
-  return getValueDOM("projectmainDIR");
+  var vMainDir = getValueDOM("projectmainDIR");
+  console.log("getMainDir() - '"+vMainDir +"'");
+  return vMainDir;
+
 }
 
 function getScriptPath() {

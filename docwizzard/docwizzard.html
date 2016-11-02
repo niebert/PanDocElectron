@@ -1,0 +1,161 @@
+<html>
+	<head>
+		<title>
+			PanDoc Wizzard
+		</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<!-- link rel="stylesheet" type="text/css" href="css/buttons.css" /-->
+		<link rel="stylesheet" type="text/css" href="css/nontermselect.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+		<link href="../css/app.css" rel="stylesheet" />
+
+		<!--script type="text/javascript" src="library/jquery-1.11.3.min.js"></script-->
+		<script type="text/javascript">
+		<!--
+		const electron = require('electron');
+		const fs    = require('fs');
+		const exec = require('child_process').exec;
+		const spawn = require('child_process').spawn;
+		const child = require('child_process').execFile;
+		const shell = electron.shell;
+		//const remote  = require('remote');
+		const remote = electron.remote;
+		var app    = remote.app;
+		var dialog = remote.dialog;
+		</script>
+		<script type="text/javascript" src="library/tables.js"></script>
+		<script type="text/javascript" src="library/string.js"></script>
+		<script type="text/javascript" src="library/nontermselect.js"></script>
+		<script type="text/javascript" src="../js/showhide.js"></script>
+		<script type="text/javascript" src="../js/marked.js"></script>
+		<script type="text/javascript" src="../js/opendialogs.js"></script>
+		<script type="text/javascript" src="../js/writedom.js"></script>
+		<script type="text/javascript">
+		//---------------------------------------------
+			var vCount = 0;
+			var vStartNode = "";
+			var vHashNT = {}; // Hash of Non Terminal Symbols and its definition
+			var vFormatArray = new Array("HTML_","LATEX_","WIKI_");
+			var vTableHash = {}; //ID of Hash e.g. "AUTHORS" for Author Table
+			var vTableLoader = {};
+			vTableLoader["TableID"] = "loader/AUTHORTABLE.html";
+			vTableLoader["RowFile"] = "loader/AUTHOR.html";
+			var vLoopID = new Array();
+			vLoopID["LOOP_BEGIN"] = "<ul>\n<li>"
+			vLoopID["LOOP_AFTER_FIRST"] = "</li><li>";
+			vLoopID["LOOP__ITEM"] = "</li><li>";
+			vLoopID["LOOP_BEFORE_LAST"] = "</li><li>";
+			vLoopID["LOOP_END"] = "</li></ul>\n";
+			//---------------------------------------------
+		//-->
+		</script>
+		<style>
+		table, th, td {
+		    border: 1px solid black;
+		    padding: 1px;
+		}
+		table {
+		    border-spacing: 5px;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="MainDIV">
+			<div class="container">
+	      <div class="row">
+	        <div class="col-md-6">
+	          <h1>
+	            <a href="javascript:openBrowserURL('http://pandoc.org/try')"><img src="../css/images/icons-png/info-black.png"></a>
+	            <pandoc class="pandocblue">PanDoc</pandoc>Wizzard
+	          </h1>
+	        </div>
+	        <div class="col-md-6" style="text-align:center;display:none">
+	         <input type="text" id="pandocprogress" size="50">
+	        </div>
+	      </div>
+				<b style="display:none">Format:</b>
+				<select id="OUTFORMAT" style="display:none">
+				 <option value="HTML" selected>HTML</option>
+				 <option value="LATEX">LaTeX</option>
+				 <option value="WIKI">Wikipedia</option>
+			 </select>
+				<b>Language:</b> <select id="OUTLANGUAGE" >
+				 <option value="English" selected>English</option>
+				 <option value="German">German</option>
+			 </select>
+			 <b>Paper Type:</b> <tt id="PAPERTYPE" ></tt>
+			 <br >
+			 <b>Filename:</b> <tt id="inputFILE" >wizzard.md</tt>
+			 <br >
+			 <b>BIB File (BibTex Citations):</b> <tt id="bibFILE" ></tt>
+			 <br >
+			 <b>CSL File (Citation Style):</b> <tt id="cslFILE" ></tt>
+			 <br >
+			 <div align="center">
+				 <button class="SelButton" id="bEDITLIST"  onclick="setWizzard('EDITLIST');">Edit List</button>
+				 <button class="SelButton"  id="bPAPERDATA"  onclick="setWizzard('PAPERDATA');">Paper Data</button>
+				 <button class="SelButton" id="bSELECTOR"  onclick="setWizzard('SELECTOR');">Selector</button>
+				 <button class="SelButton" id="bEDITOR"  onclick="setWizzard('EDITOR');">Editor</button>
+				 <button class="SelButton" id="bDISPLAY"  onclick="setWizzard('DISPLAY');">Display</button> -
+				 <button class="bluebutton" id="bSAVE"  onclick="saveWizzardFile();">Save</button>
+				 <hr/>
+			 </div>
+	  	  <div id="accordion">
+				 <div id="EDITLISTPage">
+					 <h2 class="pandocblue"  align="center">Edit List</h2>
+					 <div class="MAIN" id="EDITLIST">
+					 </div>
+				 </div>
+				 <div id="PAPERDATAPage"  align="center">
+					 <h2 class="pandocblue">Paper Data</h2>
+					 <ul class="MAIN" id="ulPAPERDATA">
+					 </ul>
+				 	 <div class="MAIN" id="PAPERDATA">
+					 </div>
+				 </div>
+				 <div id="SELECTORPage">
+				   <h2 class="pandocblue" align="center">Selector</h2>
+				 	 <div class="MAIN" id="SELECTOR" level="0">
+					 </div>
+				 </div>
+				 <div id="EDITORPage">
+				 	<h2 class="pandocblue" align="center">Editor</h2>
+				 	<div class="MAIN" id="EDITOR" level="0">
+				  </div>
+				</div>
+				 <hr>
+				 <div id="DISPLAYPage">
+				 	 <h2 class="pandocblue" align="center">Display</h2>
+				 	 <div class="MAIN" id="DISPLAY" level="0">
+					 </div>
+				</div>
+			</div>
+			  <hr>
+			 <h2 class="pandocblue" align="center">Source</h2>
+			 <textarea class="MAIN" id="taSOURCE" rows="25" cols="125">
+			 </textarea>
+		 </div>
+		 <hr><strong>Loader iFrame:</strong><br/>
+	 <iframe id="iLoader" src="loader/PAPERTYPE.html" width="90%" height="100" name="iLoader"></iframe>
+	 <iframe id="iLoadTable" src="tables/AUTHORTABLE.html" width="90%" height="100" name="iLoadTable"></iframe>
+	 <iframe id="iLoadLoop" src="overwrite/LOOP_DEFINITIONS.html" width="90%" height="100" name="iLoadLoop"></iframe>
+
+	 <div id="LOOPDEFS"></div>
+	 <!-- script src="library/jquery.js"></script>
+	 <script src="library/jquery-ui.js"></script -->
+	 <script>
+		 <!--
+		 setWizzard("SELECTOR");
+		 //$( "#accordion" ).accordion();
+		 //$( "#radioset" ).buttonset();
+		 //var vChoice = document.getElementById("radio1");
+		 //vChoice.checked = true;
+		 //$("#radio2").attr("checked", true);
+		 //$("#radio1").checked = true;
+		 loadQueryString();
+		 //-->
+		 </script>
+
+			</div>
+		</body>
+</html>

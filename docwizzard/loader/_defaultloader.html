@@ -1,0 +1,32 @@
+<html>
+<body>
+<div id="SELECTOR">
+	Please select the type of paper you want to create:<br>
+	<input type="radio" name="rSelInput" value="RESEARCH">Research Paper<br>
+	<input type="radio" name="rSelInput" value="METAANALYSIS">Meta Analysis<br>
+	<input type="radio" name="rSelInput" value="CASESTUDY">Case Study<br>
+	<input type="radio" name="rSelInput" value="CAPACITY">Capacity Building<br>
+	<input type="radio" name="rSelInput" value="MIGRATION">Open Source Migration Paper<br>
+	<input type="radio" name="rSelInput" value="TECHNICALDOC">Technical Documentation<br>
+	<input type="radio" name="rSelInput" value="DEFINITION">Definition<br>
+	<input type="button" id="bSelectType" value="Select" onclick="alert('select Paper')">
+	<hr/>
+</div>
+<div id="EDITOR">
+	Editor Append
+</div>
+<div id="DISPLAY">
+	Display Append
+</div>
+<script type="text/javascript">
+    // alert("Message:" + top.document.getElementById("bTitle").innerHTML);
+    var vNode = document.getElementById("SELECTOR");
+    top.write2InnerHTML("SELECTOR",vNode.innerHTML);
+    vNode = document.getElementById("EDITOR");
+    top.append2InnerHTML("EDITOR",vNode.innerHTML);
+    vNode = document.getElementById("SOURCE");
+    top.append2InnerHTML("SOURCE",vNode.innerHTML);
+    top.append2Value("taSOURCE",vNode.innerHTML);
+ <</script>
+</body>
+</html>

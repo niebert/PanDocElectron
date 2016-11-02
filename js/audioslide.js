@@ -1,4 +1,49 @@
 
+
+function createImageSlide(pOutFile,pCount,pTemplate) {
+  console.log("Create "+pCount+" AudioSlides for "+pOutFile);
+  //alert("Create "+pCount+" AudioSlides for "+pOutFile);
+  var i = 0;
+  var vSep = getPathSeparator();
+  //var vPathPrefix = "." + vSep + "images" + vSep + "img";
+  var vOutSlides = "";
+  var vPresentation = getFileContent (pTemplate);
+  //var vSlideTPL     = getFileContent ('tpl/audioslides/defslide.html');
+  var vDefSlide = 'defslide.html';
+  if (isChecked("checkAudioPlayer")) {
+    vDefSlide = "defslideplayer.html";
+  };
+  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+vDefSlide);
+  //alert("after TPL and LOOP with getFileContent()");
+  write2value("inputEDITOR",vPresentation);
+  write2value("inputLOOP",vSlideTPL);
+  //alert("write2value finished");
+  var vCount = parseInt(pCount);
+  while ((i<vCount) && (i < 200)) {
+    vSlide = vSlideTPL;
+    vSlide = replaceString(vSlide,"___NR___",i);
+    //vSlide = replaceBG_COLOR(vSlide);
+    //alert("vSlide="+vSlide);
+    vOutSlides +=vSlide;
+    i++;
+  };
+  //write2value("inputLOOP",vOutSlides);
+  //Replace in vPresentation ___DZ_SLIDES___ with the vOutSlides);
+  vPresentation = replaceSlides(vPresentation,vOutSlides);
+  // Replace ___BG_COLOR___ and ___BG_COLOR_SLIDE___ tag in templates
+  vPresentation = replaceBG_COLOR(vPresentation);
+  write2value("outputEDITOR",vPresentation);
+  saveFile(getInnerHTML("outputFILE"),vPresentation);
+  alert("Convert "+pCount+" AudioSlides - Done:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,..." );
+};
+
+function replaceBG_COLOR(pContent) {
+  var vColorBG = getValueDOM("colorBG");
+  pContent = replaceString(pContent,"___BG_COLOR___",vColorBG);
+  pContent = replaceString(pContent,"___BG_COLOR_SLIDE___",vColorBG);
+  return pContent;
+}
+
 function insertAudioTags(pHash) {
   var vFilename = pHash["inputFILE"];
   if (pHash["inputFORMAT"] == "html") {
@@ -7,6 +52,7 @@ function insertAudioTags(pHash) {
     //copyFile2Editor ("outputEDITOR",pHash["inputFILE"]);
     fs.readFile(vFilename, 'utf-8', function (err, data) {
       write2value("inputEDITOR", data);
+      data = replaceBG_COLOR(data);
       data = replaceAudioTag(data);
       console.log('Audio Tags in \''+vFilename+'\' inserted!');
       write2value("outputEDITOR", data);
@@ -97,50 +143,17 @@ function convertDZ2AudioSlide(pData) {
 };
 
 function copyDemoAudio(pHash) {
+  console.log("Copy Demo Audio Files");
   var vSep = getPathSeparator();
   var vAudioDemo = getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+"audiodefault.mp3";
   var vProjectDir = getPathFromFilename(pHash["inputFILE"]);
   var vAudioDir = vProjectDir + vSep +"audio" + vSep;
-  if (checkFileExists(vAudioDir+"audio0.mp3")) {
+  if (!checkFileExists(vAudioDir+"audio0.mp3")) {
     copyFile(vAudioDemo,vAudioDir+"audio0.mp3");
+    console.log("Copy audio0.mp3 to '"+vAudioDir+"'");
+  } else {
+    console.log("copyDemoAudio() - Audio File audio0.mp3 exists");
   };
-  if (checkFileExists(vAudioDir+"audio1.mp3")) {
-    copyFile(vAudioDemo,vAudioDir+"audio1.mp3");
-  };
-};
-
-function createImageSlide(pOutFile,pCount,pTemplate) {
-  console.log("Create "+pCount+" AudioSlides for "+pOutFile);
-  alert("Create "+pCount+" AudioSlides for "+pOutFile);
-  var i = 0;
-  var vSep = getPathSeparator();
-  //var vPathPrefix = "." + vSep + "images" + vSep + "img";
-  var vOutSlides = "";
-  var vPresentation = getFileContent (pTemplate);
-  //var vSlideTPL     = getFileContent ('tpl/audioslides/defslide.html');
-  var vDefSlide = 'defslide.html';
-  if (isChecked("checkAudioPlayer")) {
-    vDefSlide = "defslideplayer.html";
-  };
-  var vSlideTPL     = getFileContent (getMainDir()+vSep+'tpl'+vSep+'audioslides'+vSep+vDefSlide);
-  //alert("after TPL and LOOP with getFileContent()");
-  write2value("inputEDITOR",vPresentation);
-  write2value("inputLOOP",vSlideTPL);
-  //alert("write2value finished");
-  var vCount = parseInt(pCount);
-  while ((i<vCount) && (i < 200)) {
-    vSlide = vSlideTPL;
-    vSlide = replaceString(vSlide,"___NR___",i);
-    //alert("vSlide="+vSlide);
-    vOutSlides +=vSlide;
-    i++;
-  };
-  //write2value("inputLOOP",vOutSlides);
-  vPresentation = replaceSlides(vPresentation,vOutSlides);
-  //vPresentation =  replaceString(vPresentation,"___DZ_SLIDES___",vOutSlides);
-  write2value("outputEDITOR",vPresentation);
-  saveFile(getInnerHTML("outputFILE"),vPresentation);
-  alert("Convert Finished:\nCopy your audio comments as MP3-File into folder '/audio' of your PanDoc Project!\n(e.g. audio0.mp3 for title slide, audio1.mp3 for slide 1,..." );
 };
 
 function replaceSlides(pPresentation,pOutSlides) {

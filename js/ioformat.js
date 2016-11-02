@@ -16,15 +16,16 @@ function setInput4Project(pInputID,pOutputID,pExt) {
   };
   if (pOutputID == "downloadWikiFILE") {
     vFilename = getValueDOM("wikiARTICLE");
-    //write2innerHTML("linkWebFILE")
+    //vFilename = filenameCorrection(vFilename);
   };
+  //vFilename = filenameCorrection(vFilename);
   //write2value(pOutputID,vFilename);
   //alert("setInput4Project() vFilename:\n"+vFilename);
   var vProjectDir = getProjectDir();
   //alert("vProjectDir="+vProjectDir);
-  vFilename = vProjectDir+vPathSep+vSubDir+vPathSep+vFilename+"."+vExt;
-  console.log('Set Input File: \''+vFilename+'\' to DOM-Node['+pOutputID+']!');
-  write2innerHTML(pOutputID,vFilename);
+  var vOutFile = vProjectDir+vPathSep+vSubDir+vPathSep+filenameCorrection(vFilename)+"."+vExt;
+  console.log('Set Output File: \''+vOutFile+'\' to DOM-Node['+pOutputID+']!');
+  write2innerHTML(pOutputID,vOutFile);
 }
 
 function createOutputFile (pInputFile,pOutputFORMAT) {

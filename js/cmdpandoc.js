@@ -1,89 +1,3 @@
-function getCMD(pID) {
-  var vCMD = getValueDOM(pID);
-  //vCMD = vCMD.replace(/[\n\s]/g,"");
-  vCMD = replaceString(vCMD,"\n","");
-  return vCMD;
-};
-
-function convertFile() {
-  var vHash = {};
-  if (vHashTPL) {
-    console.log("vHashTPL exists!");
-  } else {
-    console.log("Error: vHashTPL does not exist");
-  }
-  if (convertChecker(vHash,vHashTPL)) {
-    saveTitleAuthor();
-    //alert("saveTitleAuthor() finished");
-    runPandocShell(vHash);
-  };
-};
-function runPandocShell(pHash) {
-  initShellScript(pHash);
-  var vID = ["inputFORMAT","inputFILE","outputFILE","bibFILE","cslFILE","mathjaxDIR","revealDIR"];
-  for (var i=0;i<vID.length;i++) {
-    pHash[vID[i]] = getValueDOM(vID[i]);
-  };
-  pHash["inputDIR"] = getPath4Filename(getInnerHTML("inputFILE"));
-
-  //alert("runPandocShell(pHash) now execute "+pHash["inputFILE"]);
-  executePanDocCMD(pHash);
-};
-
-function initShellScript(pHash) {
-  var vPath = getPath4Filename(pHash["inputFILE"]);
-  pHash['filename'] = vPath + "/callpandoc.sh";
-  pHash['commands'] = "#!/bin/sh";
-  pHash['savefile'] = "N";
-  if (getOperatingSystem() == "Windows") {
-    pHash['filename'] = vPath + "\\callpandoc.bat";
-    pHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
-  };
-  pHash["executeable"] = "";
-  pHash["paramarray"] = [];
-  pHash['commands'] += "\ncd "+vPath;
-};
-
-function saveShellScript(pShellHash) {
-  //get ProjectPath if the path is defined
-  var vPath = getPath4Filename(pShellHash["inputFILE"]);
-  //vFileName is the filename of the shell script "cmdpandoc.sh" that will
-  // be created in addition to executing the pandoc and image magick commands.
-  var vFileName = pShellHash["filename"];
-  //save script to filename in pShellHash
-  //alert("COMMANDS:\n"+pShellHash["commands"]);
-  if (typeof vFilename === 'undefined' || !vFilename) {
-    pShellHash['filename'] = vPath + "/callpandoc.sh";
-    pShellHash["savefile"] = "Y";
-    if (getOperatingSystem() == "Windows") {
-      pShellHash['filename'] = vPath + "\\callpandoc.bat";
-    };
-    vFileName = pShellHash["filename"];
-  };
-  if (!(pShellHash["commands"])) {
-    alert("pShellHash[commands] were undefined!");
-    pShellHash['commands'] = "#!/bin/sh";
-    if (getOperatingSystem() == "Windows") {
-      pShellHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
-    };
-    pShellHash['commands'] += "\ncd "+vPath;
-  };
-  if (pShellHash["savefile"] != "N") {
-    saveFile(vFileName,pShellHash["commands"]);
-    alert("PanDoc-Script: "+vFileName+" saved");
-  }
-};
-
-function isChecked(pID) {
-  var vCheckBox = document.getElementById(pID);
-  var vReturn = false;
-  if (vCheckBox) {
-    vReturn = vCheckBox.checked
-  } else {
-      console.log("ERROR: Checkbox ["+pID+"] is undefined");
-  };
-  return vReturn;
-}
 
 function executePanDocCMD(pHash) {
   var vSep = getPathSeparator();
@@ -114,7 +28,7 @@ function executePanDocCMD(pHash) {
   var vCMD_pre = vPandoc_CMD+" -f "+vInFORMAT+vInputFilter;
   var vCMD = vPandoc_CMD+" -f "+vInFORMAT+vInputFilter+" -t "+vPanOutFORMAT;
   var vCMD_post = " " + vAdditionParams;
-  vCMD_post += " "+pHash["inputFILE"]+" -o "+pHash["outputFILE"];
+  vCMD_post += " \""+pHash["inputFILE"]+"\" -o \""+pHash["outputFILE"]+"\"";
   vCMD_post += getBibCMD(pHash);
   vCMD_post += getTitleAuthorCMD(pHash);
   vCMD += vCMD_post;
@@ -128,7 +42,7 @@ function executePanDocCMD(pHash) {
         pHash["savefile"] = "Y";
         insertAudioTags(pHash);
         copyDemoAudio(pHash);
-        } else {
+      } else {
         var vMSG = "No HTML-Input:\n Please select an HTML file as input file!";
         vMSG += "\nFile should be a presentation (reveal or DZslides) that contains a <section> tags.";
         vMSG += "\nIf you select 16 Slides, copy audio comments per slide 'audio0.mp3', ... 'audio15.png'";
@@ -294,6 +208,94 @@ function executePanDocCMD(pHash) {
   //openConvertedFile(vShellHash);
   saveShellScript(vShellHash);
   callPandoc(vShellHash);
+};
+
+
+function getCMD(pID) {
+  var vCMD = getValueDOM(pID);
+  //vCMD = vCMD.replace(/[\n\s]/g,"");
+  vCMD = replaceString(vCMD,"\n","");
+  return vCMD;
+};
+
+function convertFile() {
+  var vHash = {};
+  if (vHashTPL) {
+    console.log("vHashTPL exists!");
+  } else {
+    console.log("Error: vHashTPL does not exist");
+  }
+  if (convertChecker(vHash,vHashTPL)) {
+    saveTitleAuthor();
+    //alert("saveTitleAuthor() finished");
+    runPandocShell(vHash);
+  };
+};
+function runPandocShell(pHash) {
+  initShellScript(pHash);
+  var vID = ["inputFORMAT","inputFILE","outputFILE","bibFILE","cslFILE","mathjaxDIR","revealDIR"];
+  for (var i=0;i<vID.length;i++) {
+    pHash[vID[i]] = getValueDOM(vID[i]);
+  };
+  pHash["inputDIR"] = getPath4Filename(getInnerHTML("inputFILE"));
+
+  //alert("runPandocShell(pHash) now execute "+pHash["inputFILE"]);
+  executePanDocCMD(pHash);
+};
+
+function initShellScript(pHash) {
+  var vPath = getPath4Filename(pHash["inputFILE"]);
+  pHash['filename'] = vPath + "/callpandoc.sh";
+  pHash['commands'] = "#!/bin/sh";
+  pHash['savefile'] = "N";
+  if (getOperatingSystem() == "Windows") {
+    pHash['filename'] = vPath + "\\callpandoc.bat";
+    pHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
+  };
+  pHash["executeable"] = "";
+  pHash["paramarray"] = [];
+  pHash['commands'] += "\ncd "+vPath;
+};
+
+function saveShellScript(pShellHash) {
+  //get ProjectPath if the path is defined
+  var vPath = getPath4Filename(pShellHash["inputFILE"]);
+  //vFileName is the filename of the shell script "cmdpandoc.sh" that will
+  // be created in addition to executing the pandoc and image magick commands.
+  var vFileName = pShellHash["filename"];
+  //save script to filename in pShellHash
+  //alert("COMMANDS:\n"+pShellHash["commands"]);
+  if (typeof vFilename === 'undefined' || !vFilename) {
+    pShellHash['filename'] = vPath + "/callpandoc.sh";
+    pShellHash["savefile"] = "Y";
+    if (getOperatingSystem() == "Windows") {
+      pShellHash['filename'] = vPath + "\\callpandoc.bat";
+    };
+    vFileName = pShellHash["filename"];
+  };
+  if (!(pShellHash["commands"])) {
+    alert("pShellHash[commands] were undefined!");
+    pShellHash['commands'] = "#!/bin/sh";
+    if (getOperatingSystem() == "Windows") {
+      pShellHash['commands'] = "@echo off\necho 'PanDoc Command Batch File'";
+    };
+    pShellHash['commands'] += "\ncd "+vPath;
+  };
+  if (pShellHash["savefile"] != "N") {
+    saveFile(vFileName,pShellHash["commands"]);
+    alert("PanDoc-Script: "+vFileName+" saved");
+  }
+};
+
+function isChecked(pID) {
+  var vCheckBox = document.getElementById(pID);
+  var vReturn = false;
+  if (vCheckBox) {
+    vReturn = vCheckBox.checked
+  } else {
+      console.log("ERROR: Checkbox ["+pID+"] is undefined");
+  };
+  return vReturn;
 };
 
 
