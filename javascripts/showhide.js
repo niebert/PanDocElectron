@@ -1,3 +1,5 @@
+var vCurrentPage = "";
+
 function setPage(pButtonID) {
 	var vPages = ["bGeneral","bScript","bWindows","bMacOSX","bLinux","bTutorial","bDeveloper"];
 	//alert("setPage for ID="+pButtonID+" vPages.length="+vPages.length);
@@ -6,13 +8,27 @@ function setPage(pButtonID) {
 		setColorDefault(vPages[i]);
 		hide(vPages[i]+"Page");
 	};
+	if (vCurrentPage == pButtonID) {
+		console.log("toggle Page '"+pButtonID+"'");
+		pButtonID = "";
+		vCurrentPage = "";
+	} else {
+		console.log("vCurrentPage='"+vCurrentPage+"' pButtonID='"+pButtonID+"'");
+		vCurrentPage = pButtonID;
+	};
 	switch (pButtonID) {
+		case "": //
+			for (i=1;i<vPages.length;i++) {
+				setColorDefault(vPages[i]);
+				show(vPages[i]+"Download");
+			};
+		break;
 		case "bGeneral":
 			for (i=1;i<vPages.length;i++) {
 				setColorDefault(vPages[i]);
 				show(vPages[i]+"Download");
 			};
-			break;
+		break;
 		default:
 			for (i=1;i<vPages.length;i++) {
 				setColorDefault(vPages[i]);
@@ -20,11 +36,12 @@ function setPage(pButtonID) {
 			};
 
 	};
-	show(pButtonID+"Page");
-	show(pButtonID+"Download");
-	setColorSelected(pButtonID);
-
-}
+	if (pButtonID != "") {
+		show(pButtonID+"Page");
+		show(pButtonID+"Download");
+		setColorSelected(pButtonID);
+	};
+};
 
 function showEditPath(pID) {
 	document.getElementById('EDIT'+pID+'CMD').value = document.getElementById(pID+'CMD').innerHTML;

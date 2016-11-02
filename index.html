@@ -117,7 +117,7 @@
 
 
 
-  <h2>1.2 Additional Features of PanDocElectron< - Audioslides</h3>
+  <h2>1.2 Additional Features of PanDocElectron - Audioslides</h3>
   With PanDocElectron you can use a PDF-export of you LibreOffice Impress or Powerpoint to extract the slides as PNG images
   and copy an audio comment (<tt>audio0.mp3, audio1.mp3, ...</tt>) into the <tt>audio</tt>-folder of PanDocElectron project.
   If you choose in PanDocElectron the export format <tt>audioslides</tt>, you will get a web based presentation that plays
@@ -126,11 +126,23 @@
 
   Record your audio comments with <a href="http://www.audacityteam.org/download/" target="_blank">Audacity</a> and <a href="https://www.google.de/search?q=audacity+mp3+encoder&ie=utf-8&oe=utf-8&client=firefox-b&gfe_rd=cr&ei=No18V_L2F66N8Qebi76wCA">MP3 Encoder Audacity</a>.
 
-
+  <h2>1.3 WikiPedia and Wikiversity Downloads</h3>
+  With PanDocElectron you can download articles and presentations from
+  <ul>
+    <li>
+      Wikipedia and
+    </li>
+    <li>
+      Wikiversity
+    </li>
+  </ul>
+  to process these files with PanDocElectron. Wikiversity is designed for educational content. A special slide format  (<a href="https://de.wikiversity.org/wiki/PanDocElectron-Presentation" target="_blank">PanDocElectron-SLIDE</a>) with less
+  content per section(=slide in presenation). This allows an tailored processing of slides for presenation from Wikivesity into a <a href="http://courses.telematique.eu/reveal.js-plugins/audio-slideshow-demo.html#/" target="_blank">RevealJS presentation</a>.
   <h2>
   <a id="3-pandoc-projects" class="anchor" href="#3-pandoc-projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.3 PanDoc Projects</h3>
 
-  <p>PanDocElectron uses a project based approach for conversion. A project is a subdirectory of <code>Documents/Pandoc/</code> e.g. <code>Documents/Pandoc/MyProject</code>. This file contains the input files and the genrated output files by PanDoc. In general the input files are mainly WikiMedia-Files <code>Documents/Pandoc/MyProject/MyProject.wiki</code>.</p>
+  <p>PanDocElectron uses a project based approach for conversion. A project is a subdirectory of <code>Documents/Pandoc/</code> e.g. <code>Documents/Pandoc/MyProject</code>.
+    This file contains the input files and the genrated output files by PanDoc. In general the input files are mainly WikiMedia-Files <code>Documents/Pandoc/MyProject/MyProject.wiki</code>.</p>
 
   <ul>
   <li>WikiMedia are provided on Wikiversity.</li>
@@ -671,7 +683,8 @@
   <ul>
     <li>
       Download <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">PanDoc Support Files and Templates</a>
-      and unzip the folder in your Documents/PanDoc Folder. The zip-file contains the binaries of PanDoc and ImageMagick for Windows.
+      and unzip the folder in your Documents/PanDoc Folder. The zip-file contains the binaries of PanDoc and ImageMagick for Windows in <tt>WinOS</tt>.
+      The folder <tt>WinOS</tt> can be delete on Linux and MacOSX.
     </li>
     <li>or (Aternative) Installation Binaries for ImageMagick are available on <a href="http://www.imagemagick.org/script/binary-releases.php" target="_blank">ImageMagick.org</a>
     </li>
@@ -741,6 +754,76 @@
       </a>
     </li>
   </ul>
+
+  <h2>
+  <a id="tutUpdateRepos" class="anchor" href="#tutUpdateRepos" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bTutorial')">+</button>
+  3.2 Update PanDoc Support Files and PanDocElectron</h2>
+  Software (PanDocElectron) and the support files (PanDoc) may change from time to time, due to
+  <ul>
+    <li>
+      debugging efforts of developers,
+    </li>
+    <li>
+      optimization of code,
+    </li>
+    <li>
+      implemenation of new features,
+    </li>
+    <li>
+      improvement of templates
+    </li>
+  </ul>
+  <b>PanDoc Support Files</b><br>
+  To update the PanDoc Support Files with <a href="https://rogerdudler.github.io/git-guide/" target="_blank">GIT</a> open the terminal
+  change to the directory where the PanDoc support files are stored
+  <blockquote>
+    <p><code>cd  Documents/PanDoc</code></p>
+  </blockquote>
+  The pull the changes from the remote directory.
+  <blockquote>
+    <p><code>git pull origin master</code></p>
+  </blockquote>
+  <p><b>Remark:</b> This is possible if and only if you installed the PanDoc support files with GIT.
+  Otherwise rename your old folder (e.g. <tt>Documents/PanDoc</tt> to <tt>Documents/PanDoc_Backup</tt>
+  and download and unzip <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">PanDoc Support Files</a> in your Documents folder and copy
+  your PanDocElectron projects in <tt>Documents/PanDoc_Backup</tt> back into <tt>Documents/PanDoc</tt>.
+  Instead of using the ZIP-file of PanDoc support files you can install GIT and clone the repository of the support files with
+    <blockquote>
+    <p><code>git clone https://github.com/niebert/PanDoc.git</code></p>
+    </blockquote>
+  This will make updates much easier for upcoming releases.
+  </p>
+
+  <b>PanDocElectron Application Update</b><br>
+  To update the PanDoc Support Files with <a href="https://rogerdudler.github.io/git-guide/" target="_blank">GIT</a> open the terminal
+  change to the directory where the application PanDocElectron was installed, e.g.
+  <blockquote>
+    <p><code>cd  Documents/PanDocElectron</code></p>
+  </blockquote>
+  The pull the changes from the PanDocElectron remote repository of the application call the following git command:
+  <blockquote>
+    <p><code>git pull origin master</code></p>
+  </blockquote>
+  <blockquote>
+  <p><code>git clone https://github.com/niebert/PanDocElectron.git</code></p>
+  </blockquote>
+  <p><b>Remark:</b> This is possible if and only if you installed the PanDocElectron with GIT or the script on Linux or Mac.
+  Otherwise rename your old folder (e.g. <tt>Documents/PanDocElectron</tt> to <tt>Documents/PanDocElectron_Backup</tt>
+  and download and unzip the binaries from the <a href="https://github.com/niebert/PanDocElectron/archive/master.zip" target="_blank">PanDocElectron</a> in your Documents folder and copy
+  your PanDocElectron projects in <tt>Documents/PanDoc_Backup</tt> back into <tt>Documents/PanDocElectron</tt>.
+  An call
+  <blockquote>
+    <p><code>npm install</code></p>
+  </blockquote>
+  Then you will be able to use PanDocElectron with the new version. It is always recommended to keep a copy of the old release
+  of <tt>PanDocElectron</tt> in <tt>PanDocElectron_Backup</tt> until you are sure the new version has no bugs on your operating system.
+  Switching back to the prior release is easy by deleting <tt>PanDocElectron</tt> folder and rename <tt>PanDocElectron_Backup</tt> back to <tt>PanDocElectron</tt>.
+  Instead of using GIT for version control you can install binaries of PanDocElectron from SourceForge.
+  Please keep in mind, that the <a href="https://sourceforge.net/projects/pandocelectron/files" target="_blank">binaries on SourceForge</a>
+   may not be up to date in comparison to <a href="https://github.com/niebert/PanDocElectron/" target="_blank">master branch of PanDocElectron</a>. 
+  on GitHub.
+
 </div>
 
 <h1 id="SEC8">
@@ -761,7 +844,7 @@
   <p>Clone the Quick Start repository first</p>
 
   <blockquote>
-  <p><code>$ git clone https://github.com/electron/electron-quick-start</code></p>
+  <p><code>git clone https://github.com/electron/electron-quick-start</code></p>
   </blockquote>
 
   <p>Go into the repository`</p>

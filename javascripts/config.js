@@ -3,9 +3,12 @@ function replaceConfig() {
   if (vBody) {
     var vText = vBody.innerHTML;
     //search and replaceString
-    //vText = vText.replace(/PanDocElectron/g,"BlaBlaElectron")
-    vBody.innerHTML = vText
+    vText = vText.replace(/PanDocElectron/g,"BlaBlaElectron")
+    vBody.innerHTML = vText;
+    console.log("Replace Words in Page Body");
+  } else {
+    console.log("innerHTML of Page Body does not exist");
   };
-}
+};
 
-setTimeout("replacePageBody",2000);
+// setTimeout("replaceConfig",2000);
