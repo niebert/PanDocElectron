@@ -370,6 +370,12 @@ function getMathJaxCMD(pHash) {
 function getMathJaxRelativeDIR() {
   var vInputDir = getInputFilePath();
   var mathjaxDIR = getInnerHTML("mathjaxDIR");
+  if (document.getElementById("checkmathjaxDIR").checked) {
+    console.log("Use LOCAL MathJax");
+  } else {
+    console.log("Use REMOTE MathJax");
+    mathjaxDIR = "";
+  };
   if (mathjaxDIR != "") {
     mathjaxDIR = getRelativePath(vInputDir,mathjaxDIR);
   } else {

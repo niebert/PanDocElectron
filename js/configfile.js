@@ -12,6 +12,7 @@ function loadConfig(pConfigFile) {
     } else {
       write2innerHTML("divconfig", data);
       console.log('Config File \''+vConfigFile+'\' loaded!');
+      //--- update the select input with the loaded values  from selectInputFORMAT and selectOutputFORMAT---
       write2value("inputFORMAT",getInnerHTML("selectInputFORMAT"));
       write2value("outputFORMAT",getInnerHTML("selectOutputFORMAT"));
     };
@@ -20,7 +21,8 @@ function loadConfig(pConfigFile) {
 
 function saveConfig (pConfigFile) {
   var vConfigFile = pConfigFile || getDefaultConfig();
-  // simnply write the innerHTML of DIV node 'divconfig' into file
+  // simply write the innerHTML of DIV node 'divconfig' into file
+  //--- update the selected formats write to innerHTML of selectInputFORMAT and selectOutputFORMAT before saving--- 
   write2innerHTML("selectInputFORMAT",getValueDOM("inputFORMAT"));
   write2innerHTML("selectOutputFORMAT",getValueDOM("outputFORMAT"));
   var vContent=document.getElementById("divconfig").innerHTML;

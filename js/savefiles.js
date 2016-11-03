@@ -27,6 +27,11 @@ function loadLocalStorageInnerHTML(pID) {
   };
 };
 
+function saveJSON(pFilename,pJSON) {
+  var vContent = JSON.stringify(pJSON);
+  saveFile(pFilename,vContent);
+};
+
 function copyFile(pSource,pDestination) {
   var vPerfomCopy = true;
   if (checkFileExists(pDestination)) {

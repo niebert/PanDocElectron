@@ -104,6 +104,7 @@ function setDefaultValues(pHashTPL) {
   var vTPL_HTML = document.getElementById("tplTPL").value;
   var vREF_HTML = document.getElementById("tplREF").value;
   var vDIR_HTML = document.getElementById("tplDIR").value;
+  var vCHECKDIR_HTML = document.getElementById("tplCHECKDIR").value;
 
   var vhtml ="html"+vSep;
   appendTemplateInput("tabletemplates","DEFAULT",vhtml+'template.html',vPath,"md",pHashTPL,vTPL_HTML);
@@ -119,7 +120,7 @@ function setDefaultValues(pHashTPL) {
   appendTemplateInput("tabletemplates","html",vhtml+'referencefile.html',vPath,"css",pHashTPL,vREF_HTML);
   //alert(app.getPath('documents'))
   appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vSep+"reveal","Reveal Folder ",vDIR_HTML);
-  appendDirectoryInput("tablefolders","MathJax",vhtml+"defaultfolder.html","mathjaxDIR",vPathMain+vSep+"mathjax","MathJax Folder ",vDIR_HTML);
+  appendDirectoryInput("tablefolders","MathJax",vhtml+"checkboxfolder.html","mathjaxDIR",vPathMain+vSep+"mathjax","MathJax Folder ",vCHECKDIR_HTML);
   //copyFile2Editor ("audioslideMAIN",getInnerHTML("tplFILEaudioslides"));
   //copyFile2Editor ("inputLOOP",__dirname+'/tpl/imgslides/audiosection.txt');
   document.getElementById("inputNEWFORMAT").innerHTML = document.getElementById("inputFORMAT").innerHTML;

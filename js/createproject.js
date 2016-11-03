@@ -59,10 +59,11 @@ function downloadWikiInput() {
         return;
       };
       var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
-      var vFilename = getValueDOM('wikiARTICLE')+".wiki";
-      var vFileSource = getValueDOM('wikiARTICLE')+"_source.wiki";
-      vFilename = filenameCorrection(vFilename);
-      vFileSource = filenameCorrection(vFileSource);
+      var vFileBase = getValueDOM('wikiARTICLE');
+      vFileBase = filenameCorrection(vFileBase);
+      var vFilename = vFileBase + ".wiki";
+      var vFileSource =  vFileBase + "_source.wiki";
+      var vFileJSON = vPath + vSep + "config" + vSep + vFileBase + "_wiki.json"
       var vInputFile = vPath + vSep + vFilename;
       write2innerHTML("inputFILE",vInputFile);
       var vOutFile = createOutputFile(vInputFile,getValueDOM("outputFORMAT"));
@@ -70,7 +71,10 @@ function downloadWikiInput() {
       //save Source File of Wiki
       saveFile(vPath + vSep + vFileSource,data);
       // convert the media links in the Wiki Source
-      data = convertWiki2Local(data);
+      var vWikiJSON = {};
+      data = convertWiki2Local(data,vWikiJSON);
+      data = replaceWikiMath(data);
+      saveJSON(vFileJSON,vWikiJSON);
       write2value("inputEDITOR",data);
       console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
       saveFile(vInputFile,data);
@@ -78,12 +82,26 @@ function downloadWikiInput() {
     });
 };
 
-function convertWiki2Local(pContent) {
+function convertWiki2Local(pContent,pWikiJSON) {
   var vMediaArray = parseWiki4Media(pContent);
+  createMediaWikiJSON(vMediaArray,pWikiJSON);
   downloadWikiMedia(vMediaArray);
   pContent = convertMediaLink4Wiki(pContent,vMediaArray);
-  pContent = replaceWikiLinks(pContent);
+  pContent = replaceWikiLinks(pContent,pWikiJSON);
   return pContent;
+};
+
+function createMediaWikiJSON(pMediaArray,pWikiJSON) {
+  var vMediaFile = "";
+  var vSubDir = "";
+  var vLocalID = "";
+  for (var i = 0; i < pMediaArray.length; i++) {
+    vSubDir = getMediaSubDir(pMediaArray[i]);
+    vMediaFile = convertWikiMedia2File(pMediaArray[i]);
+    vLocalID = vSubDir + "/" + vMediaFile
+    //pWikiJSON[vMediaArray[i]] = vLocalID;
+    pWikiJSON[vLocalID] = vMediaArray[i];
+  };
 };
 
 function convertWiki2Online(pContent) {
@@ -93,6 +111,17 @@ function convertWiki2Online(pContent) {
   pContent = replaceWikiLinks(pContent);
   return pContent;
 };
+
+function downloadWikiMedia (pMediaArray) {
+  var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  var vMediaURL = getValueDOM("inputMEDIA");
+  for (var i = 0; i < pMediaArray.length; i++) {
+    checkMediaFile(vProjectDir,vMediaURL+pMediaArray[i],pMediaArray[i]);
+  };
+  createdDownloadMediaDIV(pMediaArray,vMediaURL);
+  createdDownloadMediaFile(pMediaArray,vMediaURL,vProjectDir);
+};
+
 
 function filenameCorrection(pFilename) {
   pFilename = replaceString(pFilename,"-","_");
@@ -124,9 +153,9 @@ function parseWiki4Media(pWikiText) {
   return vMediaArray;
 };
 
-function replaceWikiLinks(pWikiText) {
+function replaceWikiLinks(pWikiText,pWikiJSON) {
   var vLinkArray = getWikiLinks(pWikiText);
-  var vURL,Title,vLink;
+  var vURL,Title,vLink,vLocalLink;
   var vPipePos = 0;
   for (var i = 0; i < vLinkArray.length; i++) {
     vLink = vLinkArray[i];
@@ -139,10 +168,22 @@ function replaceWikiLinks(pWikiText) {
       vTitle = vLink;
     };
     vURL = getWikiDisplayURL(vURL);
-    pWikiText = replaceString(pWikiText,"[["+vLink+"]]","["+vURL+" "+vTitle+"]");
+    vLocalLink = vURL+" "+vTitle;
+    pWikiText = replaceString(pWikiText,"[["+vLink+"]]","["+vLocalLink+"]");
+    // for reverse replacement to online Wikipedia or Wikiversity store replacement in WikiJSON
+    pWikiJSON[vLocalLink] = "["+vLink+"]";
   };
   return pWikiText
 };
+
+function replaceWikiMath(pWikiText) {
+  pWikiText = pWikiText.replace(/\\R /g,"\\mathbb R ");
+  pWikiText = pWikiText.replace(/\\R</g,"\\mathbb R<");
+  pWikiText = pWikiText.replace(/\\R\s/g,"\\mathbb R ");
+  //pWikiText = replaceString(pWikiText,'\\','\mathbb R \\');
+  return pWikiText;
+};
+
 
 function getWikiLinks(pWikiText) {
   // Wiki Links are open with ""
@@ -196,17 +237,6 @@ function convertMediaLink4WikiOnline(pWikiText,pMediaArray) {
     pWikiText = replaceString(pWikiText,"File:"+pMediaArray[i],"File:"+vReplaceLink);
   };
   return pWikiText;
-};
-
-
-function downloadWikiMedia (pMediaArray) {
-  var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
-  var vMediaURL = getValueDOM("inputMEDIA");
-  for (var i = 0; i < pMediaArray.length; i++) {
-    checkMediaFile(vProjectDir,vMediaURL+pMediaArray[i],pMediaArray[i]);
-  };
-  createdDownloadMediaDIV(pMediaArray,vMediaURL);
-  createdDownloadMediaFile(pMediaArray,vMediaURL,vProjectDir);
 };
 
 function getWikiDisplayURL(pArticle) {
