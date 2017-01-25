@@ -39,9 +39,7 @@ function downloadWikiInput() {
   // This is the main function called, when user presses
   // the download Button "Wiki-Download"
   var vSep = getPathSeparator();
-  var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
-  makedirpath(vPath);
-  makeProjectDirs(vPath); //audio, video, config, images
+  var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
   setInputFormat("mediawiki");
   setOutputFormat();
   var bot = require('nodemw');
@@ -58,27 +56,37 @@ function downloadWikiInput() {
         console.error(err);
         return;
       };
-      var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
-      var vFileBase = getValueDOM('wikiARTICLE');
-      vFileBase = filenameCorrection(vFileBase);
-      var vFilename = vFileBase + ".wiki";
-      var vFileSource =  vFileBase + "_source.wiki";
-      var vFileJSON = vPath + vSep + "config" + vSep + vFileBase + "_wiki.json"
-      var vInputFile = vPath + vSep + vFilename;
-      write2innerHTML("inputFILE",vInputFile);
-      var vOutFile = createOutputFile(vInputFile,getValueDOM("outputFORMAT"));
-      write2innerHTML("outputFILE",vOutFile);
-      //save Source File of Wiki
-      saveFile(vPath + vSep + vFileSource,data);
-      // convert the media links in the Wiki Source
-      var vWikiJSON = {};
-      data = convertWiki2Local(data,vWikiJSON);
-      data = replaceWikiMath(data);
-      saveJSON(vFileJSON,vWikiJSON);
-      write2value("inputEDITOR",data);
-      console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
-      saveFile(vInputFile,data);
-      alert("Wiki Article from '"+getValueDOM('wikiARTICLE')+"' downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'))
+      if (data) {
+        makeProjectDirs(vProjectDir); //audio, video, config, images
+        makedirpath(vProjectDir);
+        var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
+        var vFileBase = getValueDOM('wikiARTICLE');
+        vFileBase = filenameCorrection(vFileBase);
+        var vFilename = vFileBase + ".wiki";
+        var vFileSource =  vFileBase + "_source.wiki";
+        var vFileJSON = vPath + vSep + "config" + vSep + vFileBase + "_wiki.json"
+        var vInputFile = vPath + vSep + vFilename;
+        write2innerHTML("inputFILE",vInputFile);
+        var vOutFile = createOutputFile(vInputFile,getValueDOM("outputFORMAT"));
+        write2innerHTML("outputFILE",vOutFile);
+        //save Source File of Wiki
+        saveFile(vPath + vSep + vFileSource,data);
+        // convert the media links in the Wiki Source
+        var vWikiJSON = {};
+        vWikiJSON["url"] = getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
+        var now = new Date();
+        vWikiJSON["date"] = now.toJSON();
+        data = convertWiki2Local(data,vWikiJSON);
+        data = replaceWikiMath(data);
+        saveJSON(vFileJSON,vWikiJSON);
+        write2value("inputEDITOR",data);
+        console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
+        saveFile(vInputFile,data);
+        alert("Wiki Article from '"+getValueDOM('wikiARTICLE')+"' downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
+      } else {
+        alert("DOWNLOAD WARNING: Wiki Article from '"+getValueDOM('wikiARTICLE')+"' could not be downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
+      };
+
     });
 };
 
@@ -95,12 +103,13 @@ function createMediaWikiJSON(pMediaArray,pWikiJSON) {
   var vMediaFile = "";
   var vSubDir = "";
   var vLocalID = "";
+  checkWikiJSON(pWikiJSON,"media")
   for (var i = 0; i < pMediaArray.length; i++) {
     vSubDir = getMediaSubDir(pMediaArray[i]);
     vMediaFile = convertWikiMedia2File(pMediaArray[i]);
     vLocalID = vSubDir + "/" + vMediaFile
     //pWikiJSON[vMediaArray[i]] = vLocalID;
-    pWikiJSON[vLocalID] = vMediaArray[i];
+    pWikiJSON["media"][vLocalID] = vMediaArray[i];
   };
 };
 
@@ -125,6 +134,13 @@ function downloadWikiMedia (pMediaArray) {
 
 function filenameCorrection(pFilename) {
   pFilename = replaceString(pFilename,"-","_");
+  pFilename = pFilename.replace(/Ä/g,"Ae");
+  pFilename = pFilename.replace(/Ö/g,"Oe");
+  pFilename = pFilename.replace(/Ü/g,"Ue");
+  pFilename = pFilename.replace(/ä/g,"ae");
+  pFilename = pFilename.replace(/ö/g,"oe");
+  pFilename = pFilename.replace(/ü/g,"ue");
+  pFilename = pFilename.replace(/ß/g,"ss");
   pFilename = pFilename.replace(/[^A-Za-z\/0-9_\.]/g,"_");
   pFilename = pFilename.replace(/_[_]+/g,"_");
   pFilename = pFilename.replace(/[_]+\./g,".");
@@ -153,15 +169,24 @@ function parseWiki4Media(pWikiText) {
   return vMediaArray;
 };
 
+function checkWikiJSON(pWikiJSON,pHashID) {
+  if (pWikiJSON[pHashID]) {
+    console.log("WikiJSON['"+pHashID+"']  exists!");
+  } else {
+    pWikiJSON[pHashID] = {};
+  };
+};
+
 function replaceWikiLinks(pWikiText,pWikiJSON) {
   var vLinkArray = getWikiLinks(pWikiText);
   var vURL,Title,vLink,vLocalLink;
   var vPipePos = 0;
+  checkWikiJSON(pWikiJSON,"links");
   for (var i = 0; i < vLinkArray.length; i++) {
     vLink = vLinkArray[i];
     vPipePos = vLink.indexOf("|");
     if (vPipePos>0) {
-      vURL = vLink.substr(0,vPipePos-1);
+      vURL = vLink.substr(0,vPipePos);
       vTitle = vLink.substr(vPipePos+1,vLink.length);
     } else {
       vURL = vLink;
@@ -171,7 +196,7 @@ function replaceWikiLinks(pWikiText,pWikiJSON) {
     vLocalLink = vURL+" "+vTitle;
     pWikiText = replaceString(pWikiText,"[["+vLink+"]]","["+vLocalLink+"]");
     // for reverse replacement to online Wikipedia or Wikiversity store replacement in WikiJSON
-    pWikiJSON[vLocalLink] = "["+vLink+"]";
+    pWikiJSON["links"][vLocalLink] = "["+vLink+"]";
   };
   return pWikiText
 };
@@ -184,6 +209,45 @@ function replaceWikiMath(pWikiText) {
   return pWikiText;
 };
 
+function getLinks2SquareBrackets(pWikiText) {
+  // Wiki Links are enclosed with double square brackets [[link]]
+  // Type of enclose Links
+  // (1) [[Linear Algebra]] internal Wiki Link (Default)
+  // (2) [[Linear Algebra|Definition of Linear Algebra]] [[link|linktext]]
+  // (3) [[File:filename.ext]] Media File Video, Image, Audio - File|Datei|Image
+
+  var vLinkArray = [];
+  var vSearch = /\[\[([^\]]+)\]\]/g;
+  // \[\[         # "[["
+  //(             # group 1
+  //  [^\[]+    #   any character except the closing square bracket "]"
+  // )            # end group 1 - this will be the image's name
+  // \]\]         # "]]"
+  var vResult;
+  var vCount =0;
+  while (vResult = vSearch.exec(pWikiText)) {
+    vCount++;
+    vLinkArray.push(vResult[1]);
+    console.log("Wiki-Double Square Bracket Link "+vCount+": '[[" + vResult[1] + "]]' found");
+  };
+  return vLinkArray;
+};
+
+function extractLinkArray2MediaLink(pLinkArray) {
+  var vMediaArray = [];
+  var vLink  = "";
+  var vResult;
+  for (var i = 0; i < pLinkArray.length; i++) {
+    vLink  = pLinkArray[i];
+    vSearch = /(File|Datei|Image):([^\|]*)/;
+    vResult = vSearch.exec(vLink);
+    if(vResult == true) {
+      vMediaArray.push(vLink);
+      console.log("MediaLink '" + vMediaLink + "'");
+    };
+  };
+  return vMediaArray;
+}
 
 function getWikiLinks(pWikiText) {
   // Wiki Links are open with ""
@@ -485,7 +549,7 @@ function setInput4WebDownload() {
   document.getElementById("downloadWebFILE").innerHTML = vDownloadFile;
 };
 
-function createProject() {
+function createProject(pCallWizzard) {
   var vPandoc_CMD = getValueDOM("pandocCMD");
   var vSep = getPathSeparator();
   var vName = getValueDOM("inputNEWPROJECT");
@@ -551,6 +615,9 @@ function createProject() {
     //write2value("inputFORMAT",)
     alert("Project: "+vName+" created!\nInput Format: "+vInFormat+"\nOutput Format: "+vOutFormat);
     setPage("bConvert");
+    if (pCallWizzard) {
+      pCallWizzard();
+    };
   } else {
     // Do nothing!
     alert("Project Create: CANCEL Operation")

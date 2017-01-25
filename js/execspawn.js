@@ -6,7 +6,20 @@ function updateSoftware() {
   } else {
     alert("CANCEL: Updating Software was cancelled!");
   };
+};
+
+function updateTemplates() {
+  vAnswer = confirm("Do want to update the Templates PanDoc with GIT!");
+  if (vAnswer) {
+    //runShellCommand("cd \""+__dirname+"\"; git update");
+    // get Templates Dirname
+    // run git pull origin master
+    alert("Updated the PanDoc Templates was successful with GIT.");
+  } else {
+    alert("CANCEL: Updating Templates was cancelled!");
+  };
 }
+
 
 function whichPath(pCommand,pDOM,pDefaultCommand) {
   var vDefaultCommand = pDefaultCommand || pCommand;

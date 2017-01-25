@@ -1,6 +1,7 @@
 
 function appendDirectoryInput(pID,pTitle,pTemplate,pFolderID,pPathDefault,pButtonTitle,pTPL) {
   var vReplaceHash = {};
+  vInnerHTMLID.push(pFolderID);
   vReplaceHash["FOLDERID"]    = pFolderID;
   vReplaceHash["BUTTONTITLE"] = pButtonTitle;
   vReplaceHash["TITLE"] = pTitle;
@@ -13,6 +14,7 @@ function appendTemplateInput(pID,pOutputFORMAT,pTemplate,pPath,pExt,pHashTPL,pTP
   if (pTemplate.indexOf("referencefile")>0) {
     vTPLID = pOutputFORMAT+"REF";
   };
+  vInnerHTMLID.push(vTPLID);
   var vReplaceHash = {};
   var vSep = getPathSeparator();
   var vDefaultName = "tpldefault";
@@ -119,8 +121,8 @@ function setDefaultValues(pHashTPL) {
   appendTemplateInput("tabletemplates","docx2col",vhtml+'referencefile.html',vPath,"docx",pHashTPL,vREF_HTML);
   appendTemplateInput("tabletemplates","html",vhtml+'referencefile.html',vPath,"css",pHashTPL,vREF_HTML);
   //alert(app.getPath('documents'))
-  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vSep+"reveal","Reveal Folder ",vDIR_HTML);
-  appendDirectoryInput("tablefolders","MathJax",vhtml+"checkboxfolder.html","mathjaxDIR",vPathMain+vSep+"mathjax","MathJax Folder ",vCHECKDIR_HTML);
+  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vSep+"reveal","Reveal Folder ",vDIR_HTML,vInnerHTMLID);
+  appendDirectoryInput("tablefolders","MathJax",vhtml+"checkboxfolder.html","mathjaxDIR",vPathMain+vSep+"mathjax","MathJax Folder ",vCHECKDIR_HTML,vInnerHTMLID);
   //copyFile2Editor ("audioslideMAIN",getInnerHTML("tplFILEaudioslides"));
   //copyFile2Editor ("inputLOOP",__dirname+'/tpl/imgslides/audiosection.txt');
   document.getElementById("inputNEWFORMAT").innerHTML = document.getElementById("inputFORMAT").innerHTML;

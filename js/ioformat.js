@@ -28,6 +28,13 @@ function setInput4Project(pInputID,pOutputID,pExt) {
   write2innerHTML(pOutputID,vOutFile);
 }
 
+function setmathjaxDIRLocal(pChecked) {
+  var vArrID = ["checkmathjaxDIR","checkMathJaxNew"];
+  for (var i = 0; i < vArrID.length; i++) {
+    document.getElementById(vArrID[i]).checked = pChecked;
+  };
+};
+
 function createOutputFile (pInputFile,pOutputFORMAT) {
   var vFileNoExt = removeExtension(pInputFile);
   var vExt = vExtHash[pOutputFORMAT] || pOutputFORMAT;
@@ -55,8 +62,10 @@ function visibleOutFormatSelectors(pOutputFORMAT) {
   };
   if ((pOutputFORMAT == "reveal") || (pOutputFORMAT == "dzslides")) {
     showElement("themeREVEAL");
+    showElement("divMathJaxLocal");
   } else {
     hideElement("themeREVEAL");
+    hideElement("divMathJaxLocal");
   };
 }
 

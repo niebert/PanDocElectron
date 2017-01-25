@@ -27,9 +27,27 @@ function loadLocalStorageInnerHTML(pID) {
   };
 };
 
+function loadJSON(pFilename) {
+  var vJSON;
+  var vContent;
+  if (checkFileExists(pFilename)) {
+    var vContent = getFileContent(pFilename);
+    vJSON = JSON.parse(vContent);
+    console.log("JSON File '"+pFilename+"' parsed in loadJSON()-Call");
+  } else {
+    console.log("loadJSON('"+pFilename+"') - File does not exist");
+  };
+  return vJSON;
+};
+
 function saveJSON(pFilename,pJSON) {
-  var vContent = JSON.stringify(pJSON);
-  saveFile(pFilename,vContent);
+  if (pJSON) {
+    var vContent = JSON.stringify(pJSON);
+    saveFile(pFilename,vContent);
+    console.log("saveJSON('"+pFilename+"')");
+  } else {
+    console.log("ERROR: in saveJSON('"+pFilename+"') pJSON does not exist!");
+  }
 };
 
 function copyFile(pSource,pDestination) {

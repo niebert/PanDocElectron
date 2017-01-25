@@ -49,24 +49,25 @@ width: 200px;
 	  -webkit-border-radius: 28;
 	  -moz-border-radius: 28;
 	  border-radius: 28px;
-	  text-shadow: 4px 3px 3px #666666;
 	  font-family: Arial;
 	  color: #ffffff;
-	  font-size: 12px;
-	  padding: 10px 20px 10px 20px;
+	  font-size: 13px;
+	  padding: 1px 20px 2px 18px;
 	  text-decoration: none;
-	}
+}
 
-	.blueNTbutton:hover {
-	  background: #3cb0fd;
-	  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
-	  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
-	  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
-	  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
-	  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
-	  text-decoration: none;
-	}
-	.bluebutton {
+
+.blueNTbutton:hover {
+	background: #3cb0fd;
+	background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+	text-decoration: none;
+}
+
+.bluebutton {
 	  background-color:#3D8CD1;
 	  color:white;
-	}
+}

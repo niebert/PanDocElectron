@@ -92,7 +92,7 @@ function addAudioReveal(pData,pStartPage) {
     var vCount = 0;
     var vTagInsert = "";
     while (vResult = vSearch.exec(pData)) {
-          vTagInsert = "data-audio-src=\"audio/audio"+vCount+".mp3\"";
+          vTagInsert = " data-audio-src=\"audio/audio"+vCount+".mp3\" ";
           if (vCount >= pStartPage) {
             pData = replaceString(pData,vResult[1],vResult[1]+vTagInsert);
             console.log("Audio Tag "+vCount+" inserted: '"+vResult[1]+"'");

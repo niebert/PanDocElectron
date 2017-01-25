@@ -35,7 +35,7 @@ let template = [{
   label: 'File',
   submenu: [{
     label: 'New',
-    accelerator: 'CmdOrCtrl+O',
+    accelerator: 'CmdOrCtrl+N',
     click() {
       console.log("MENU CALL: New Project");
       mainWindow.webContents.send('menucall', 'setPage("bNew")');
@@ -65,8 +65,8 @@ let template = [{
     }
   }, {
     label: 'Convert File',
-    //accelerator: 'Shift+CmdOrCtrl+S',
-    accelerator: 'CmdOrCtrl+F',
+    accelerator: 'Shift+CmdOrCtrl+C',
+    //accelerator: 'CmdOrCtrl+Y',
     click() {
       console.log("MENU CALL: Convert File");
       //mainWindow.webContents.send('menucall', 'vEProof__QID__.saveAsOpenDialog()');
