@@ -109,7 +109,7 @@ function createMediaWikiJSON(pMediaArray,pWikiJSON) {
     vMediaFile = convertWikiMedia2File(pMediaArray[i]);
     vLocalID = vSubDir + "/" + vMediaFile
     //pWikiJSON[vMediaArray[i]] = vLocalID;
-    pWikiJSON["media"][vLocalID] = vMediaArray[i];
+    pWikiJSON["media"][vLocalID] = pMediaArray[i];
   };
 };
 
