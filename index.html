@@ -56,7 +56,7 @@
         <b><a href="https://en.wikipedia.org/wiki/Markdown" target="_blank">MarkDown</a></b> Text Documents
       </li>
       <li>
-        <b><a href="https://www.mediawiki.org/wiki/Help:Formatting" target="_blank">MediaWiki</a></b> Text Documents
+        <b><a href="https://www.mediawiki.org/wiki/MediaWiki" target="_blank">MediaWiki</a></b> Text Documents
       </li>
     </ol>
     Main <i>Ouput Formats</i> are:
@@ -65,10 +65,10 @@
         <b>Office Documents</b> like <a href="https://en.wikipedia.org/wiki/LibreOffice" target="_blank">LibreOffice</a> that is able to load  Open Document Formats and Microsoft Office Word Documents as well
       </li>
       <li>
-        <b>Presentation</b> with e.g. <a href="http://lab.hakim.se/reveal-js/" target="_blank">RevealJS</a> (Press <tt>"F"</tt> in Reveal for Fullscreen Presentation) or DZSlides that alternative for Microsoft PowerPoint or LibreOffice Impress Documents.
+        <b>Presentations</b> with e.g. <a href="http://lab.hakim.se/reveal-js/" target="_blank">RevealJS</a> (Press <tt>"F"</tt> in Reveal for Fullscreen Presentation) or DZSlides as alternative for Microsoft PowerPoint or LibreOffice Impress Documents.
       </li>
       <li> <b>Presentations with Audio Comments:</b>
-        Audio  comments can added to all slides of RevealJS and DZSlides Presentations (Output Format: <tt>audioplayer</tt>) or with a PDF-document as input format with Outputformat <tt>audioslides</tt>.
+        Audio  comments can be added to all slides of RevealJS and DZSlides Presentations (Output Format: <tt>audioplayer</tt>) or with a PDF-document as input format with Outputformat <tt>audioslides</tt>.
         <a href="tutorial/TutorialPPTtoHTML_final.pdf" target="_blank">Tutorial PDF to Audioslides</a> by J&ouml;rg Rapp</li>
     </ol>
     PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Document Converter on the Command Shell on Linux, Mac or Windows. Or in simple words:
@@ -81,7 +81,7 @@
   </ul>
 
 
-  <p>Electron is more or less a brower, that has full access to your filesystem. So Electron/Atom allows to write multiplattform application just with HTML and Javascript, than runs on:</p>
+  <p>Electron is more or less a browser, that has full access to your filesystem. So Electron/Atom allows to write multiplattform applications just with HTML and Javascript, than runs on:</p>
 
   <h3> Operating Systems - <a href="https://github.com/niebert/PanDocElectron/commits/master" target="_blank">Latest Update</a>
   <ul>
@@ -108,21 +108,21 @@
     <li>
     <b>npm</b> to install pre-build packages of Electron as a runtime environment. (npm is installed as part of <a href="https://nodejs.org/en/" target="_blank">NodeJS</a>)</li>
     <li>
-    <b>nodejs</b> allow with Javscript reading and writing files to the filesystem in Electron (installer <a href="https://nodejs.org/en/" target="_blank">NodeJS and NPM</a>).
+    <b>nodejs</b> allows with Javscript reading and writing files to the filesystem in Electron (installer <a href="https://nodejs.org/en/" target="_blank">NodeJS and NPM</a>).
     For running and testing the <code>Electron</code> applications in general (like PanDocElectron) it is necessary to install the Electron environment on your Desktop Computer. With electron you download the application that is designed as cross-plattform application and install the Electron Framework for your operating system (OS).</li>
   </ul>
-  Full installation guides for Linux, MacOSX and Windows are given in <a href="#SEC5">section 5</a>, <a href="#SEC6">section 6</a> and <a href="#SEC7">section 7</a>.
+  Full installation guides for Linux, MacOSX and Windows are given in <a href="#SEC5">section 2.2</a>, <a href="#SEC6">section 2.3</a> and <a href="#SEC7">section 2.4</a>.
   Start PanDocElectron and adjust path to convert and pandoc according to your installation and save your config by pressing the
   save config button. The config loads all previous settings including the last filename that was converted by PanDoc.
 
 
 
   <h2>1.2 Additional Features of PanDocElectron - Audioslides</h3>
-  With PanDocElectron you can use a PDF-export of you LibreOffice Impress or Powerpoint to extract the slides as PNG images
-  and copy an audio comment (<tt>audio0.mp3, audio1.mp3, ...</tt>) into the <tt>audio</tt>-folder of PanDocElectron project.
+  With PanDocElectron you can use a PDF-export of LibreOffice Impress or Powerpoint to extract the slides as PNG images
+  and copy an audio comment (<tt>audio0.mp3, audio1.mp3, ...</tt>) into the <tt>audio</tt>-folder of the PanDocElectron project.
   If you choose in PanDocElectron the export format <tt>audioslides</tt>, you will get a web based presentation that plays
-  the e.g. audio comment <tt>audio3.mp3</tt> in folder <tt>audio</tt> for the slide  <tt>img3.png</tt> in folder <tt>images</tt> of
-  you PanDocElectron project.
+  e.g. the audio comment <tt>audio3.mp3</tt> in folder <tt>audio</tt> for the slide  <tt>img3.png</tt> in folder <tt>images</tt> of
+  your PanDocElectron project.
 
   Record your audio comments with <a href="http://www.audacityteam.org/download/" target="_blank">Audacity</a> and <a href="https://www.google.de/search?q=audacity+mp3+encoder&ie=utf-8&oe=utf-8&client=firefox-b&gfe_rd=cr&ei=No18V_L2F66N8Qebi76wCA">MP3 Encoder Audacity</a>.
 
@@ -137,22 +137,22 @@
     </li>
   </ul>
   to process these files with PanDocElectron. Wikiversity is designed for educational content. A special slide format  (<a href="https://de.wikiversity.org/wiki/PanDocElectron-Presentation" target="_blank">PanDocElectron-SLIDE</a>) with less
-  content per section(=slide in presenation). This allows an tailored processing of slides for presenation from Wikivesity into a <a href="http://courses.telematique.eu/reveal.js-plugins/audio-slideshow-demo.html#/" target="_blank">RevealJS presentation</a>.
+  content per section(=slide in presenation). This allows a tailored processing of slides for a presenation from Wikivesity into a <a href="http://courses.telematique.eu/reveal.js-plugins/audio-slideshow-demo.html#/" target="_blank">RevealJS presentation</a>.
   <h2>
-  <a id="3-pandoc-projects" class="anchor" href="#3-pandoc-projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.3 PanDoc Projects</h3>
+  <a id="3-pandoc-projects" class="anchor" href="#3-pandoc-projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.4 PanDoc Projects</h3>
 
   <p>PanDocElectron uses a project based approach for conversion. A project is a subdirectory of <code>Documents/Pandoc/</code> e.g. <code>Documents/Pandoc/MyProject</code>.
-    This file contains the input files and the genrated output files by PanDoc. In general the input files are mainly WikiMedia-Files <code>Documents/Pandoc/MyProject/MyProject.wiki</code>.</p>
+    This file contains the input files and the generated output files by PanDoc. In general the input files are mainly WikiMedia-Files <code>Documents/Pandoc/MyProject/MyProject.wiki</code>.</p>
 
   <ul>
   <li>WikiMedia are provided on Wikiversity.</li>
-  <li>WikiMedia is regarded as main input format for content, other inputs formats are possible due to your source content you want to process.</li>
+  <li>WikiMedia is regarded as main input format for content, other input formats are possible due to your source content you want to process.</li>
   </ul>
 
   <h2>
-  <a id="31-pandocelectron-filename-convention-for-converted-files-in-project" class="anchor" href="#31-pandocelectron-filename-convention-for-converted-files-in-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.4 PanDocElectron Filename Convention for converted files in Project</h3>
+  <a id="31-pandocelectron-filename-convention-for-converted-files-in-project" class="anchor" href="#31-pandocelectron-filename-convention-for-converted-files-in-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5 PanDocElectron Filename Convention for converted files in Project</h3>
 
-  <p>Normally the basename of the input file is the same as the directory name, but this is optional. You can have more than one input file in one directory. From the input document you create output documents in several formats. To distinguish output formats it is necessary to some filename rules. We use the input file <code>MyProject.wiki</code> in the input format <code>WikiMedia</code> as an example.</p>
+  <p>Normally the basename of the input file is the same as the directory name, but this is optional. You can have more than one input file in one directory. From the input document you create output documents in several formats. To distinguish output formats it is necessary to have some filename rules. We use the input file <code>MyProject.wiki</code> in the input format <code>WikiMedia</code> as an example.</p>
 
   <ul>
   <li>convert <code>MyProject.wiki</code> into DOCX File, creates a filename <code>MyProject.docx</code>.</li>
@@ -166,27 +166,27 @@
   To avoid overwriting the files with the same file extensions (e.g. `html`), default filenames are expanded with the output format (eg. <code>_reveal</code> for RevealJS format as an output format with the file extension <code>.html</code>.</p>
 
   <h2>
-  <a id="32-project-subdirectories" class="anchor" href="#32-project-subdirectories" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5 Project subdirectories</h3>
+  <a id="32-project-subdirectories" class="anchor" href="#32-project-subdirectories" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.6 Project subdirectories</h3>
 
   <p>In a PanDocElectron Project 4 subdirectories are created.</p>
 
   <ul>
   <li>
-  <code>config</code> contain the configuration for "Title" and "Author" of the project. Config files share the same basename. E.g. the corresponding config file for  <code>MyProject.wiki</code> is <code>config/MyProject.wiki</code>.</li>
+  <code>config</code> contains the configuration for "Title" and "Author" of the project. Config files share the same basename. E.g. the corresponding config file for  <code>MyProject.wiki</code> is <code>config/MyProject.wiki</code>.</li>
   <li>
   <code>images</code> contains images of the HTML-document, LaTeX, WikiMedia, Markdown input files and the exported slides from an input PDF presentation.</li>
   <li>
   <code>audio</code> contains the MP3 audio comments for a slide or other audio files used in the documents.</li>
   <li>
-  <code>video</code> contains videos used in presentations or in WikiMedia. Default video format is <code>webm</code> and <code>ogg</code> because they can used for streaming in web browsers and in Wikiversity. Use Firefox Plugin for converting videos in your base format <a href="https://firefogg.org/">FireOGG</a>.<br>
+  <code>video</code> contains videos used in presentations or in WikiMedia. Default video format is <code>webm</code> and <code>ogg</code> because they can be used for streaming in web browsers and in Wikiversity. Use Firefox Plugin for converting videos in your base format <a href="https://firefogg.org/">FireOGG</a>.<br>
   </li>
   </ul>
 
   <h2 id="SEC4">
-  <a id="4-software-development-with-atomelectron" class="anchor" href="#4-software-development-with-atomelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.6 Software Development with Atom/Electron</h3>
+  <a id="4-software-development-with-atomelectron" class="anchor" href="#4-software-development-with-atomelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.7 Software Development with Atom/Electron</h3>
 
   <ul>
-  <li>npm installs packages in <code>node_modules</code>. If you have installed  <code>electron-prebuilt</code> in that folder on a Mac then do not sync the content in you github repository because others users on a Windows Machine will get confused because the software will create error messages due to the non-matching Operating System (OS).</li>
+  <li>npm installs packages in <code>node_modules</code>. If you have installed  <code>electron-prebuilt</code> in that folder on a Mac then do not sync the content in your github repository because other users e.g. on a Windows Machine might get confused as the software will create error messages due to the non-matching Operating System (OS).</li>
   <li>Install Atom (<a href="https://atom.io/">https://atom.io/</a>) as Editor for Software Development in</li>
   </ul>
 </div>
@@ -200,7 +200,7 @@
      2.1 Install Script
   </h2>
   <div class="apptab" id="bScriptPage" style="display:none">
-  Installation Scripts <b style="color:red">install PanDocElectron with all necessary packages</b>
+  <b style="color:red">Install PanDocElectron with all necessary packages</b>
   for PanDocElectron (i.e. ImageMagick, PanDoc, NPM, ...). You can run PanDocElectron
   and you can change the layout and options of the application according to your requirements.
   Installation scripts are available for following operating systems:
@@ -212,9 +212,9 @@
         Install Script <a href="install/install_mac.sh" target="_blank">MacOSX - Apple Mac</a>
     </li>
     </ul>
-    Run script in your Documents folders (open Terminal). Scripts will download PanDoc templates and PanDocElectron.
+    Save and run script in your Documents folder (e.g. /home/user/Documents/) via Terminal. Scripts will download PanDoc templates and PanDocElectron.
     <b>Remark:</b> The install scripts assume that <tt>PanDoc</tt> and <tt>PanDocElectron</tt> is not installed on your Linux System.
-    Rename <tt>PanDoc</tt> and <tt>PanDocElectron</tt> to <tt>PanDoc_bak</tt> and <tt>PanDocElectron_bak</tt> before starting the install scripts with
+    If PanDoc and PanDocElectron is already installed on your linux system, rename <tt>PanDoc</tt> and <tt>PanDocElectron</tt> to <tt>PanDoc_bak</tt> and <tt>PanDocElectron_bak</tt> before starting the install scripts with
     <blockquote>
     <p><code>sh install_linux.sh</code></p>
     </blockquote>
