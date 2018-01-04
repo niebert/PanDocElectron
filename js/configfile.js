@@ -110,7 +110,7 @@ function getConfigDOM() {
   vType = 'CheckBoxID';
   vJSON[vType] = {};
   for (var i = 0; i < vCheckBoxID.length; i++) {
-    vJSON[vType][vInnerHTMLID[i]] = getChecked(vCheckBoxID[i]);
+    vJSON[vType][vCheckBoxID] = getChecked(vCheckBoxID[i]);
   };
   return vJSON
 }
