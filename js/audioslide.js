@@ -86,21 +86,47 @@ function convertReveal2AudioSlide(pContent,pUseRecorder) {
   return pContent;
 };
 
+function countSlides(pData) {
+  return pData.match(/<section[^>]*/).length;
+};
+
+function X_addAudioReveal(pData,pStartPage) {
+    var vSearch = /(<\/section[^>]*>)/i;
+    var vResult;
+    var vCount = 0;
+    var vTagInsert = "";
+    while (vResult = vSearch.exec(pData)) {
+          vTagInsert = "     <p class =\"fragment\" data-audio-src=\"audio/audio"+vCount+".mp3\"  autoplay=\"true\">\n";
+          vTagInsert += "       audio"+vCount+"\n";
+          vTagInsert += "    </p>\n"
+          if (vCount >= pStartPage) {
+            //pData = replaceString(pData,vResult[1],vTagInsert+"</XXXXX>");
+            pData = pData.replace(vResult[1],vTagInsert+"</XXXXX>")
+            console.log("Audio Tag "+vCount+" inserted: '"+vResult[1]+"'");
+          };
+          vCount++;
+    };
+    pData = pData.replace(/<\/XXXXX>/g,"</section>");
+    return pData;
+};
+
 function addAudioReveal(pData,pStartPage) {
-    var vSearch = /(<section[^>]+)>/gi;
+    var vSearch = /(<section[^>]*>)/i;
     var vResult;
     var vCount = 0;
     var vTagInsert = "";
     while (vResult = vSearch.exec(pData)) {
           vTagInsert = " data-audio-src=\"audio/audio"+vCount+".mp3\" ";
           if (vCount >= pStartPage) {
-            pData = replaceString(pData,vResult[1],vResult[1]+vTagInsert);
+            pData = replaceString(pData,vResult[1],"<XXXXX "+vTagInsert+">");
             console.log("Audio Tag "+vCount+" inserted: '"+vResult[1]+"'");
           };
           vCount++;
     };
+    pData = pData.replace(/<XXXXX/g,"<section");
     return pData;
 };
+
 
 function fileTypeIsReveal(pContent) {
   var vIsReveal = false;
@@ -125,7 +151,7 @@ function fileTypeIsReveal(pContent) {
 };
 
 function convertDZ2AudioSlide(pData) {
-  var vSearch = /(<section[^>]+>)/gi;
+  var vSearch = /(<section[^>]*>)/gi;
   var vResult;
   var vCount = 0;
   var vSep = getPathSeparator();

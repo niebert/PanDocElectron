@@ -8,7 +8,8 @@ PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Docume
 * List of other GUIs and PanDoc Wrappers are available at [GitHub jgm](https://github.com/jgm/pandoc/wiki/Pandoc-Extras#pandoc-wrappers-and-interfaces)
 
 ## Last Update
-
+* (2018-01-04) New Version 0.9.8 - Download Media from Wikiversity - MathJax path updated due to shutdown MathJax CDN 0
+* (2017-06-25) Bugfix added
 * (2016-10-15) Wikipedia Download added to PanDocElectron
 * (2016-06-30) Create New Projects - correted Pathnames
 * (2016-06-29) Calling pandoc on windows changed, create BAT and SH files from PanDocElectron.
