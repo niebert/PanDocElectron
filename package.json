@@ -1,6 +1,6 @@
 {
   "name": "PanDocElectron",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "A Graphical User Interface for PanDoc as Electron application",
   "main": "main.js",
   "scripts": {

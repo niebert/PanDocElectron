@@ -40,6 +40,11 @@ function downloadWikiInput() {
   // the download Button "Wiki-Download"
   var vSep = getPathSeparator();
   var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  var vTitle = (getValueDOM('wikiARTICLE')).replace(/_/g," ");
+  var vAuthor = getValueDOM('inputSERVER');
+  write2value("outputTITLE",vTitle);
+  write2value("outputAUTHOR",vAuthor);
+
   setInputFormat("mediawiki");
   setOutputFormat();
   var bot = require('nodemw');
@@ -94,7 +99,13 @@ function convertWiki2Local(pContent,pWikiJSON) {
   var vMediaArray = parseWiki4Media(pContent);
   createMediaWikiJSON(vMediaArray,pWikiJSON);
   downloadWikiMedia(vMediaArray);
-  pContent = convertMediaLink4Wiki(pContent,vMediaArray);
+  if (isChecked("checkImageLocal")) {
+    console.log("LOCAL IMAGES: Media in Wiki Download require locally downloaded files");
+    pContent = convertMediaLink4Wiki(pContent,vMediaArray);
+  } else {
+    console.log("ONLINE IMAGES: Media in Wiki Download use remote files");
+    pContent = convertMediaLink4WikiOnline(pContent,vMediaArray);
+  }
   pContent = replaceWikiLinks(pContent,pWikiJSON);
   return pContent;
 };
@@ -106,7 +117,7 @@ function createMediaWikiJSON(pMediaArray,pWikiJSON) {
   checkWikiJSON(pWikiJSON,"media")
   for (var i = 0; i < pMediaArray.length; i++) {
     vSubDir = getMediaSubDir(pMediaArray[i]);
-    vMediaFile = convertWikiMedia2File(pMediaArray[i]);
+    vMediaFile = convertWikiMedia2File(pMediaArray[i]); // replaces " \t" and "\t" to
     vLocalID = vSubDir + "/" + vMediaFile
     //pWikiJSON[vMediaArray[i]] = vLocalID;
     pWikiJSON["media"][vLocalID] = pMediaArray[i];
@@ -128,7 +139,7 @@ function downloadWikiMedia (pMediaArray) {
     checkMediaFile(vProjectDir,vMediaURL+pMediaArray[i],pMediaArray[i]);
   };
   createdDownloadMediaDIV(pMediaArray,vMediaURL);
-  createdDownloadMediaFile(pMediaArray,vMediaURL,vProjectDir);
+  //createdDownloadMediaFile(pMediaArray,vMediaURL,vProjectDir);
 };
 
 
@@ -178,6 +189,10 @@ function checkWikiJSON(pWikiJSON,pHashID) {
 };
 
 function replaceWikiLinks(pWikiText,pWikiJSON) {
+  // The MediaWiki Context interprets [[Wiki Title]] as an internal Link in same MediaWiki
+  // This context is lost, when the Wiki source text is downloaded to your local harddrive.
+  // Therefore e.g. the internal wiki link of [[Swarm intelligence]] links will be converted into a local link e.g.
+  // https://en.wikiversity.org/wiki/Swarm_intelligence
   var vLinkArray = getWikiLinks(pWikiText);
   var vURL,Title,vLink,vLocalLink;
   var vPipePos = 0;
@@ -186,23 +201,37 @@ function replaceWikiLinks(pWikiText,pWikiJSON) {
     vLink = vLinkArray[i];
     vPipePos = vLink.indexOf("|");
     if (vPipePos>0) {
-      vURL = vLink.substr(0,vPipePos);
-      vTitle = vLink.substr(vPipePos+1,vLink.length);
+      // [[Swarm intelligence|intelligence of swarms]]
+      // be splitted into
+      vURL = vLink.substr(0,vPipePos); // "Swarm_intelligence" and
+      vTitle = vLink.substr(vPipePos+1,vLink.length); // "intelligence of swarms"
     } else {
+      // [[Swarm intelligence]]
       vURL = vLink;
       vTitle = vLink;
     };
+    // getWikiDisplayURL() expands the local link to a full MediaWiki URL
+    // vURL= "Swarm_intelligence"
     vURL = getWikiDisplayURL(vURL);
+    // vURL = "https://en.wikiversity.org/wiki/Swarm_intelligence"
     vLocalLink = vURL+" "+vTitle;
-    pWikiText = replaceString(pWikiText,"[["+vLink+"]]","["+vLocalLink+"]");
-    // for reverse replacement to online Wikipedia or Wikiversity store replacement in WikiJSON
-    pWikiJSON["links"][vLocalLink] = "["+vLink+"]";
+    if (vTitle.indexOf("http") == 0) {
+       // If the Title contains an URL that PanDoc handles the link properly
+        console.log("replaceWikiLinks() URL: "+vTitle+" ignored");
+    } else {
+      pWikiText = replaceString(pWikiText,"[["+vLink+"]]","["+vLocalLink+"]");
+      // replace "[[Swarm intelligence]]" by "[https://en.wikiversity.org/wiki/Swarm_intelligence Swarm intelligence]"
+      // or "[[Swarm intelligence|intelligence of swarms]]" by "[https://en.wikiversity.org/wiki/Swarm_intelligence intelligence of swarms]"
+      // for reverse replacement to online Wikipedia or Wikiversity store replacement in WikiJSON
+      pWikiJSON["links"][vLocalLink] = "["+vLink+"]";
+    }
   };
   return pWikiText
 };
 
 function replaceWikiMath(pWikiText) {
   pWikiText = pWikiText.replace(/\\R /g,"\\mathbb R ");
+  pWikiText = pWikiText.replace(/\\R\^/g,"\\mathbb R^");
   pWikiText = pWikiText.replace(/\\R</g,"\\mathbb R<");
   pWikiText = pWikiText.replace(/\\R\s/g,"\\mathbb R ");
   //pWikiText = replaceString(pWikiText,'\\','\mathbb R \\');
@@ -269,13 +298,23 @@ function getWikiLinks(pWikiText) {
   return vLinkArray;
 }
 
+function convertFileTag_and_ThumbMini(pWikiText) {
+  // [[Image:diagram.svg|200px|Comment for Text]]
+  pWikiText = pWikiText.replace(/\[(File|Image|Datei):/gi,"[File:");
+  // [[File:diagram.svg|mini|Comment for Text]]
+  pWikiText = pWikiText.replace(/\|mini|thumb\|/gi,"|300px");
+  // [[File:diagram.svg|mini|300px|Comment for Text]]
+  return pWikiText;
+}
+
 function convertMediaLink4Wiki(pWikiText,pMediaArray) {
   var vReplaceLink;
   var vMediaFile;
   var vSubDir;
-
-  pWikiText = pWikiText.replace(/\[(File|Image|Datei):/gi,"[File:");
-
+  // [[Image:diagram.svg|300px|Comment for Text]]
+  // [[Image:diagram.svg|mini|Comment for Text]]
+  pWikiText = convertFileTag_and_ThumbMini(pWikiText);
+  // [[File:diagram.svg|mini|300px|Comment for Text]]
   for (var i = 0; i < pMediaArray.length; i++) {
     vSubDir = getMediaSubDir(pMediaArray[i]);
     vMediaFile = convertWikiMedia2File(pMediaArray[i]);
@@ -289,15 +328,16 @@ function convertMediaLink4WikiOnline(pWikiText,pMediaArray) {
   var vReplaceLink;
   var vMediaFile;
   var vPathArray;
-
-  pWikiText = pWikiText.replace(/\[(File|Image|Datei):/gi,"[File:");
-
+  // [[Image:diagram.svg|300px|Comment for Text]]
+  // [[Image:diagram.svg|mini|Comment for Text]]
+  pWikiText = convertFileTag_and_ThumbMini(pWikiText);
+  // [[File:diagram.svg|mini|300px|Comment for Text]]
   for (var i = 0; i < pMediaArray.length; i++) {
     vPathArray = (pMediaArray[i]).split("/");
     vMediaFile = vPathArray[vPathArray.length-1];
     var vFileSplit = vMediaFile.split("|");
     vMediaFile = vFileSplit[0];
-    vReplaceLink = vMediaFile + "|mini|" + vMediaFile;
+    vReplaceLink = getWikiMediaURL(vMediaFile);
     pWikiText = replaceString(pWikiText,"File:"+pMediaArray[i],"File:"+vReplaceLink);
   };
   return pWikiText;
@@ -307,6 +347,27 @@ function getWikiDisplayURL(pArticle) {
   var vArticle = pArticle || getValueDOM('wikiARTICLE')
   vArticle = replaceString(vArticle," ","_");
   return "https://"+getValueDOM('inputSERVER')+"/wiki/"+vArticle;
+};
+
+function getWikiMediaURL(pFileName) {
+  return "https://"+getValueDOM('inputSERVER')+"/wiki/Special:Redirect/file/"+pFileName;
+};
+
+function getMediaFileType(pFileName) {
+  var vType = "none";
+  if ( /\.(jpe?g|png|gif|bmp)$/i.test(pFileName) ) {
+    vType = "img";
+  };
+  if ( /\.(svg)$/i.test(pFileName) ) {
+    vType = "svg";
+  };
+  if ( /\.(mp4|webm|mov|avi|mpe?g|ogv)$/i.test(pFileName) ) {
+    vType = "video";
+  };
+  if ( /\.(mp3|wav|ogg|mid)$/i.test(pFileName) ) {
+    vType = "audio";
+  };
+  return vType
 }
 
 function createdDownloadMediaDIV(pMediaArray,pMediaURL) {
@@ -317,7 +378,9 @@ function createdDownloadMediaDIV(pMediaArray,pMediaURL) {
   for (var i = 0; i < pMediaArray.length; i++) {
     //vDownloaded +="\n("+(i+1)+") "+pMediaArray[i];
     vDownloaded +="\n  <li>";
-    vDownloaded += "("+(i+1)+") <a href='#' onclick=\"openFileInBrowser('"+pMediaURL+pMediaArray[i]+"')\">"+pMediaArray[i]+"</a>";
+    vDownloaded += "("+(i+1)+") ";
+    vDownloaded +="\n <button onclick=\"downloadMediaClick('"+pMediaArray[i]+"');return false\">Download</button> ";
+    vDownloaded += "<a href='#' onclick=\"openFileInBrowser('"+pMediaURL+pMediaArray[i]+"')\">"+pMediaArray[i]+"</a>";
     vDownloaded +="\n  </li>";
   };
   vDownloaded +="\n</ul><hr>";
@@ -325,6 +388,7 @@ function createdDownloadMediaDIV(pMediaArray,pMediaURL) {
 };
 
 function createdDownloadMediaFile(pMediaArray,pMediaURL) {
+  // depricated
   var vURL=getWikiDisplayURL();
   var vDownloaded = "<b>Download Media Files for URL: <a href='"+vURL+"' target='_blank'>"+vURL+"</a></b>";
   var pMediaURL = getValueDOM("inputMEDIA");
@@ -341,7 +405,8 @@ function createdDownloadMediaFile(pMediaArray,pMediaURL) {
   vDownloaded +="\n</ul>";
   vDownloaded = wrapperHTML(vDownloaded);
   var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
-  saveLogWiki(vProjectDir,vDownloaded);
+  // The following file writes a HTML file with download links to the project directory
+  //saveLogWiki(vProjectDir,vDownloaded);
 };
 
 function splitURL(pURL) {
@@ -387,6 +452,20 @@ function X_checkMediaFile(pProjectDir,pMediaFullURL,pMediaLink) {
     downloadMedia(pProjectDir,vURL,pMediaLink)
   }
 };
+
+function downloadMediaClick(pMediaLink) {
+  // vDownloadPath = "http://en.wikipedia.org/wiki/Special:FilePath/""
+  var vDownloadPath = getValueDOM("downloadMEDIA");
+  // The link ___https://en.wikipedia.org/wiki/Special:Redirect/file/Annweiler_Rathaus.JPG___ refers to the current version of the image ___Annweiler_Rathaus.JPG___.
+  // Size of image can be determined by ___http://en.wikipedia.org/wiki/Special:FilePath/Annweiler_Rathaus.JPG?width=300___ (here resize the width to 300 pixels.
+  // Width: 200px, 400px, 600px, 800px
+  var vURL = vDownloadPath + pMediaLink;
+  var vSubDir = getMediaSubDir(pMediaLink);
+  console.log("Download: " + vURL+ " - SubDir: "+vSubDir);
+  var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  downloadMedia(vProjectDir,vDownloadPath,pMediaLink);
+  alert("File: '"+pMediaLink+"' downloaded in '"+vSubDir+"' with the project directory\n   "+vProjectDir);
+}
 
 function extractDownloadURL(pDownloadPage) {
   var vURL = "";
@@ -445,30 +524,32 @@ function getContentHTTPS(pHashURL) {
   return vOut;
 }
 
-function downloadMedia(pProjectDir,pURL,pMediaLink) {
+function downloadMedia(pProjectDir,pDownloadPath,pMediaLink) {
+  // pProjectDir = "demo/test",
+  // pURL="http://en.wikipedia.org/wiki/Special:FilePath/"
+  // pMediaLink="Annweiler_Rathaus.JPG"
   var vMediaLink = convertWikiMedia2URL(pMediaLink);
   var vMediaFile = convertWikiMedia2File(pMediaLink);
   var vSep = getPathSeparator();
-  var vWGET_File  = pURL + "/" +vMediaLink;
+  var vWGET_File  = pDownloadPath + vMediaLink;
+  alert("WGET File: "+vWGET_File);
   var vSubDir = getMediaSubDir(vMediaLink);
   var vWGET_CMD = getCMD("wgetCMD");
   runShellCommand(vWGET_CMD + " -O " + pProjectDir + vSep + vSubDir + vSep + vMediaFile+" "+vWGET_File);
 }
 
 function getMediaSubDir(pMediaLink) {
-  var vExt = getExtensionOfFilename(pMediaLink);
+  //var vExt = getExtensionOfFilename(pMediaLink);
+  var vType = getMediaFileType(pMediaLink);
   var vSubDir ="images"
-  switch (vExt) {
-    case "mp3":
+  switch (vType) {
+    case "audio":
         vSubDir = "audio"
     break;
-    case "mid":
-        vSubDir = "audio"
+    case "svg":
+        vSubDir = "images"
     break;
-    case "ogg":
-        vSubDir = "video"
-    break;
-    case "webm":
+    case "video":
         vSubDir = "video"
     break;
     default:
@@ -488,6 +569,7 @@ function getLogFilename() {
 };
 
 function convertWikiMedia2File(pMediaLink) {
+  // remove blanks and tabs / convert " " to "_"
   pMediaLink = convertWikiMedia2URL(pMediaLink);
   pMediaLink = pMediaLink.replace(/[^A-Za-z_\-0-9\.]/g,"_");
   //console.log("Media File: '"+pMediaLink+"'");
@@ -495,8 +577,11 @@ function convertWikiMedia2File(pMediaLink) {
 };
 
 function convertWikiMedia2URL(pMediaLink) {
+  // remove blanks and tabs at the end of the string
   pMediaLink = pMediaLink.replace(/[ \t]+$/,"");
+  // replace
   pMediaLink = pMediaLink.replace(/ /g,"_");
+  pMediaLink = encodeURI(pMediaLink);
   //console.log("MediaLink: '"+pMediaLink+"'");
   return pMediaLink;
 };
@@ -615,6 +700,7 @@ function createProject(pCallWizzard) {
     //write2value("inputFORMAT",)
     alert("Project: "+vName+" created!\nInput Format: "+vInFormat+"\nOutput Format: "+vOutFormat);
     setPage("bConvert");
+    saveConfigLS();
     if (pCallWizzard) {
       pCallWizzard();
     };

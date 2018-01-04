@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="javascripts/showhide.js"></script>
+
+    <title>PanDocElectron Docs</title>
+  </head>
+
+  <body id="pagebody">
+    <header>
+      <div class="inner">
+        <h1>PanDocElectron</h1>
+        <h2>Atom/Electron Application for calling PanDoc Converter with Shell Commands on Linux, Windows, Mac</h2>
+        <h3 style="color:white">Version: 0.9.8 - ( 2018 / 01 / 04 )</h3>
+        <a href="https://github.com/niebert/PanDocElectron" id="githubDownload" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="pandocelectron" class="anchor" href="#pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PanDocElectron</h1>
+<div align="center">
+  <button  id="bGeneral"  onclick="setPage(this.id);">Introduction</button>
+  <button  id="bScript"  onclick="setPage(this.id);">Script Install</button>
+  <button  id="bWindows"  onclick="setPage(this.id);">Windows</button>
+  <button  id="bLinux"  onclick="setPage(this.id);">Linux</button>
+  <button  id="bMacOSX"  onclick="setPage(this.id);">MacOSX</button>
+  <button  id="bTutorial"  onclick="setPage(this.id);">Tutorial</button>
+  <button  id="bDeveloper"  onclick="setPage(this.id);">Developer</button>
+  <a href="https://github.com/niebert/PanDocElectron">News Release</a>
+  <hr/>
+</div>
+<h1 id="SEC1">
+<a id="1-general-requirements-for-electron" class="anchor" href="#1-general-requirements-for-electron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+<button onclick="setPage('bGeneral')">+</button>
+1 Introduction
+</h1>
+<div class="apptab" id="bGeneralPage" style="display:none">
+
+  <p>
+    PanDocElectron can be used to convert different input formats of text documents
+    in a variaty of output formats and download files from Wikipedia/Wikiversity. There are two main <i>Input Formats</i>:
+    <ol>
+      <li>
+        <b><a href="https://en.wikipedia.org/wiki/Markdown" target="_blank">MarkDown</a></b> Text Documents
+      </li>
+      <li>
+        <b><a href="https://www.mediawiki.org/wiki/MediaWiki" target="_blank">MediaWiki</a></b> Text Documents
+      </li>
+    </ol>
+    Main <i>Ouput Formats</i> are:
+    <ol>
+      <li>
+        <b>Office Documents</b> like <a href="https://en.wikipedia.org/wiki/LibreOffice" target="_blank">LibreOffice</a> that is able to load  Open Document Formats and Microsoft Office Word Documents as well
+      </li>
+      <li>
+        <b>Presentations</b> with e.g. <a href="http://lab.hakim.se/reveal-js/" target="_blank">RevealJS</a> (Press <tt>"F"</tt> in Reveal for Fullscreen Presentation) or DZSlides as alternative for Microsoft PowerPoint or LibreOffice Impress Documents.
+      </li>
+      <li> <b>Presentations with Audio Comments:</b>
+        Audio  comments can be added to all slides of RevealJS and DZSlides Presentations (Output Format: <tt>audioplayer</tt>) or with a PDF-document as input format with Outputformat <tt>audioslides</tt>.
+        <a href="tutorial/TutorialPPTtoHTML_final.pdf" target="_blank">Tutorial PDF to Audioslides</a> by J&ouml;rg Rapp</li>
+    </ol>
+    PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Document Converter on the Command Shell on Linux, Mac or Windows. Or in simple words:
+  </p>
+
+  <ul>
+  <li>Documents are converted by <a href="http://pandoc.org" target="_blank">PanDoc</a>
+  </li>
+  <li><a href="https://sourceforge.net/projects/pandocelectron/files" target="_blank">PanDocElectron</a> frees the user from knowing and setting the parameters from the command line (see Downloads on the right).</li>
+  </ul>
+
+
+  <p>Electron is more or less a browser, that has full access to your filesystem. So Electron/Atom allows to write multiplattform applications just with HTML and Javascript, than runs on:</p>
+
+  <h3> Operating Systems - <a href="https://github.com/niebert/PanDocElectron/commits/master" target="_blank">Latest Update</a>
+  <ul>
+  <li>Linux (see <a href="#SEC5">section 2.2</a>) </li>
+  <li>MacOSX (see <a href="#SEC6">section 2.3</a>) </li>
+  <li>Windows (see <a href="#SEC7">section 2.4</a>)</li>
+  </ul>
+  </h3>
+
+  <h2 id="SECQuickStart">1.1 Software Requirements</h3>
+
+  The following software packages are needed to use PanDoc and PanDocElectron.
+  <ul>
+    <li><b>PanDocElectron</b> the Graphical User Interface for PanDoc<br></li>
+    <li><b>PanDoc</b> the core tool for converting documents, the swiss army knife for document processing developed by John MacFarlane.</li>
+    <li><b>ImageMagick</b> to convert PDF-Slides into web-based Presentation with Audio Comments. ImageMagick is used to create multiple PNG-File as slides from the PDF document. </li>
+    <li><b>LaTeX</b> for PDF conversion and processing Latex input files. Convert from a latex document and convert the source into WikiMedia output for Wikiversity. </li>
+    <li><b>Templates</b> Download <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">Support Files and Templates</a>
+    for all Operating Systems and unzip the folder into your folder <tt>Documents/PanDoc</tt></li>
+    <li>
+    <b>git</b> to download and update the sources of Electron Applications (see <a href="http://git-scm.com/">http://git-scm.com/</a> for installing the software git)</li>
+    <li>
+    <b>Ghostscript</b>, an interpreter for the PostScript language and for PDF</li>
+    <li>
+    <b>npm</b> to install pre-build packages of Electron as a runtime environment. (npm is installed as part of <a href="https://nodejs.org/en/" target="_blank">NodeJS</a>)</li>
+    <li>
+    <b>nodejs</b> allows with Javscript reading and writing files to the filesystem in Electron (installer <a href="https://nodejs.org/en/" target="_blank">NodeJS and NPM</a>).
+    For running and testing the <code>Electron</code> applications in general (like PanDocElectron) it is necessary to install the Electron environment on your Desktop Computer. With electron you download the application that is designed as cross-plattform application and install the Electron Framework for your operating system (OS).</li>
+  </ul>
+  Full installation guides for Linux, MacOSX and Windows are given in <a href="#SEC5">section 2.2</a>, <a href="#SEC6">section 2.3</a> and <a href="#SEC7">section 2.4</a>.
+  Start PanDocElectron and adjust path to convert and pandoc according to your installation and save your config by pressing the
+  save config button. The config loads all previous settings including the last filename that was converted by PanDoc.
+
+
+
+  <h2>1.2 Additional Features of PanDocElectron - Audioslides</h3>
+  With PanDocElectron you can use a PDF-export of LibreOffice Impress or Powerpoint to extract the slides as PNG images
+  and copy an audio comment (<tt>audio0.mp3, audio1.mp3, ...</tt>) into the <tt>audio</tt>-folder of the PanDocElectron project.
+  If you choose in PanDocElectron the export format <tt>audioslides</tt>, you will get a web based presentation that plays
+  e.g. the audio comment <tt>audio3.mp3</tt> in folder <tt>audio</tt> for the slide  <tt>img3.png</tt> in folder <tt>images</tt> of
+  your PanDocElectron project.
+
+  Record your audio comments with <a href="http://www.audacityteam.org/download/" target="_blank">Audacity</a> and <a href="https://www.google.de/search?q=audacity+mp3+encoder&ie=utf-8&oe=utf-8&client=firefox-b&gfe_rd=cr&ei=No18V_L2F66N8Qebi76wCA">MP3 Encoder Audacity</a>.
+
+  <h2>1.3 WikiPedia and Wikiversity Downloads</h3>
+  With PanDocElectron you can download articles and presentations from
+  <ul>
+    <li>
+      Wikipedia and
+    </li>
+    <li>
+      Wikiversity
+    </li>
+  </ul>
+  to process these files with PanDocElectron. Wikiversity is designed for educational content. A special slide format  (<a href="https://de.wikiversity.org/wiki/PanDocElectron-Presentation" target="_blank">PanDocElectron-SLIDE</a>) with less
+  content per section(=slide in presenation). This allows a tailored processing of slides for a presenation from Wikivesity into a <a href="http://courses.telematique.eu/reveal.js-plugins/audio-slideshow-demo.html#/" target="_blank">RevealJS presentation</a>.
+  <h2>
+  <a id="3-pandoc-projects" class="anchor" href="#3-pandoc-projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.4 PanDoc Projects</h3>
+
+  <p>PanDocElectron uses a project based approach for conversion. A project is a subdirectory of <code>Documents/Pandoc/</code> e.g. <code>Documents/Pandoc/MyProject</code>.
+    This file contains the input files and the generated output files by PanDoc. In general the input files are mainly WikiMedia-Files <code>Documents/Pandoc/MyProject/MyProject.wiki</code>.</p>
+
+  <ul>
+  <li>WikiMedia are provided on Wikiversity.</li>
+  <li>WikiMedia is regarded as main input format for content, other input formats are possible due to your source content you want to process.</li>
+  </ul>
+
+  <h2>
+  <a id="31-pandocelectron-filename-convention-for-converted-files-in-project" class="anchor" href="#31-pandocelectron-filename-convention-for-converted-files-in-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5 PanDocElectron Filename Convention for converted files in Project</h3>
+
+  <p>Normally the basename of the input file is the same as the directory name, but this is optional. You can have more than one input file in one directory. From the input document you create output documents in several formats. To distinguish output formats it is necessary to have some filename rules. We use the input file <code>MyProject.wiki</code> in the input format <code>WikiMedia</code> as an example.</p>
+
+  <ul>
+  <li>convert <code>MyProject.wiki</code> into DOCX File, creates a filename <code>MyProject.docx</code>.</li>
+  <li>convert <code>MyProject.wiki</code> into DOCX File with a 2 Column Layout, creates a filename <code>MyProject_docx2col.docx</code>.</li>
+  <li>convert <code>MyProject.wiki</code> to HTML File, creates a filename <code>MyProject.html</code>.</li>
+  <li>convert <code>MyProject.wiki</code> to HTML presentation, creates a filename <code>MyProject_reveal.html</code>.</li>
+  <li>convert <code>MyProject.wiki</code> to <a href="http://lab.hakim.se/reveal-js/#/">RevealJS</a> presentation, creates a filename <code>MyProject_reveal.html</code>.</li>
+  </ul>
+
+  <p>The basic version of output format get the standard extension <code>odt</code>, <code>docx</code> or <code>html</code>.
+  To avoid overwriting the files with the same file extensions (e.g. `html`), default filenames are expanded with the output format (eg. <code>_reveal</code> for RevealJS format as an output format with the file extension <code>.html</code>.</p>
+
+  <h2>
+  <a id="32-project-subdirectories" class="anchor" href="#32-project-subdirectories" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.6 Project subdirectories</h3>
+
+  <p>In a PanDocElectron Project 4 subdirectories are created.</p>
+
+  <ul>
+  <li>
+  <code>config</code> contains the configuration for "Title" and "Author" of the project. Config files share the same basename. E.g. the corresponding config file for  <code>MyProject.wiki</code> is <code>config/MyProject.wiki</code>.</li>
+  <li>
+  <code>images</code> contains images of the HTML-document, LaTeX, WikiMedia, Markdown input files and the exported slides from an input PDF presentation.</li>
+  <li>
+  <code>audio</code> contains the MP3 audio comments for a slide or other audio files used in the documents.</li>
+  <li>
+  <code>video</code> contains videos used in presentations or in WikiMedia. Default video format is <code>webm</code> and <code>ogg</code> because they can be used for streaming in web browsers and in Wikiversity. Use Firefox Plugin for converting videos in your base format <a href="https://firefogg.org/">FireOGG</a>.<br>
+  </li>
+  </ul>
+
+  <h2 id="SEC4">
+  <a id="4-software-development-with-atomelectron" class="anchor" href="#4-software-development-with-atomelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.7 Software Development with Atom/Electron</h3>
+
+  <ul>
+  <li>npm installs packages in <code>node_modules</code>. If you have installed  <code>electron-prebuilt</code> in that folder on a Mac then do not sync the content in your github repository because other users e.g. on a Windows Machine might get confused as the software will create error messages due to the non-matching Operating System (OS).</li>
+  <li>Install Atom (<a href="https://atom.io/">https://atom.io/</a>) as Editor for Software Development in</li>
+  </ul>
+</div>
+<h1>
+  <button onclick="setPage('bScript')">+</button>
+  2 Installation
+</h1>
+  This section describes the installation of the electron developing environment for PanDocElectron.
+  <h2>
+    <button onclick="setPage('bScript')">+</button>
+     2.1 Install Script
+  </h2>
+  <div class="apptab" id="bScriptPage" style="display:none">
+  <b style="color:red">Install PanDocElectron with all necessary packages</b>
+  for PanDocElectron (i.e. ImageMagick, PanDoc, NPM, ...). You can run PanDocElectron
+  and you can change the layout and options of the application according to your requirements.
+  Installation scripts are available for following operating systems:
+    <ul>
+      <li><b>Linux:</b>
+        Install Script  <a href="install/install_linux.sh" target="_blank">Linux - Debian/Ubuntu/Mint</a>
+      </li>
+      <li><b>MacOSX:</b>
+        Install Script <a href="install/install_mac.sh" target="_blank">MacOSX - Apple Mac</a>
+    </li>
+    </ul>
+    Save and run script in your Documents folder (e.g. /home/user/Documents/) via Terminal. Scripts will download PanDoc templates and PanDocElectron.
+    <b>Remark:</b> The install scripts assume that <tt>PanDoc</tt> and <tt>PanDocElectron</tt> is not installed on your Linux System.
+    If PanDoc and PanDocElectron is already installed on your linux system, rename <tt>PanDoc</tt> and <tt>PanDocElectron</tt> to <tt>PanDoc_bak</tt> and <tt>PanDocElectron_bak</tt> before starting the install scripts with
+    <blockquote>
+    <p><code>sh install_linux.sh</code></p>
+    </blockquote>
+    on a Linux System (Debian based like Ubuntu, Mint, ...) or with
+    <blockquote>
+    <p><code>sh install_mac.sh</code></p>
+    </blockquote>
+    on MacOSX with installed <a href="http://brew.sh">HomeBrew</a>.
+    <br>
+    <b>Legacy Mode:</b> If installation fails with message <tt>WARN This failure might be due to the use of legacy binary "node"</tt>
+    please install the NodeJS-Legacy package
+    <blockquote>
+    <p><code>sudo apt-get install nodejs-legacy</code></p>
+    </blockquote>
+
+  </div>
+
+<h2 id="SEC5">
+  <a id="5-linux---electron-framework" class="anchor" href="#5-linux---electron-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bLinux')">+</button>
+  2.2 Linux - Electron Framework
+</h2>
+<div class="apptab" id="bLinuxPage"  style="display:none">
+
+The installation was tested on Ubuntu, Mint, Debian System. For OpenSuse the installation should be performed by using <tt>zypper</tt>
+and using equivalent packages from the OpenSuse repository. Please send infos about a successful procedure of installation to <tt>niehaus(at)uni-landau.de</tt>,
+so that the tutoral can be updated, Thank you very much.
+  <h3>
+  <a id="51-install-git" class="anchor" href="#51-install-git" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.1 Install GIT</h3>
+
+  <p>GIT as version control system is used to update PanDocElectron</p>
+
+  <blockquote>
+  <p><code>sudo apt-get install git</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="52-install-npm" class="anchor" href="#52-install-npm" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.2 Install NPM</h3>
+
+  <p>The node package manager (NPM) is necessary for installation of electron.</p>
+
+  <blockquote>
+  <p><code>sudo apt-get install npm</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="53-install-nodejs" class="anchor" href="#53-install-nodejs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.3 Install NodeJS</h3>
+
+  <p>As a next step it necessary to install NodeJS on your system.</p>
+
+  <p><a href="https://nodejs.org/en/download/package-manager/">https://nodejs.org/en/download/package-manager/</a></p>
+
+  <p>E.g. on Ubuntu/Linux install NodeJS for version 6 or higher:</p>
+
+  <blockquote>
+  <p><code>sudo apt-get install curl</code></p>
+  </blockquote>
+
+  <p>curl is now installed. We use curl to download the installer for NodeJS.</p>
+
+  <blockquote>
+  <p><code>curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -</code></p>
+  </blockquote>
+
+  <p>Now we install nodejs</p>
+
+  <blockquote>
+  <p><code>sudo apt-get install -y nodejs</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="54-installation-of-pandocelectron" class="anchor" href="#54-installation-of-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.4 Installation of PanDocElectron</h3>
+
+  <p>When git is installed on your operting system, you can download PanDocElectron with the following command in the shell:</p>
+
+  <blockquote>
+  <p><code>cd  Documents</code> resp. <code>cd /path/to/Documents</code></p>
+  </blockquote>
+
+  <p>Download/clone PanDocElectron:</p>
+
+  <blockquote>
+  <p><code>git clone https://github.com/niebert/PanDocElectron.git</code></p>
+  </blockquote>
+
+  <p>Download/clone the MathJax and Reveal Files for offline use of presentations:</p>
+
+  <blockquote>
+  <p><code>git clone https://github.com/niebert/PanDoc.git</code></p>
+  </blockquote>
+
+  When git is not installed, you can download the following zip-file and unzip the file in your Documents folder.
+
+  <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank"><code>PanDoc.zip</code></a>
+
+  <h3>
+  <a id="55-install-build-essentials-on-linux" class="anchor" href="#55-install-build-essentials-on-linux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.5 Install Build essentials on Linux</h3>
+
+  <p>Finally it is necessary to install the build essentials on the Linux system with:</p>
+
+  <blockquote>
+  <p><code>sudo apt-get install -y build-essential</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="56-install-electron-as-runtime-environment-for-pandocelectron" class="anchor" href="#56-install-electron-as-runtime-environment-for-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.6 Install Electron as Runtime Environment for PanDocElectron</h3>
+
+  <p>Change directory to PanDocElectron and install prebuilt Electron binaries for your  operating system:</p>
+
+  <blockquote>
+
+  <p><code>cd  PanDocElectron</code> resp. <code>cd /path/to/application/PanDocElectron</code></p>
+
+  <p><code>npm install electron-prebuilt --save-dev</code></p>
+
+
+
+  <p><code>rm -R node_modules/*</code></p>
+
+  <p><code>npm install && npm start</code></p>
+
+  </blockquote>
+
+  <h3 id="SEC5latex">
+  <a id="57-install-latex" class="anchor" href="#57-install-latex" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.7 Install LaTeX</h3>
+
+  <p>LaTeX is needed to convert the Documents.</p>
+
+  <ul>
+  <li>
+  <p>for apt-get based Linux-Distributions (debian, ubuntu etc.):</p>
+
+  <blockquote>
+  <p><code>sudo apt-get install texlive-full</code></p>
+  </blockquote>
+  </li>
+  <li>
+  <p>for openSuSE:</p>
+
+  <blockquote>
+  <p><code>sudo zypper install texlive-scheme-full</code></p>
+  </blockquote>
+  </li>
+  <li>
+  <p>for Fedora, Redhat:</p>
+
+  <blockquote>
+  <p><code>sudo yum install texlive-scheme-full</code></p>
+  </blockquote>
+  </li>
+  </ul>
+
+  <h3 id="SEC5imagemagick">
+  <a id="58-install-imagemagick-on-linux" class="anchor" href="#58-install-imagemagick-on-linux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.8 Install ImageMagick on Linux</h3>
+
+  <p>ImageMagick is needed to convert the PDF documents into PNG files as slides.</p>
+
+  <ul>
+  <li>
+  <p>for apt-get based Linux-Distributions (debian, ubuntu etc.):</p>
+
+  <blockquote>
+  <p><code>sudo apt-get install imagemagick imagemagick-doc</code></p>
+  </blockquote>
+  </li>
+  <li>
+  <p>for openSuSE:</p>
+
+  <blockquote>
+  <p><code>sudo zypper install imagemagick imagemagick-doc</code></p>
+  </blockquote>
+  </li>
+  <li>
+  <p>for Fedora, Redhat:</p>
+
+  <blockquote>
+  <p><code>sudo yum install imagemagick imagemagick-doc</code></p>
+  </blockquote>
+  </li>
+  </ul>
+
+  <h3>
+  <a id="59-install-additional-packages-for-pandocelectron" class="anchor" href="#59-install-additional-packages-for-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.9 Install additional Packages for PanDocElectron</h3>
+
+  <p>Install necessary modules for PanDocElectron:</p>
+
+  <blockquote>
+  <p><code>cd PanDocElectron</code> resp. <code>cd /path/to/application/PanDocElectron</code></p>
+
+  <p><code>npm install mkdirp</code></p>
+  </blockquote>
+
+  <p>Now install the dependencies and test the first run of PanDocElectron:</p>
+
+  <blockquote>
+  <p><code>npm install &amp;&amp; npm start</code></p>
+  </blockquote>
+
+  <h3 id="SEC5pandoc">
+  <a id="510-install-pandoc-on-linux" class="anchor" href="#510-install-pandoc-on-linux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.10 Install PanDoc on Linux</h3>
+
+  <p>The main package used by PanDocElectron is PanDoc itself</p>
+
+  <blockquote>
+  <p><code>sudo apt-get install pandoc pandoc-citeproc</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="511-optional-install-atom-editor-to-modify-the-pandocelectron" class="anchor" href="#511-optional-install-atom-editor-to-modify-the-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.11 Optional: Install Atom Editor to Modify the PanDocElectron</h3>
+
+  <p>PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
+  The Atom Editor is recommended as developing environment together with electron:
+  Download and install from  the following website:</p>
+
+  <ul>
+  <li><a href="https://atom.io/">https://atom.io/</a></li>
+  </ul>
+
+  <h3>
+  <a class="anchor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2.12 Get PanDocElectron started</h3>
+
+  <p>PanDocElectron and PanDoc are now installed. To start PanDocElectron :</p>
+  <blockquote>
+  <p><code>cd PanDocElectron</code> resp. <code>cd /path/to/application/PanDocElectron</code></p>
+
+  <p><code>npm start</code></p>
+  </blockquote>
+
+</div>
+
+<h2 id="SEC6">
+<a id="6-macosx---electron-framework" class="anchor" href="#6-macosx---electron-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+<button onclick="setPage('bMacOSX')">+</button>
+2.3 MacOSX - Electron Framework
+</h2>
+<div class="apptab" id="bMacOSXPage" style="display:none">
+
+  <p>This section describes the installation of the electron developing environment for PanDocElectron.
+  If you just want to use the software, follow the <a href="#SECQuickStart">Guide</a>.
+
+  The following command assumes, that <a href="http://brew.sh" target="_blank">HomeBrew</a> to be installed on your MacOSX. If not please follow the <a href="http://brew.sh" target="_blank">HomeBrew installation guide</a></p>
+  <h3>
+  <a id="61-install-git-on-macosx" class="anchor" href="#61-install-git-on-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.1 Install GIT on MacOSX</h3>
+
+  <p>GIT as version control system is used to update PanDocElectron</p>
+
+  <blockquote>
+  <p><code>brew install git</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="62-install-npm-on-macosx" class="anchor" href="#62-install-npm-on-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.2 Install NPM on MacOSX</h3>
+
+  <p>The node package manager (NPM) is necessary for installation of electron.</p>
+
+  <blockquote>
+  <p><code>brew install npm</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="63-install-nodejs-on-macosx" class="anchor" href="#63-install-nodejs-on-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.3 Install NodeJS on MacOSX</h3>
+
+  <p>As a next step it necessary to install NodeJS on your system.</p>
+
+  <ul>
+  <li>
+  <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> use MacOSX-Installer</li>
+  </ul>
+
+  <p>Opening Windows in your Electron Application needs XQuartz. Please install <a href="https://www.xquartz.org/" target="_blank">XQuartz DMG</a> on your MacOSX:</p>
+
+  <blockquote>
+  <p><code>brew install wine mono</code></p>
+  </blockquote>
+
+
+  <!-- brew install Caskroom/cask/xquartz wine mono  -->
+  <h3>
+  <a id="64-installation-of-pandocelectron" class="anchor" href="#64-installation-of-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.4 Installation of PanDocElectron</h3>
+
+  <p>When git installed on your operting system, you can download PanDocElectron with the following command in the shell:</p>
+
+  <blockquote>
+  <p><code>cd  Documents</code>  resp. <code>cd /path/to/Documents</code></p>
+  </blockquote>
+
+  <p>Download/clone PanDocElectron:</p>
+
+  <blockquote>
+  <p><code>git clone https://github.com/niebert/PanDocElectron.git</code></p>
+  </blockquote>
+
+  <p>Download/clone the MathJax and Reveal Files for offline use of presentations:</p>
+
+  <blockquote>
+  <p><code>git clone https://github.com/niebert/PanDoc.git</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="65-install-electron-as-runtime-environment-for-pandocelectron" class="anchor" href="#65-install-electron-as-runtime-environment-for-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.5 Install Electron as Runtime Environment for PanDocElectron</h3>
+
+  <p>Change directory to PanDocElectron and install prebuilt Electron binaries for your  operating system:</p>
+
+  <blockquote>
+  <p><code>cd  PanDocElectron</code> resp. <code>cd /path/to/application/PanDocElectron</code></p>
+
+  <p><code>rm -R node_modules/*</code></p>
+
+  <p><code>npm install electron-prebuilt --save-dev</code></p>
+
+  </blockquote>
+
+  <p>Now install the dependencies and test the first run of PanDocElectron:</p>
+
+  <blockquote>
+  <p><code>npm install &amp;&amp; npm start</code></p>
+  </blockquote>
+
+  <h3 id="SEC6imagemagick">
+  <a id="66-install-imagemagick-on-macosx" class="anchor" href="#66-install-imagemagick-on-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.6 Install ImageMagick on MacOSX</h3>
+
+  <p>ImageMagick is needed to convert the PDF documents into PNG files as slides.</p>
+
+  <blockquote>
+  <p><code>brew install imagemagick</code></p>
+  </blockquote>
+
+  Furthermore install Ghostscript which is needed for converting a PDF file into convert several PNG images.
+
+  <blockquote>
+  <p><code>brew install ghostscript</code></p>
+  </blockquote>
+
+  <h3 id="SEC6latex">
+  <a id="67-install-latex-on-macosx" class="anchor" href="#67-install-latex-on-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.7 Install LaTeX on MacOSX</h3>
+
+  <p>LaTeX is needed to convert the Documents.</p>
+
+  <ul>
+  <li>Install MacTeX <a href="https://tug.org/mactex/">https://tug.org/mactex/</a>
+  </li>
+  </ul>
+
+  <h3 id="SEC6pandoc">
+  <a id="68-install-pandoc-on-linux" class="anchor" href="#68-install-pandoc-on-linux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.8 Install PanDoc on Linux</h3>
+
+  <p>The main package used by PanDocElectron is PanDoc itself</p>
+
+  <blockquote>
+  <p><code>brew install pandoc</code></p>
+  </blockquote>
+
+  <h3 id="SEC6pandoc">
+  <a id="69-optional-install-atom-editor-to-modify-the-pandocelectron" class="anchor" href="#69-optional-install-atom-editor-to-modify-the-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.9 Optional: Install Atom Editor to Modify the PanDocElectron</h3>
+
+  <p>PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
+  The Atom Editor is recommended as developing environment together with electron:
+  Download and install from  the following website:</p>
+
+  <ul>
+  <li><a href="https://atom.io/">https://atom.io/</a></li>
+  </ul>
+
+  <h3>
+  <a id="610-xcode-for-macosx" class="anchor" href="#610-xcode-for-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.10 XCode for MacOSX</h3>
+
+  <p>Please install Xcode form the AppStore for your MacOSX system as developer environment:</p>
+
+  <ul>
+  <li><a href="https://developer.apple.com/xcode/download">https://developer.apple.com/xcode/download</a></li>
+  <li>The X-Server on MacOSX is implemented by <a href="https://www.xquartz.org/">XQuartz</a>. Install XQuartz on your MacOSX with DMG-Installer.</li>
+  </ul>
+
+  <h3>
+  <a id="611--optional-install-atom-editor-to-modify-the-pandocelectron" class="anchor" href="#611--optional-install-atom-editor-to-modify-the-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3.11  Optional: Install Atom Editor to Modify the PanDocElectron</h3>
+
+  <p>PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
+  The Atom Editor is recommended as developing environment together with electron:
+  Download and install from  the following website:</p>
+
+  <ul>
+  <li><a href="https://atom.io/">https://atom.io/</a></li>
+  </ul>
+
+</div>
+
+<h2 id="SEC7">
+<a id="7-pandocelectron-on-windows" class="anchor" href="#7-pandocelectron-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+<button onclick="setPage('bWindows')">+</button>
+2.4 PanDocElectron on Windows
+</h2>
+<div class="apptab" id="bWindowsPage" style="display:none">
+  This section describes the installation of the electron developing environment for PanDocElectron for Windows.
+  If you just want to use the software, follow the <a href="#SECQuickStart">Guide</a>.
+  <h3>
+  <a id="71-install-git-on-windows" class="anchor" href="#71-install-git-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.1 Install GIT on Windows</h3>
+
+  <p>Download <a href="https://git-scm.com/download/win" target="_blank">GIT</a> from</p>
+
+  <ul>
+  <li>
+  <a href="https://git-scm.com/download/win" target="_blank">https://git-scm.com/download/win </a>
+  and install GIT with windows installer.</li>
+  </ul>
+
+  <h3>
+  <a id="72-install-npm-and-nodejs-on-windows" class="anchor" href="#72-install-npm-and-nodejs-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.2 Install NPM on Windows</h3>
+
+  <p>The node package manager (NPM) is necessary for installation of electron.</p>
+
+  <ul>
+  <li><a href="https://nodejs.org/en/#download" target="_blank">https://nodejs.org/en/#download</a></li>
+  </ul>
+  <p>Now you are able to install Electron on you system</p>
+
+  <h3>
+  <a id="73-installation-of-pandocelectron" class="anchor" href="#73-installation-of-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.3 Installation of PanDocElectron</h3>
+
+  <p>Open Shell on Windows (e.g. press "Win-R," type "cmd" and press "Enter" to open a Command Prompt session using just your keyboard.
+  When git is installed on your operting system, you can download PanDocElectron with the following command in the shell:</p>
+
+  <blockquote>
+  <p><code>cd /D %userprofile%</code></p>
+  </blockquote>
+
+  <p>Download/clone PanDocElectron:</p>
+
+  <blockquote>
+  <p><code>git clone https://github.com/niebert/PanDocElectron.git</code></p>
+  </blockquote>
+
+  <p>Download/clone the MathJax and Reveal Files for offline use of presentations:</p>
+
+  <blockquote>
+  <p><code>cd documents</code> </p>
+  </blockquote>
+  resp. your location where you store your documents:
+  <blockquote>
+  <p><code>git clone https://github.com/niebert/PanDoc.git</code></p>
+  </blockquote>
+
+  <h3>
+  <a id="74-install-electron-as-runtime-environment-for-pandocelectron" class="anchor" href="#74-install-electron-as-runtime-environment-for-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.4 Install Electron as Runtime Environment for PanDocElectron</h3>
+
+  <p>Change directory to PanDocElectron and install prebuilt Electron binaries for your  operating system:</p>
+
+  <blockquote>
+  <p><code>cd  PanDocElectron</code> resp. <code>cd \path\to\application\PanDocElectron</code></p>
+
+  <p><code>rmdir node_modules/* /s /q</code></p>
+
+  <p><code>npm install electron-prebuilt --save-dev</code></p>
+
+  <p><code>npm install mkdirp</code></p>
+  </blockquote>
+
+  <p>Now install the dependencies and test the first run of PanDocElectron:</p>
+
+  <blockquote>
+  <p><code>npm install &amp;&amp; npm start</code></p>
+  </blockquote>
+
+  <h3 id="SEC7imagemagick">
+  <a id="75-install-imagemagick-on-windows" class="anchor" href="#75-install-imagemagick-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.5 Install ImageMagick on Windows</h3>
+
+  <p>ImageMagick is needed to convert the PDF documents into PNG files as slides.</p>
+
+  <ul>
+    <li>
+      Download <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">PanDoc Support Files and Templates</a>
+      and unzip the folder in your Documents/PanDoc Folder. The zip-file contains the binaries of PanDoc and ImageMagick for Windows in <tt>WinOS</tt>.
+      The folder <tt>WinOS</tt> can be delete on Linux and MacOSX.
+    </li>
+    <li>or (Aternative) Installation Binaries for ImageMagick are available on <a href="http://www.imagemagick.org/script/binary-releases.php" target="_blank">ImageMagick.org</a>
+    </li>
+  </ul>
+
+  <h3 id="SEC7latex">
+  <a id="76-install-latex-on-windows" class="anchor" href="#76-install-latex-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.6 Install LaTeX on Windows</h3>
+
+  <p>LaTeX is needed to convert the Documents.</p>
+
+  <ul>
+  <li>MikTex Installation <a href="http://miktex.org/download" target="_blank">http://miktex.org/download</a>
+  </li>
+  </ul>
+
+  <h3 id="SEC7pandoc">
+  <a id="77-install-pandoc-on-windows" class="anchor" href="#77-install-pandoc-on-windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.7 Install PanDoc on Windows</h3>
+
+  <p>The main package used by PanDocElectron is PanDoc itself</p>
+
+  <ul>
+    <li>
+      Download <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">PanDoc Support Files and Templates</a>
+      and unzip the folder in your Documents/PanDoc Folder. The zip-file contains the binaries of PanDoc and ImageMagick for Windows.
+    </li>
+    <li>or Alternative <a href="http://pandoc.org/installing.html#windows" target="_blank">http://pandoc.org/installing.html</a></li>
+  </ul>
+
+  <h3>
+  <a id="" class="anchor" href="" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.8 Install Ghostscript on Windows</h3>
+
+  <p>Ghostscript is needed for the conversion from pdf to images. Please select the appropriate version from the following page and install it</p>
+
+  <ul>
+  <li><a href="http://ghostscript.com/download/gsdnld.html" target="_blank">http://ghostscript.com/</a></li>
+  </ul>
+
+
+  <h3>
+  <a id="78-optional-install-atom-editor-to-modify-the-pandocelectron" class="anchor" href="#78-optional-install-atom-editor-to-modify-the-pandocelectron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4.9 Optional: Install Atom Editor to Modify the PanDocElectron</h3>
+
+  <p>PanDocElectron is a HTML/Javascript Application that can be modified and tailored to your needs with a minor HTML/Javascript knowledge.
+  The Atom Editor is recommended as developing environment together with electron:
+  Download and install from  the following website:</p>
+
+  <ul>
+  <li><a href="https://atom.io/" target="_blank">https://atom.io/</a></li>
+  </ul>
+
+</div>
+<h1 id="SEC9TUT">
+<a id="Atutorial" class="anchor" href="Atutorial" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+<button onclick="setPage('bTutorial')">+</button>
+3 Tutorials
+</h1>
+<div class="apptab" id="bTutorialPage" style="display:none">
+  <h2>
+  <a id="tutAudioSlides" class="anchor" href="#tutAudioSlides" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bTutorial')">+</button>
+  3.1 Audio Slides</h2>
+  Audio Slides are HTML presentations that have recorded audio comments for each slide. The following tutorial by J. Rapp guides you in creating
+  Audio slides with PanDocElectron.
+  <ul>
+    <li>
+      <a href="tutorial/TutorialPPTtoHTML_final.pdf" >
+        Audio-Slides Tutorial by J. Rapp
+      </a>
+    </li>
+     <li>
+      <a href="https://niebert.github.io/Summerschool/OneHealth_OpenCommunity/Summerschool2016_reveal.html" >
+        Demo Slides of an Audio Presentation</a> (Summerschool University of Koblenz-Landau).
+        Press [F] for fullscreen mode of audio slides and cursor keys to navigate in presentation.
+    </li>
+     <li>
+      Download <a href="https://www.github.com/niebert/Summerschool/" >
+        ZIP-File Audio Slides</a> (Summerschool University of Koblenz-Landau).
+    </li>
+
+  </ul>
+
+  <h2>
+  <a id="tutLinksRepos" class="anchor" href="#tutLinksRepos" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bTutorial')">+</button>
+  3.2 Application of PanDocElectron in Wikiversity</h2>
+  As demo application of <a href="https://en.wikipedia.org/wiki/Open_educational_resources" target="_blank">Open Educational Resources</a> a small introduction to the
+  application of PanDocElectron with Wikiversity is provided on <a href="https://de.wikiversity.org/wiki/PanDocElectron-Presentation" target="_blank">Wikiversity PanDocElectron-SLIDE</a>,
+  that contains some links to sample presentations in the domain <a href="https://de.wikiversity.org/wiki/Kurs:Funktionalanalysis" target="_blank">Mathemtatics/ Introduction to Functional Analysis</a> (German).
+
+  <h2>
+  <a id="tutUpdateRepos" class="anchor" href="#tutUpdateRepos" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bTutorial')">+</button>
+  3.3 Update PanDoc Support Files and PanDocElectron</h2>
+  Software (PanDocElectron) and the support files (PanDoc) may change from time to time, due to
+  <ul>
+    <li>
+      debugging efforts of developers,
+    </li>
+    <li>
+      optimization of code,
+    </li>
+    <li>
+      implemenation of new features,
+    </li>
+    <li>
+      improvement of templates
+    </li>
+  </ul>
+
+<b>PanDoc Support Files</b><br>
+  To update the PanDoc Support Files with <a href="https://rogerdudler.github.io/git-guide/" target="_blank">GIT</a> open the terminal
+  change to the directory where the PanDoc support files are stored
+  <blockquote>
+    <p><code>cd  Documents/PanDoc</code></p>
+  </blockquote>
+  The pull the changes from the remote directory.
+  <blockquote>
+    <p><code>git pull origin master</code></p>
+  </blockquote>
+  <p><b>Remark:</b> This is possible if and only if you installed the PanDoc support files with GIT.
+  Otherwise rename your old folder (e.g. <tt>Documents/PanDoc</tt> to <tt>Documents/PanDoc_Backup</tt>
+  and download and unzip <a href="https://github.com/niebert/PanDoc/archive/master.zip" target="_blank">PanDoc Support Files</a> in your Documents folder and copy
+  your PanDocElectron projects in <tt>Documents/PanDoc_Backup</tt> back into <tt>Documents/PanDoc</tt>.
+  Instead of using the ZIP-file of PanDoc support files you can install GIT and clone the repository of the support files with
+    <blockquote>
+    <p><code>git clone https://github.com/niebert/PanDoc.git</code></p>
+    </blockquote>
+  This will make updates much easier for upcoming releases.
+  </p>
+
+  <b>PanDocElectron Application Update</b><br>
+  To update the PanDoc Support Files with <a href="https://rogerdudler.github.io/git-guide/" target="_blank">GIT</a> open the terminal
+  change to the directory where the application PanDocElectron was installed, e.g.
+  <blockquote>
+    <p><code>cd  Documents/PanDocElectron</code></p>
+  </blockquote>
+  The pull the changes from the PanDocElectron remote repository of the application call the following git command:
+  <blockquote>
+    <p><code>git pull origin master</code></p>
+  </blockquote>
+  <blockquote>
+  <p><code>git clone https://github.com/niebert/PanDocElectron.git</code></p>
+  </blockquote>
+  <p><b>Remark:</b> This is possible if and only if you installed the PanDocElectron with GIT or the script on Linux or Mac.
+  Otherwise rename your old folder (e.g. <tt>Documents/PanDocElectron</tt> to <tt>Documents/PanDocElectron_Backup</tt>
+  and download and unzip the binaries from the <a href="https://github.com/niebert/PanDocElectron/archive/master.zip" target="_blank">PanDocElectron</a> in your Documents folder and copy
+  your PanDocElectron projects in <tt>Documents/PanDoc_Backup</tt> back into <tt>Documents/PanDocElectron</tt>.
+  An call
+  <blockquote>
+    <p><code>npm install</code></p>
+  </blockquote>
+  Then you will be able to use PanDocElectron with the new version. It is always recommended to keep a copy of the old release
+  of <tt>PanDocElectron</tt> in <tt>PanDocElectron_Backup</tt> until you are sure the new version has no bugs on your operating system.
+  Switching back to the prior release is easy by deleting <tt>PanDocElectron</tt> folder and rename <tt>PanDocElectron_Backup</tt> back to <tt>PanDocElectron</tt>.
+  Instead of using GIT for version control you can install binaries of PanDocElectron from SourceForge.
+  Please keep in mind, that the <a href="https://sourceforge.net/projects/pandocelectron/files" target="_blank">binaries on SourceForge</a>
+   may not be up to date in comparison to <a href="https://github.com/niebert/PanDocElectron/" target="_blank">master branch of PanDocElectron</a>.
+  on GitHub.
+</div>
+
+<h1 id="SEC8">
+<a id="8-developer-for-electron-tutorials-on-linux-and-macosx" class="anchor" href="#8-developer-for-electron-tutorials-on-linux-and-macosx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+<button onclick="setPage('bDeveloper')">+</button>
+4 Developer Information
+</h1>
+<div class="apptab" id="bDeveloperPage" style="display:none">
+  <h2>
+  <a id="81-developer-quickstart" class="anchor" href="#81-developer-quickstart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bDeveloper')">+</button>
+  4.1 Developer Quickstart</h2>
+  <ul>
+  <li><a href="https://www.youtube.com/watch?v=ojX5yz35v4M" target="_blank">Create the first App in Electron</a></li>
+  <li>Install a <a href="http://electron.atom.io/" target="_blank">Quick Start Electron</a> Application. Use the install support for this:</li>
+  </ul>
+
+  <p>Clone the Quick Start repository first</p>
+
+  <blockquote>
+  <p><code>git clone https://github.com/electron/electron-quick-start</code></p>
+  </blockquote>
+
+  <p>Go into the repository`</p>
+
+  <blockquote>
+  <p><code>cd electron-quick-start</code>`</p>
+  </blockquote>
+
+  <p>Now install the dependencies and run</p>
+
+  <blockquote>
+  <p><code>npm install &amp;&amp; npm start</code></p>
+  </blockquote>
+
+  <p>Install necessary modules for PanDocElectron:</p>
+
+  <blockquote>
+  <p><code>npm install mkdirp</code></p>
+  </blockquote>
+  Now you can run the Electron application by using the command
+  <blockquote>
+  <p><code>npm start</code></p>
+  </blockquote>
+  in the directory of your application. The following shell script can be used on Linux and MacOSX:
+  <blockquote>
+  <p><code>#!/bin/sh<br>
+    cd /home/usershome/Documents/PanDocElectron<br>
+    npm start</code></p>
+  </blockquote>
+  Replace <tt>/home/usershome/Documents/PanDocElectron</tt> by the path to your PanDocElectron Application.
+
+  If you want to start your Electron application from anywhere in the directory tree, if you installed your application globally
+  (e.g. <tt>npm install -g pandocelectron</tt> then PanDocElectron can be started with <tt>pandocelectron</tt> from anywhere in the directory tree.
+
+  <h2>
+  <a id="82-electron-builder-packager" class="anchor" href="#82-electron-builder-packager" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  <button onclick="setPage('bDeveloper')">+</button>
+  4.2 Electron Builder Packager</h2>
+Packages can helpful for users to avoid installations of the Electron Framework and Installation Procedure.
+The binaries are created with <tt>electron-packager-interactive</tt> with Electron 1.2.2.
+  <p> <div class="highlight highlight-source-shell"><pre>sudo npm install -g electron-packager-interactive
+    </pre></div>
+Please develop your application with Electron version 1.2.2 to 1.2.7 (defined in package.json)
+    <!-- Then users can type simply with the command: <tt>pandocelectron</tt> . You should just add that line into your package.json to let npm know about it:
+
+    Builder and Packager is used to create Desktop Application-->
+  </p>
+
+  <div class="highlight highlight-source-shell"><pre>"devDependencies": {
+    "electron-prebuilt": "1.2.7"
+  },
+  </pre></div>
+
+  <p>See <a href="https://www.npmjs.com/package/electron-packager-interactive" target="_blank">electron-packager-interactive</a> or <a href="https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build" target="_blank">Multiplattform Build with Electron</a> for further details.
+              `</p>
+
+</div>
+        </section>
+
+        <aside id="sidebar">
+          <hr/>
+          <b>Download Templates Support</b>
+          <a href="https://github.com/niebert/PanDoc/zipball/master" class="button">
+            <small>PanDoc Support Files Templates</small>
+            Docs.zip
+          </a>
+          <hr/>
+          <div id="bWindowsDownload">
+            <b>Download Windows</b>
+            <a href="https://sourceforge.net/projects/pandocelectron/files/stable/PanDocElectron-Windows-32Bit.zip/download" class="button">
+              <small>PanDocElectron Win32</small>
+              Win32Bit.zip
+            </a>
+            <a href="https://sourceforge.net/projects/pandocelectron/files/stable/PanDocElectron-Windows-64Bit.zip/download" class="button">
+              <small>PanDocElectron Win64</small>
+              Win64Bit.zip
+            </a>
+            <hr>
+          </div>
+          <div id="bMacOSXDownload">
+            <b>Download MacOSX</b>
+            <a href="https://sourceforge.net/projects/pandocelectron/files/stable/PanDocElectron-MacOSX-64Bit.zip/download" class="button">
+              <small>PanDocElectron MacOSX</small>
+              MacOSX.zip
+            </a>
+            <hr>
+          </div>
+          <div id="bLinuxDownload">
+            <b>Download Linux</b>
+            <a href="https://sourceforge.net/projects/pandocelectron/files/stable/PanDocElectron-Linux-32Bit.zip/download" class="button">
+              <small>PanDocElectron Linux 32Bit</small>
+              Lin32Bit.zip
+            </a>
+            <a href="https://sourceforge.net/projects/pandocelectron/files/stable/PanDocElectron-Linux-64Bit.zip/download" class="button">
+              <small>PanDocElectron Linux 64Bit</small>
+              Lin64Bit.zip
+            </a>
+          </div>
+          <div id="bScriptDownload">
+            <b>Download Scripts</b>
+              <a href="install/install_linux.sh" class="button">
+              <small>Install Script - Debian/Ubuntu/Mint</small>
+              Linux
+            </a>
+
+            <a href="install/install_mac.sh" class="button">
+                <small>Install Script for HowBrew</small>
+                MacOSX
+            </a>
+            <hr>
+          </div>
+          <div id="bTutorialDownload">
+            <b>Download Tutorials</b>
+            <a href="tutorial/TutorialPPTtoHTML_final.pdf" class="button">
+              <small>Tutorial by J. Rapp</small>
+              Audio-Slides
+            </a>
+            <hr>
+          </div>
+          <div id="bDeveloperDownload">
+            <b>Download Sources</b>
+            <a href="https://github.com/niebert/PanDocElectron/zipball/master" id="githubSource" class="button">
+              <small>PanDocElectron Sources</small>
+              Sources.zip
+            </a>
+          </div>
+          <p class="repo-owner"><a href="https://github.com/niebert/PanDocElectron"></a> is maintained by <a href="https://github.com/niebert">niebert</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+
+  </body>
+  <script type="text/javascript" src="javascripts/config.js"></script>
+</html>

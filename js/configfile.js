@@ -3,6 +3,7 @@ function getDefaultConfig() {
 };
 
 function loadConfig(pConfigFile) {
+  // Depricated: Loads HTML code from file and writes loaded code to InnerHTML of div element "divconfig"
   var vConfigFile = pConfigFile || getDefaultConfig();
   // simnply load config file into the innerHTML of DIV node 'divconfig'
   fs.readFile(vConfigFile, 'utf-8', function (err, data) {
@@ -20,6 +21,7 @@ function loadConfig(pConfigFile) {
 }
 
 function saveConfig (pConfigFile) {
+  // Depricated: Saves inner HTML code of div element "divconfig" to the config file pConfigFile stored in all folders
   var vConfigFile = pConfigFile || getDefaultConfig();
   // simply write the innerHTML of DIV node 'divconfig' into file
   //--- update the selected formats write to innerHTML of selectInputFORMAT and selectOutputFORMAT before saving---
@@ -33,9 +35,9 @@ function saveConfig (pConfigFile) {
  });
 }
 
-//----defined in index.html-----
-//var vDOMID = ["outputTITLE","outputAUTHOR","inputSERVER","wikiARTICLE","inputWEBPROJECT"];
-//var vInnerHTMLID = [];
+//----defined in index.html line 38 ff.-----
+//var vDOMID = ["outputTITLE","outputAUTHOR","inputSERVER","wikiARTICLE","inputWEBPROJECT", ...];
+//var vInnerHTMLID = ["bibFILE","cslFILE"];
 
 function loadTitleAuthor() {
   //loadTitleAuthorCFG();
@@ -48,22 +50,14 @@ function saveTitleAuthor() {
 };
 
 function loadTitleAuthorJSON() {
-  console.log("Load Title and Author JSON");
   var vConfigFile = getFilename4TitleAuthor(".json");
+  console.log("Save Title and Author to JSON file: "+vConfigFile);
   if (checkFileExists(vConfigFile)) {
     fs.readFile(vConfigFile , 'utf-8', function (err, data) {
       // check if the cfg-File with Title and Author exists
       if (data) {
         var vJSON = JSON.parse(data);
-        var vType = 'DOMID';
-        for (var iID in vJSON[vType]) {
-          write2value(iID,vJSON[vType][iID]);
-        };
-        vType = 'InnerHTMLID';
-        for (var iID in vJSON[vType]) {
-          write2innerHTML(iID,vJSON[vType][iID]);
-        };
-        setInput4Project("inputWEBPROJECT",'downloadWikiFILE');
+        writeConfigDOM(vJSON); //write a Config JSON file to DOM
         console.log('Config JSON File \''+vConfigFile +' opened!');
       }
     });
@@ -73,9 +67,35 @@ function loadTitleAuthorJSON() {
   }
 };
 
-function saveTitleAuthorJSON() {
-  console.log("Save Title and Author");
-  var vConfigFile = getFilename4TitleAuthor(".json");
+function writeConfigDOM(pConfig) {
+  //----defined in index.html line 38 ff.-----
+  //var vDOMID = ["outputTITLE","outputAUTHOR","inputSERVER","wikiARTICLE","inputWEBPROJECT", ...];
+  //var vInnerHTMLID = ["bibFILE","cslFILE"];
+  if (pConfig) {
+    var vType = 'DOMID';
+    for (var iID in pConfig[vType]) {
+      write2value(iID,pConfig[vType][iID]);
+    };
+    vType = 'InnerHTMLID';
+    for (var iID in pConfig[vType]) {
+      write2innerHTML(iID,pConfig[vType][iID]);
+    };
+    vType = 'CheckBoxID';
+    for (var iID in pConfig[vType]) {
+      write2checkbox(iID,pConfig[vType][iID]);
+    };
+    setInput4Project("inputWEBPROJECT",'downloadWikiFILE');
+  } else {
+    console.log("pConfig in loadConfigDOM undefined");
+  }
+};
+
+function getConfigDOM() {
+  // reads the DOM values and innerHTML from the DOM,
+  // creates a JSON file and return the JSON
+  //----defined in index.html line 38 ff.-----
+  //var vDOMID = ["outputTITLE","outputAUTHOR","inputSERVER","wikiARTICLE","inputWEBPROJECT", ...];
+  //var vInnerHTMLID = ["bibFILE","cslFILE"];
   var vJSON = {};
   var vType = 'DOMID';
   vJSON[vType] = {};
@@ -87,13 +107,26 @@ function saveTitleAuthorJSON() {
   for (var i = 0; i < vInnerHTMLID.length; i++) {
     vJSON[vType][vInnerHTMLID[i]] = getInnerHTML(vInnerHTMLID[i]);
   };
-  var vOut = JSON.stringify(vJSON);
+  vType = 'CheckBoxID';
+  vJSON[vType] = {};
+  for (var i = 0; i < vCheckBoxID.length; i++) {
+    vJSON[vType][vInnerHTMLID[i]] = getChecked(vCheckBoxID[i]);
+  };
+  return vJSON
+}
+
+function saveTitleAuthorJSON() {
+  var vConfigFile = getFilename4TitleAuthor(".json");
+  console.log("Save Title and Author to JSON file: "+vConfigFile);
+  var vJSON = getConfigDOM();
+  var vOut = JSON.stringify(vJSON,null,4);
   saveFile(vConfigFile, vOut);
 };
 
 function loadTitleAuthorCFG() {
-  console.log("Load Title and Author");
+  // depricated: loads a text file with no identifies the pathnames only
   var vConfigFile = getFilename4TitleAuthor();
+  console.log("Load Title and Author one value per line file (depricated): "+vConfigFile);
   if (checkFileExists(vConfigFile)) {
     fs.readFile(vConfigFile , 'utf-8', function (err, data) {
       // check if the cfg-File with Title and Author exists
@@ -120,7 +153,8 @@ function loadTitleAuthorCFG() {
 
 
 function saveTitleAuthorCFG() {
-  console.log("Save Title and Author");
+  // depricated: writes a text file with no identifies the pathnames only
+  console.log("Save Title and Author on value per line file - depricated");
   var vConfigFile = getFilename4TitleAuthor();
   var vCR = "";
   var vOut = ""
@@ -133,34 +167,6 @@ function saveTitleAuthorCFG() {
     vCR = "\n";
   };
   saveFile(vConfigFile, vOut);
-};
-
-
-function loadTitleAuthor() {
-  console.log("Load Title and Author");
-  var vConfigFile = getFilename4TitleAuthor();
-  if (checkFileExists(vConfigFile)) {
-    fs.readFile(vConfigFile , 'utf-8', function (err, data) {
-      // check if the cfg-File with Title and Author exists
-      if (data) {
-        var vLines = data.split("\n");
-        for (var i = 0; i < vDOMID.length; i++) {
-          if (vLines[i]) {
-            write2value(vDOMID[i],vLines[i]);
-          };
-        };
-        for (var i = 0; i < vInnerHTMLID.length; i++) {
-          if (vLines[i+vDOMID.length]) {
-            write2innerHTML(vInnerHTMLID[i],vLines[i+vDOMID.length]);
-          };
-        };
-        setInput4Project("inputWEBPROJECT",'downloadWikiFILE');
-        console.log('Config File \''+vConfigFile +' opened!');
-      }
-    });
-  } else {
-    console.log('Config File \''+vConfigFile +' does not exist!');
-  }
 };
 
 function getFilename4TitleAuthor(pExt) {

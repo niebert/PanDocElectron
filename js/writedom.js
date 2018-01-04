@@ -1,10 +1,40 @@
+function getTableCellNode(pID,pRowIndex,pColIndex) {
+  var vTableCellNode = $("#"+pID).children().children()[pRowIndex].children[pColIndex];
+  // vNode is the table cell node of DOM
+  if (vNode){
+    return vNode;
+  } else {
+    alert("Table Cell DOM-Node for row="+pRowIndex+", col="+pColIndex+" and table ID=["+pID+"] was undefined")
+  };
+};
+
 function write2innerHTML(pID,pContent) {
-  var vNode =document.getElementById(pID)
+  var vNode =document.getElementById(pID);
   if (vNode){
     vNode.innerHTML=pContent;
   } else {
-    alert("Write DOM-Node 'innerHTML' with ID=["+pID+"] was undefined")
-  }}
+    alert("Write DOM-Node 'innerHTML' with ID=["+pID+"] was undefined");
+  }
+};
+
+function getChecked(pID) {
+  var vNode =document.getElementById(pID);
+  if (vNode){
+    return vNode.checked;
+  } else {
+    console.log("Get DOM-Node for 'checkbox' with ID=["+pID+"] was undefined");
+  };
+}
+
+function write2checkbox(pID,pContent) {
+  var vNode =document.getElementById(pID);
+  if (vNode){
+    vNode.checked =pContent;
+  } else {
+    console.log("Write DOM-Node 'innerHTML' with ID=["+pID+"] was undefined");
+  }
+}
+
 function write2value(pID,pContent) {
   var vNode =document.getElementById(pID)
   if (vNode){

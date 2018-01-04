@@ -223,10 +223,11 @@ function convertFile() {
   if (vHashTPL) {
     console.log("vHashTPL exists!");
   } else {
-    console.log("Error: vHashTPL does not exist");
-  }
+    console.log("ERROR in convertFile(): vHashTPL does not exist");
+  };
   if (convertChecker(vHash,vHashTPL)) {
-    saveTitleAuthor();
+    saveConfigLS(); // config to LocalStorage defined in localstorage.js
+    saveTitleAuthor(); // defined in configfile.js
     //alert("saveTitleAuthor() finished");
     runPandocShell(vHash);
   };
@@ -289,13 +290,13 @@ function saveShellScript(pShellHash) {
 
 function isChecked(pID) {
   var vCheckBox = document.getElementById(pID);
-  var vReturn = false;
   if (vCheckBox) {
-    vReturn = vCheckBox.checked
+    if (vCheckBox.checked) {
+      return true
+    };
   } else {
       console.log("ERROR: Checkbox ["+pID+"] is undefined");
   };
-  return vReturn;
 };
 
 
@@ -359,6 +360,7 @@ function getMathJaxCMD(pHash) {
   //var vReturn = "";
   var vInputDir = pHash["inputDIR"];
   var mathjaxDIR = getMathJaxRelativeDIR();
+  //relative Path use the remoteMathJaxPath if Local [x] is unchecked
   pHash["mathjaxCMD"] = mathjaxDIR;
   //vReturn += "  --variable mathjax-url= "+mathjaxDIR;
   pushArgsCMD(pHash,"--mathjax");
@@ -367,19 +369,24 @@ function getMathJaxCMD(pHash) {
   //return "  --mathjax";
 };
 
+
 function getMathJaxRelativeDIR() {
   var vInputDir = getInputFilePath();
   var mathjaxDIR = getInnerHTML("mathjaxDIR");
-  if (document.getElementById("checkmathjaxDIR").checked) {
+  if (isChecked("checkmathjaxDIR")) {
     console.log("Use LOCAL MathJax");
   } else {
     console.log("Use REMOTE MathJax");
     mathjaxDIR = "";
   };
   if (mathjaxDIR != "") {
+    // according to the path definition the relative path needs
+    // one more directory up, because reference directory
+    // is /reveal/plugins/math.js not /reveal/math.js
     mathjaxDIR = getRelativePath(vInputDir,mathjaxDIR);
+    //mathjaxDIR = "node_modules/mathjax";
   } else {
-    mathjaxDIR = "http://cdn.mathjax.org/mathjax/latest";
+    mathjaxDIR = getValueDOM("remoteMathJaxPath");
   };
   return mathjaxDIR;
 };
@@ -390,6 +397,7 @@ function getRevealRelativeDIR() {
   if (revealDIR != "") {
     revealDIR = getRelativePath(vInputDir,revealDIR);
   } else {
+    // remote Directory over HTTPS like CDN resources is not possible
     revealDIR = "http://lab.hakim.se/reveal-js";
   };
   return revealDIR;

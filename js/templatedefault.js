@@ -121,8 +121,9 @@ function setDefaultValues(pHashTPL) {
   appendTemplateInput("tabletemplates","docx2col",vhtml+'referencefile.html',vPath,"docx",pHashTPL,vREF_HTML);
   appendTemplateInput("tabletemplates","html",vhtml+'referencefile.html',vPath,"css",pHashTPL,vREF_HTML);
   //alert(app.getPath('documents'))
-  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vSep+"reveal","Reveal Folder ",vDIR_HTML,vInnerHTMLID);
   appendDirectoryInput("tablefolders","MathJax",vhtml+"checkboxfolder.html","mathjaxDIR",vPathMain+vSep+"mathjax","MathJax Folder ",vCHECKDIR_HTML,vInnerHTMLID);
+  appendDirectoryInput("tablefolders","Reveal",vhtml+"defaultfolder.html","revealDIR",vPathMain+vSep+"reveal","Reveal Folder ",vDIR_HTML,vInnerHTMLID);
+  appendDirectoryInput("tablefolders","PanDoc TPL",vhtml+"defaultfolder.html","pandoctemplateDIR",vPathMain+vSep+"tpl"+vSep+"pandoctemplates","Pandoc Template Folder ",vDIR_HTML,vInnerHTMLID);
   //copyFile2Editor ("audioslideMAIN",getInnerHTML("tplFILEaudioslides"));
   //copyFile2Editor ("inputLOOP",__dirname+'/tpl/imgslides/audiosection.txt');
   document.getElementById("inputNEWFORMAT").innerHTML = document.getElementById("inputFORMAT").innerHTML;

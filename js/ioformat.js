@@ -29,6 +29,8 @@ function setInput4Project(pInputID,pOutputID,pExt) {
 }
 
 function setmathjaxDIRLocal(pChecked) {
+  // synchronizes the checkboxes boolean values of the following checkbox IDs
+  // the onchange event of those checkboxes in index.html trigger this functions
   var vArrID = ["checkmathjaxDIR","checkMathJaxNew"];
   for (var i = 0; i < vArrID.length; i++) {
     document.getElementById(vArrID[i]).checked = pChecked;
