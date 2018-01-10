@@ -1,9 +1,34 @@
+
+function filepathCorrection(pFilename) {
+  pFilename = replaceString(pFilename,"-","_");
+  pFilename = pFilename.replace(/Ä/g,"Ae");
+  pFilename = pFilename.replace(/Ö/g,"Oe");
+  pFilename = pFilename.replace(/Ü/g,"Ue");
+  pFilename = pFilename.replace(/ä/g,"ae");
+  pFilename = pFilename.replace(/ö/g,"oe");
+  pFilename = pFilename.replace(/ü/g,"ue");
+  pFilename = pFilename.replace(/ß/g,"ss");
+  // The following RegEx allow "/" in pFilename - see \/ in RegEx
+  pFilename = pFilename.replace(/[^A-Za-z\/0-9_\.]/g,"_");
+  pFilename = pFilename.replace(/_[_]+/g,"_");
+  pFilename = pFilename.replace(/[_]+\./g,".");
+  return pFilename;
+};
+
+function filenameCorrection(pFilename) {
+  pFilename = filepathCorrection(pFilename);
+  // "/" is allowed in filepathCorrection() but not in filenameCorrection()
+  pFilename = pFilename.replace(/[^A-Za-z0-9_\.]/g,"_");
+  pFilename = pFilename.replace(/_[_]+/g,"_");
+  pFilename = pFilename.replace(/[_]+\./g,".");
+  return pFilename;
+};
+
 function getMainDir() {
   // i.e. /home/user/Documente/Pandoc
   var vMainDir = getValueDOM("projectmainDIR");
   console.log("getMainDir() - '"+vMainDir +"'");
   return vMainDir;
-
 }
 
 function getScriptPath() {
@@ -123,4 +148,4 @@ function makeProjectDirs(pPath){
   makedirpath(pPath+vSep+"audio");
   makedirpath(pPath+vSep+"video");
   makedirpath(pPath+vSep+"images");
-}
+};

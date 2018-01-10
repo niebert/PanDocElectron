@@ -57,16 +57,17 @@ function downloadWikiInput() {
     });
     client.getArticle(getValueDOM('wikiARTICLE'), function(err, data) {
       // error handling
+      var vArticle = getValueDOM('wikiARTICLE');
       if (err) {
-        console.error(err);
-        return;
-      };
-      if (data) {
+        console.error("ERROR in downloadWikiInput(): "+err);
+        alert("ERROR: Download of '"+vArticle+"' from Wiki 'https://"+getValueDOM('inputSERVER')+"' failed ")
+      } else if ((vArticle.indexOf("http://") >= 0) || (vArticle.indexOf("https://") >= 0)) {
+        alert("ERROR: No URL in Article Name allowed!");
+      } else if (data) {
         makeProjectDirs(vProjectDir); //audio, video, config, images
         makedirpath(vProjectDir);
         var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
-        var vFileBase = getValueDOM('wikiARTICLE');
-        vFileBase = filenameCorrection(vFileBase);
+        var vFileBase = filenameCorrection(vArticle);
         var vFilename = vFileBase + ".wiki";
         var vFileSource =  vFileBase + "_source.wiki";
         var vFileJSON = vPath + vSep + "config" + vSep + vFileBase + "_wiki.json"
@@ -87,7 +88,8 @@ function downloadWikiInput() {
         write2value("inputEDITOR",data);
         console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
         saveFile(vInputFile,data);
-        alert("Wiki Article from '"+getValueDOM('wikiARTICLE')+"' downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
+        saveConfigLS();
+        alert("SUCCESS: Wiki Article from '"+getValueDOM('wikiARTICLE')+"' downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
       } else {
         alert("DOWNLOAD WARNING: Wiki Article from '"+getValueDOM('wikiARTICLE')+"' could not be downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
       };
@@ -142,21 +144,6 @@ function downloadWikiMedia (pMediaArray) {
   //createdDownloadMediaFile(pMediaArray,vMediaURL,vProjectDir);
 };
 
-
-function filenameCorrection(pFilename) {
-  pFilename = replaceString(pFilename,"-","_");
-  pFilename = pFilename.replace(/Ä/g,"Ae");
-  pFilename = pFilename.replace(/Ö/g,"Oe");
-  pFilename = pFilename.replace(/Ü/g,"Ue");
-  pFilename = pFilename.replace(/ä/g,"ae");
-  pFilename = pFilename.replace(/ö/g,"oe");
-  pFilename = pFilename.replace(/ü/g,"ue");
-  pFilename = pFilename.replace(/ß/g,"ss");
-  pFilename = pFilename.replace(/[^A-Za-z\/0-9_\.]/g,"_");
-  pFilename = pFilename.replace(/_[_]+/g,"_");
-  pFilename = pFilename.replace(/[_]+\./g,".");
-  return pFilename;
-};
 
 function parseWiki4Media(pWikiText) {
   var vMediaArray = [];

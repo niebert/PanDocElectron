@@ -7,6 +7,9 @@ PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Docume
 * PanDocElectron frees the user from knowing and setting the parameters from the command line.
 * List of other GUIs and PanDoc Wrappers are available at [GitHub jgm](https://github.com/jgm/pandoc/wiki/Pandoc-Extras#pandoc-wrappers-and-interfaces)
 
+## Wikiversity Environment
+PanDocElectron is mainly developed to support the multiformat use of [Open Educational Resources]()
+
 ## Last Update
 * (2018-01-04) New Version 0.9.8 - Download Media from Wikiversity - MathJax path updated due to shutdown MathJax CDN 0
 * (2017-06-25) Bugfix added
