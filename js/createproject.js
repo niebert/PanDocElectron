@@ -193,9 +193,13 @@ function replaceWikiLinks(pWikiText,pWikiJSON) {
       vURL = vLink.substr(0,vPipePos); // "Swarm_intelligence" and
       vTitle = vLink.substr(vPipePos+1,vLink.length); // "intelligence of swarms"
     } else {
-      // [[Swarm intelligence]]
+      // [[w:en:Swarm intelligence]]
       vURL = vLink;
       vTitle = vLink;
+      var vColonPos = vTitle.lastIndexOf(":");  // e.g. vColonPos = 4
+      if (vColonPos>0) {
+        vTitle = vTitle.substr(vColonPos+1,vLink.length); // vTitle= "Swarm intelligence"
+      };
     };
     // getWikiDisplayURL() expands the local link to a full MediaWiki URL
     // vURL= "Swarm_intelligence"
@@ -331,9 +335,32 @@ function convertMediaLink4WikiOnline(pWikiText,pMediaArray) {
 };
 
 function getWikiDisplayURL(pArticle) {
+  var vLanguage = getValueDOM("sWikiLanguage");
+  var vServer  = getValueDOM('inputSERVER');
+  var vMap = {};
+  vMap["w"] = "wikipedia";
+  vMap["wikipedia"] = "wikipedia";
+  vMap["Wikipedia"] = "wikipedia";
+  vMap["v"] = "wikiversity";
+  vMap["wikiversity"] = "wikiversity";
+  vMap["Wikiversity"] = "wikiversity";
+  vMap["b"] = "wikibooks";
+  vMap["wikibook"] = "wikiversity";
+  vMap["Wikiversity"] = "wikiversity";
   var vArticle = pArticle || getValueDOM('wikiARTICLE')
   vArticle = replaceString(vArticle," ","_");
-  return "https://"+getValueDOM('inputSERVER')+"/wiki/"+vArticle;
+  var vLinkArr = vArticle.split(":");
+  if (vLinkArr.lenght == 2) {
+    // Wikipedia:Swarm_intelligence
+    // w:Swarm_intelligence
+    vServer = vLanguage + "." + vMap[vLinkArr[0]];
+    vArticle = vMap[vLinkArr[1]] || "Water";
+  } else if (vLinkArr.lenght == 3) {
+    // w:de:Swarm_intelligence
+    vServer = vLinkArr[0] + "." + vMap[vLinkArr[1]];
+    vArticle = vMap[vLinkArr[2]] || "Water";
+  }
+  return "https://"+vServer+"/wiki/"+vArticle;
 };
 
 function getWikiMediaURL(pFileName) {
