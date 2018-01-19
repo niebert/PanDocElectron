@@ -11,6 +11,7 @@ PanDocElectron is a Graphical User Interface (GUI) for calling the PanDoc Docume
 PanDocElectron is mainly developed to support the multiformat use of [Open Educational Resources]()
 
 ## Last Update
+* (2018-01-14) `wtf_wikipedia.js` added to js-repository for browserified version of PanDocElectron. Integration is a ToDo 
 * (2018-01-04) New Version 0.9.8 - Download Media from Wikiversity - MathJax path updated due to shutdown MathJax CDN 0
 * (2017-06-25) Bugfix added
 * (2016-10-15) Wikipedia Download added to PanDocElectron
