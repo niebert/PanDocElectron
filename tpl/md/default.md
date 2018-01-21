@@ -1,10 +1,11 @@
-% Simple Example Paper with MarkDown 
 
--------------------- 	-------------------------  -------------------------------- 
+% Simple Example Paper with MarkDown
+
+-------------------- 	-------------------------  --------------------------------
       Miller, Peter 	   miller@uni-landau.de     University of Koblenz\-Landau
        Stone, Maria	       stuart@pandoc.uni        PanDoc University
          Rock, Anna        rock@pandoc.uni          PanDoc University
---------------------   -------------------------  -------------------------------- 
+--------------------   -------------------------  --------------------------------
 
 
 
@@ -58,7 +59,7 @@ The `@bibID` is the ID in the BibTex-File that is used normally at  with
 
 ## Shell Script to Convert MarkDown to ODT ##
 
-If you want to convert MarkDown to ODT use the following call: 
+If you want to convert MarkDown to ODT use the following call:
 
 > `sh md2odt.sh paper.md tpl4twocolumn.odt literature.bib`
 
@@ -86,7 +87,7 @@ Note again how the actual text starts at 4 columns in (4 characters
 from the left side). Here's a code sample:
 
     `# Let me re-iterate ... `
-    `for i in 1 .. 10 { do-something(i) } ` 
+    `for i in 1 .. 10 { do-something(i) } `
 
 As you probably guessed, indented 4 spaces. By the way, instead of
 indenting the block, you can use delimited blocks, if you like:
@@ -157,7 +158,7 @@ Tables can look like this:
 
 Table: Shoes, their sizes, and what they're made of
 
-The next table is a grid table (Pandoc extension `+grid_tables` ) 
+The next table is a grid table (Pandoc extension `+grid_tables` )
 
 +---------------+---------------+--------------------+
 | Fruit         | Price         |    Advantages      |
@@ -220,4 +221,3 @@ which you wish to be displayed literally, ex.: \`foo\`, \*bar\*, etc.on systems 
 
 References
 ----------
-

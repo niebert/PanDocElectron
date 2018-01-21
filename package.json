@@ -28,6 +28,7 @@
   "dependencies": {
     "electron-open-link-in-browser": "1.0.2",
     "mkdirp": "0.5.1",
+    "node-wget": "^0.4.2",
     "nodemw": "^0.10.1"
   }
 }
