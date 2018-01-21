@@ -35,6 +35,51 @@ function setWikiURL(pLanguage,pDomain) {
   write2value("inputSERVER",pLanguage+pDomain)
 };
 
+function processWikiDownload(data) {
+	if (data) {
+        var vArticle = getValueDOM('wikiARTICLE');
+     	var vSep = getPathSeparator();
+  		var vProjectDir = getProjectDir(getValueDOM("inputWEBPROJECT"));
+  		var vTitle = (getValueDOM('wikiARTICLE')).replace(/_/g," ");
+		var vAuthor = getValueDOM('inputSERVER');
+		// Set Output Title and Output Author
+  		write2value("outputTITLE",vTitle);
+  		write2value("outputAUTHOR",vAuthor);
+		// set Input Format
+  		setInputFormat("mediawiki");
+  		setOutputFormat();
+  		makeProjectDirs(vProjectDir); //audio, video, config, images
+        makedirpath(vProjectDir);
+        var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
+        var vFileBase = filenameCorrection(vArticle);
+        var vFilename = vFileBase + ".wiki";
+        var vFileSource =  vFileBase + "_source.wiki";
+        var vFileJSON = vPath + vSep + "config" + vSep + vFileBase + "_wiki.json"
+        var vInputFile = vPath + vSep + vFilename;
+        write2innerHTML("inputFILE",vInputFile);
+        var vOutFile = createOutputFile(vInputFile,getValueDOM("outputFORMAT"));
+        write2innerHTML("outputFILE",vOutFile);
+        //save Source File of Wiki
+        saveFile(vPath + vSep + vFileSource,data);
+        // convert the media links in the Wiki Source
+        var vWikiJSON = {};
+        vWikiJSON["url"] = getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
+        var now = new Date();
+        vWikiJSON["date"] = now.toJSON();
+        data = convertWiki2Local(data,vWikiJSON);
+        data = replaceWikiMath(data);
+        saveJSON(vFileJSON,vWikiJSON);
+        write2value("inputEDITOR",data);
+        console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
+        saveFile(vInputFile,data);
+        saveConfigLS();
+        alert("SUCCESS: Wiki Article from '"+getValueDOM('wikiARTICLE')+"' downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
+    } else {
+        alert("DOWNLOAD WARNING: Wiki Article from '"+getValueDOM('wikiARTICLE')+"' could not be downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
+    };
+}
+
+
 function downloadWikiInput() {
   // This is the main function called, when user presses
   // the download Button "Wiki-Download"
@@ -63,36 +108,9 @@ function downloadWikiInput() {
         alert("ERROR: Download of '"+vArticle+"' from Wiki 'https://"+getValueDOM('inputSERVER')+"' failed ")
       } else if ((vArticle.indexOf("http://") >= 0) || (vArticle.indexOf("https://") >= 0)) {
         alert("ERROR: No URL in Article Name allowed!");
-      } else if (data) {
-        makeProjectDirs(vProjectDir); //audio, video, config, images
-        makedirpath(vProjectDir);
-        var vPath = getProjectDir(getValueDOM("inputWEBPROJECT"));
-        var vFileBase = filenameCorrection(vArticle);
-        var vFilename = vFileBase + ".wiki";
-        var vFileSource =  vFileBase + "_source.wiki";
-        var vFileJSON = vPath + vSep + "config" + vSep + vFileBase + "_wiki.json"
-        var vInputFile = vPath + vSep + vFilename;
-        write2innerHTML("inputFILE",vInputFile);
-        var vOutFile = createOutputFile(vInputFile,getValueDOM("outputFORMAT"));
-        write2innerHTML("outputFILE",vOutFile);
-        //save Source File of Wiki
-        saveFile(vPath + vSep + vFileSource,data);
-        // convert the media links in the Wiki Source
-        var vWikiJSON = {};
-        vWikiJSON["url"] = getValueDOM('inputSERVER')+"/wiki/"+getValueDOM('wikiARTICLE');
-        var now = new Date();
-        vWikiJSON["date"] = now.toJSON();
-        data = convertWiki2Local(data,vWikiJSON);
-        data = replaceWikiMath(data);
-        saveJSON(vFileJSON,vWikiJSON);
-        write2value("inputEDITOR",data);
-        console.log("Write Wiki Content of '"+getValueDOM('wikiARTICLE')+"' to Path '"+vPath+"'");
-        saveFile(vInputFile,data);
-        saveConfigLS();
-        alert("SUCCESS: Wiki Article from '"+getValueDOM('wikiARTICLE')+"' downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
       } else {
-        alert("DOWNLOAD WARNING: Wiki Article from '"+getValueDOM('wikiARTICLE')+"' could not be downloaded from http://"+getValueDOM('inputSERVER')+getValueDOM('pathAPI'));
-      };
+      	processWikiDownload(data);
+      }
 
     });
 };
@@ -293,8 +311,10 @@ function convertFileTag_and_ThumbMini(pWikiText) {
   // [[Image:diagram.svg|200px|Comment for Text]]
   pWikiText = pWikiText.replace(/\[(File|Image|Datei):/gi,"[File:");
   // [[File:diagram.svg|mini|Comment for Text]]
-  pWikiText = pWikiText.replace(/\|mini|thumb\|/gi,"|300px");
-  // [[File:diagram.svg|mini|300px|Comment for Text]]
+  // [[File:diagram.svg|thumb|Comment for Text]]
+  pWikiText = pWikiText.replace(/\|mini|thumb\|/gi,"600px|");
+  //pWikiText = pWikiText.replace(/\|mini|thumb\|/gi,"|100%"); does not work
+  // [[File:diagram.svg|300px|Comment for Text]]
   return pWikiText;
 }
 

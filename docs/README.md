@@ -112,7 +112,7 @@ You can start PanDocElectron
 
 > `npm install`
 
-Those commands can be automized in a shell script (Linux/Mac) or with a batch file (.BAT) on Windows. 
+Those commands can be automized in a shell script (Linux/Mac) or with a batch file (.BAT) on Windows.
 
 ## 3 PanDoc Projects
 PanDocElectron uses a project based approach for conversion. A project is a subdirectory of `Documents/Pandoc/` e.g. `Documents/Pandoc/MyProject`. This file contains the input files and the genrated output files by PanDoc. In general the input files are mainly WikiMedia-Files `Documents/Pandoc/MyProject/MyProject.wiki`.
@@ -269,7 +269,7 @@ As a next step it necessary to install NodeJS on your system.
 
 * [https://nodejs.org/en/](https://nodejs.org/en/) use MacOSX-Installer
 
-Opening Windows (xquartz) create in your Electron Application needs the following installation on your MacOSX:
+Opening Windows (xquartz) created in your Electron Application needs the following installation on your MacOSX:
 
 > `brew install Caskroom/cask/xquartz wine mono`
 
