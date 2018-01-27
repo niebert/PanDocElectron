@@ -365,19 +365,19 @@ function getWikiDisplayURL(pArticle) {
   vMap["wikiversity"] = "wikiversity";
   vMap["Wikiversity"] = "wikiversity";
   vMap["b"] = "wikibooks";
-  vMap["wikibook"] = "wikiversity";
-  vMap["Wikiversity"] = "wikiversity";
+  vMap["wikibooks"] = "wikibooks";
+  vMap["Wikibooks"] = "wikibooks";
   var vArticle = pArticle || getValueDOM('wikiARTICLE')
   vArticle = replaceString(vArticle," ","_");
   var vLinkArr = vArticle.split(":");
   if (vLinkArr.lenght == 2) {
     // Wikipedia:Swarm_intelligence
     // w:Swarm_intelligence
-    vServer = vLanguage + "." + vMap[vLinkArr[0]];
+    vServer = vLanguage + "." + vMap[vLinkArr[0]]+".org";
     vArticle = vMap[vLinkArr[1]] || "Water";
   } else if (vLinkArr.lenght == 3) {
     // w:de:Swarm_intelligence
-    vServer = vLinkArr[0] + "." + vMap[vLinkArr[1]];
+    vServer = vLinkArr[1] + "." + vMap[vLinkArr[0]]+".org";
     vArticle = vMap[vLinkArr[2]] || "Water";
   }
   return "https://"+vServer+"/wiki/"+vArticle;
